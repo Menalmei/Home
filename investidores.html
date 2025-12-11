@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Investimentos Menalmei</title>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        /* ======== ESTILO FUTURISTA ======== */
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: radial-gradient(circle at top, #0c0c12, #060608, #000);
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid #1f1f1f;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+        }
+
+        header img {
+            height: 70px;
+        }
+
+        /* CONTAINERS PRINCIPAIS */
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 25px;
+            gap: 25px;
+        }
+
+        /* ======= CARTÕES ======= */
+        .card {
+            background: rgba(20,20,30,0.9);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 0 20px rgba(0,150,255,0.15);
+            backdrop-filter: blur(6px);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 25px rgba(0,150,255,0.3);
+        }
+
+        /* TÍTULOS */
+        h2 {
+            margin-top: 0;
+            font-weight: 600;
+            font-size: 22px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        /* LISTA DE INVESTIDORES */
+        #investidores {
+            width: 50%;
+            height: 420px;
+            overflow-y: auto;
+        }
+
+        .investidor {
+            background: #14141e;
+            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            border: 1px solid #1f1f1f;
+        }
+
+        .investidor:hover {
+            background: #0d0d14;
+            border-color: #007bff;
+            transform: translateX(6px);
+            box-shadow: 0 0 10px rgba(0,120,255,0.5);
+        }
+
+        .trofeu {
+            font-size: 18px;
+            color: #f4d03f;
+        }
+
+        /* GRÁFICO */
+        #grafico {
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        canvas {
+            margin-top: 10px;
+            max-width: 280px;
+            max-height: 280px;
+            width: 100% !important;
+            height: auto !important;
+        }
+
+        /* SIMULADOR */
+        #simulador {
+            width: 90%;
+            margin: 0 auto;
+            margin-top: 20px;
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: #007bff;
+        }
+
+        #valorSelecionado, #retorno {
+            color: #00aaff;
+            font-weight: bold;
+        }
+
+        /* pequenas info-cards abaixo do gráfico */
+        .small-info {
+            display:flex;
+            gap:10px;
+            margin-top:12px;
+            width:100%;
+            justify-content:space-between;
+        }
+        .info-box {
+            background:rgba(0,0,0,0.4);
+            padding:8px 12px;
+            border-radius:10px;
+            text-align:center;
+            min-width:110px;
+            border:1px solid rgba(255,255,255,0.04);
+        }
+        .info-box b { display:block; color:#00c0ff; font-size:18px; }
+        .info-box small { color:#9aa7b2; }
+
+
+        /* ==========================================
+           ============== RESPONSIVO ================
+           ========================================== */
+
+        @media (max-width: 900px) {
+            #container {
+                flex-direction: column;
+                padding: 15px;
+                gap: 15px;
+            }
+
+	    #simulador {
+            padding: 25px;
+            width: 90%;
+            padding: 20px 8px 8px 8px;
+            margin: 15px 10px 0px 10px;
+            }
+
+            #investidores,
+            #grafico {
+                width: 100%;
+            }
+
+	    h2 {
+	    text-align: center;
+	    }
+
+            canvas {
+                max-width: 220px;
+                max-height: 220px;
+            }
+
+            .small-info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+	    .card {
+	    padding: 30px 0px;
+	    }
+
+            .info-box {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            header {
+                justify-content: center;
+                padding: 15px;
+            }
+
+            header img {
+                height: 55px;
+            }
+
+            #container {
+                padding: 10px;
+                gap: 12px;
+            }
+
+            #investidores {
+                height: 300px;
+            }
+
+            .investidor {
+                padding: 10px;
+                font-size: 14px;
+            }
+
+            canvas {
+                max-width: 200px;
+                max-height: 200px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <img src="logotipo.png" alt="Logo Menalmei" />
+</header>
+
+<div id="container">
+
+    <!-- CAIXA INVESTIDORES -->
+    <div id="investidores" class="card">
+        <h2>Investidores</h2>
+        <div class="investidor" onclick="abrirInvestidor('Arthur')"><span class="trofeu">🏆</span>Arthur</div>
+        <div class="investidor" onclick="abrirInvestidor('Fulano')"><span class="trofeu">🏆</span>Fulano</div>
+        <div class="investidor" onclick="abrirInvestidor('Ciclano')"><span class="trofeu">🏆</span>Ciclano</div>
+        <div class="investidor" onclick="abrirInvestidor('Bruno')"><span class="trofeu">🏆</span>Bruno</div>
+        <div class="investidor" onclick="abrirInvestidor('Eduardo')"><span class="trofeu">🏆</span>Eduardo</div>
+    </div>
+
+    <!-- GRÁFICO -->
+    <div id="grafico" class="card">
+        <h2>Progresso</h2>
+        <canvas id="pizza"></canvas>
+
+        <div class="small-info">
+            <div class="info-box">
+                <small>Total</small>
+                <b id="totalLabel">R$ 0</b>
+            </div>
+            <div class="info-box">
+                <small>Investido</small>
+                <b id="investidoLabel">R$ 0</b>
+            </div>
+            <div class="info-box">
+                <small>Falta</small>
+                <b id="faltaLabel">R$ 0</b>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- SIMULADOR -->
+<div id="simulador" class="card">
+    <h2>Simulação de Investimento</h2>
+    <p>Escolha o valor para investir:</p>
+    <input type="range" id="rangeInvest" min="0" max="10000" step="100" />
+    <p>Valor selecionado: R$ <span id="valorSelecionado">0</span></p>
+    <p>Retorno estimado (35%): R$ <span id="retorno">0</span></p>
+</div>
+
+<script>
+/* === DADOS INICIAIS === */
+let total = 3000;
+let investido = 1000;
+let falta = total - investido;
+
+/* Atualiza pequenas info-boxes */
+document.getElementById('totalLabel').textContent = 'R$ ' + total;
+document.getElementById('investidoLabel').textContent = 'R$ ' + investido;
+document.getElementById('faltaLabel').textContent = 'R$ ' + falta;
+
+/* === CRIA O GRADIENTE E O GRÁFICO MELHORADO === */
+const ctx = document.getElementById('pizza').getContext('2d');
+
+const grad = ctx.createLinearGradient(0, 0, 280, 280);
+grad.addColorStop(0, '#00c0ff');
+grad.addColorStop(0.6, '#007bff');
+grad.addColorStop(1, '#004ea3');
+
+const sobraColor = '#222831';
+
+const centerTextPlugin = {
+    id: 'centerText',
+    afterDraw: (chart) => {
+        const {ctx} = chart;
+
+        const meta = chart.getDatasetMeta(0).data[0];
+        const centerX = meta.x;
+        const centerY = meta.y;
+
+        const totalValue = chart.data.datasets[0].data.reduce((a,b)=>a+b,0);
+        const investedValue = chart.data.datasets[0].data[0];
+        const pct = totalValue ? Math.round((investedValue / totalValue) * 100) : 0;
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(0,120,255,0.06)';
+        ctx.arc(centerX, centerY, meta.outerRadius * 0.6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#00e5ff';
+        ctx.font = '700 28px "Segoe UI"';
+        ctx.textAlign = 'center';
+        ctx.fillText(pct + '%', centerX, centerY - 6);
+
+        ctx.fillStyle = '#9fbccc';
+        ctx.font = '400 12px "Segoe UI"';
+        ctx.fillText('investido', centerX, centerY + 18);
+
+        ctx.restore();
+    }
+};
+
+Chart.register(centerTextPlugin);
+
+const chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [
+            `Investido (${investido} R$)`,
+            `Falta Investir (${falta} R$)`
+        ],
+        datasets: [{
+            data: [investido, falta],
+            backgroundColor: [grad, sobraColor],
+            hoverOffset: 18,
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '64%',
+        plugins: {
+            legend: {
+                display: true,
+                position: 'bottom',
+                labels: {
+                    color: '#cfeeff',
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    padding: 16
+                }
+            }
+        }
+    }
+});
+
+function abrirInvestidor(nome) {
+    window.open("investidor_" + nome + ".html", "_blank");
+}
+
+let range = document.getElementById("rangeInvest");
+let valorSpan = document.getElementById("valorSelecionado");
+let retornoSpan = document.getElementById("retorno");
+
+range.oninput = function() {
+    let valor = Number(this.value);
+    valorSpan.textContent = valor;
+    retornoSpan.textContent = (valor * 1.35).toFixed(2);
+}
+
+</script>
+
+</body>
+</html>
