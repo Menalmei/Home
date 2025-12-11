@@ -41,7 +41,7 @@
         }
 
         header img {
-            height: 70px;
+            height: 100px;
         }
 
         /* CONTAINERS PRINCIPAIS */
@@ -175,15 +175,26 @@
             }
 
 	    #simulador {
-            padding: 25px;
-            width: 90%;
-            padding: 20px 8px 8px 8px;
-            margin: 15px 10px 0px 10px;
+            padding: 25px 10px 25px 10px;
+            width: 93%;
+            display: flex;
+            margin: 0px auto 30px auto;
+            flex-direction: column;
             }
 
             #investidores,
             #grafico {
                 width: 100%;
+            }
+	    
+            #investidores {
+            display: flex;
+            align-items: center;
+       	    flex-direction: column;
+            }
+
+            .investidor {
+            width: 90%;
             }
 
 	    h2 {
@@ -249,7 +260,7 @@
 <body>
 
 <header>
-    <img src="logotipo2.png" alt="Logo Menalmei" />
+    <img src="logotipo.png" alt="Logo Menalmei" />
 </header>
 
 <footer>
