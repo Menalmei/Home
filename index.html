@@ -94,13 +94,12 @@
 <script>
     const canvas = document.getElementById("particles");
     const ctx = canvas.getContext("2d");
-
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
     let particles = [];
     const total = 55;
-    const maxDist = 120;
+    const maxDist = 60;
     let mouse = { x: null, y: null };
 
     window.addEventListener("mousemove", (e) => {
