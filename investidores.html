@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Menalmei • Painel do Investidor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+    --gold:#d4af37;
+    --dark:#0b0b0b;
+    --card:#151515;
+    --border:#2a2a2a;
+    --muted:#9a9a9a;
+}
+
+body{
+    margin:0;
+    background:radial-gradient(circle at top,#1a1a1a,#000);
+    font-family:Arial,Helvetica,sans-serif;
+    color:#fff;
+}
+
+/* LOGIN */
+.login{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.login-box{
+    background:var(--card);
+    padding:35px;
+    border-radius:20px;
+    border:1px solid var(--border);
+    width:320px;
+    text-align:center;
+}
+
+.login-box img{
+    width:120px;
+    margin-bottom:15px;
+}
+
+.login-box input{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    margin-top:10px;
+}
+
+.login-box button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:var(--gold);
+    font-weight:bold;
+    margin-top:15px;
+    cursor:pointer;
+}
+
+.erro{
+    color:#ff6b6b;
+    font-size:13px;
+    margin-top:10px;
+}
+
+/* PAINEL */
+.painel{ display:none; }
+
+header{
+    text-align:center;
+    padding:25px;
+}
+
+header img{
+    width:130px;
+}
+
+.card{
+    background:linear-gradient(180deg,#141414,#0a0a0a);
+    border:1px solid var(--border);
+    border-radius:20px;
+    max-width:1100px;
+    margin:20px auto;
+    padding:30px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+}
+
+.item{
+    background:var(--card);
+    border:1px solid var(--border);
+    padding:18px;
+    border-radius:14px;
+}
+
+.item span{
+    font-size:13px;
+    color:var(--muted);
+}
+
+.item strong{
+    display:block;
+    margin-top:6px;
+    font-size:20px;
+}
+
+/* PROGRESSO */
+.progress-bar{
+    margin-top:20px;
+    height:14px;
+    background:#1f1f1f;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.progress{
+    height:100%;
+    background:linear-gradient(90deg,#a8872f,var(--gold));
+    width:0%;
+}
+
+/* SIMULADOR */
+.simulador{
+    margin-top:30px;
+}
+.simulador input, .simulador button{
+    width:100%;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    margin-top:10px;
+}
+.simulador button{
+    background:var(--gold);
+    font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="login" id="login">
+    <div class="login-box">
+        <img src="logotipo.png">
+        <input id="cpf" placeholder="CPF (somente números)">
+        <input id="senha" type="password" placeholder="Senha">
+        <button onclick="entrar()">Entrar</button>
+        <div class="erro" id="erro"></div>
+    </div>
+</div>
+
+<!-- PAINEL -->
+<div class="painel" id="painel">
+<header>
+    <img src="logotipo.png">
+    <h3 id="nomeUsuario"></h3>
+</header>
+
+<section class="card">
+    <h2 id="nomeInv"></h2>
+
+    <div class="grid">
+        <div class="item">
+            <span>Valor disponível</span>
+            <strong id="valor"></strong>
+        </div>
+
+        <div class="item">
+            <span>Retorno</span>
+            <strong id="retorno"></strong>
+        </div>
+
+        <div class="item">
+            <span>Investido (R$)</span>
+            <strong id="investido"></strong>
+        </div>
+
+        <div class="item">
+            <span>Investido (%)</span>
+            <strong id="percentual"></strong>
+        </div>
+
+        <div class="item">
+            <span>Início do investimento</span>
+            <strong id="inicio"></strong>
+        </div>
+
+        <div class="item">
+            <span>Término do investimento</span>
+            <strong id="termino"></strong>
+        </div>
+    </div>
+
+    <div class="progress-bar">
+        <div class="progress" id="barra"></div>
+    </div>
+
+    <!-- MANTÉM TODO O HTML E CSS ANTERIOR -->
+<!-- A PARTIR DA SIMULAÇÃO, SUBSTITUA POR ESTE BLOCO -->
+
+<div class="simulador">
+    <h3>Simulador de Retorno</h3>
+    <input type="number" id="valorSim" placeholder="Valor para investir (R$)">
+    <button onclick="simular()">Simular retorno</button>
+    <p id="resultado"></p>
+
+    <hr style="margin:25px 0;border:1px solid #2a2a2a">
+
+    <h3>Total já recebido</h3>
+    <p style="font-size:22px;color:#d4af37" id="totalRecebido">R$ 0,00</p>
+
+    <button onclick="toggleHistorico()">Histórico de Recebimento</button>
+
+    <div id="historico" style="display:none;margin-top:20px;">
+        <table width="100%" cellpadding="10" style="border-collapse:collapse;">
+            <thead>
+                <tr style="background:#1c1c1c">
+                    <th>Transação</th>
+                    <th>Recebido (R$)</th>
+                    <th>Data</th>
+                    <th>Hora</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaHistorico"></tbody>
+        </table>
+    </div>
+</div>
+
+</section>
+</div>
+
+<script>
+const URL = "https://script.google.com/macros/s/AKfycbz9nkvLc4bkucRKNM49a2ewlAXpmLcrARO_K34BD4DorV74dxEdBx1fZwJ_6JISnQoA/exec";
+let retornoPct = 0;
+
+function entrar(){
+    fetch(`${URL}?cpf=${cpf.value}&senha=${senha.value}`)
+    .then(r=>r.json())
+    .then(d=>{
+        if(d.erro){
+            erro.innerText = d.erro;
+            return;
+        }
+
+        login.style.display="none";
+        painel.style.display="block";
+
+        nomeUsuario.innerText = "Olá, " + d.usuario.nome;
+
+        nomeInv.innerText = d.investimento.NOME;
+        valor.innerText = "R$ " + d.investimento.VALOR;
+        retorno.innerText = d.investimento.RETORNO + "%";
+        investido.innerText = "R$ " + d.investimento.INVESTIDO;
+        percentual.innerText = d.investimento["INVESTIMENTO ATUAL"] + "%";
+        inicio.innerText = d.investimento.INICIO;
+        termino.innerText = d.investimento.TERMINO;
+
+        barra.style.width = d.investimento["INVESTIMENTO ATUAL"] + "%";
+        retornoPct = parseFloat(d.investimento.RETORNO);
+
+        // TOTAL RECEBIDO
+        totalRecebido.innerText =
+          "R$ " + d.totalRecebido.toFixed(2);
+
+        // HISTÓRICO
+        tabelaHistorico.innerHTML = "";
+        d.historico.forEach(h=>{
+            tabelaHistorico.innerHTML += `
+              <tr>
+                <td>${h.transacao}</td>
+                <td>R$ ${h.recebido.toFixed(2)}</td>
+                <td>${h.data}</td>
+                <td>${h.hora}</td>
+              </tr>`;
+        });
+    });
+}
+
+function simular(){
+    const v = parseFloat(valorSim.value);
+    if(!v) return;
+    const lucro = v * (retornoPct/100);
+    resultado.innerText =
+      `Total estimado: R$ ${(v+lucro).toFixed(2)} (lucro R$ ${lucro.toFixed(2)})`;
+}
+
+function toggleHistorico(){
+    historico.style.display =
+      historico.style.display === "none" ? "block" : "none";
+}
+</script>
+
+
+</body>
+</html>
