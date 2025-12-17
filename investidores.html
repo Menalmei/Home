@@ -4,308 +4,156 @@
 <meta charset="UTF-8">
 <title>Menalmei • Painel do Investidor</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
---gold:#d4af37;
---card:#151515;
---border:#2a2a2a;
---muted:#9a9a9a;
+  --gold:#d4af37;
+  --card:#151515;
+  --border:#2a2a2a;
+  --muted:#9a9a9a;
 }
-
-*{ box-sizing:border-box }
-
-body{
-margin:0;
-background:radial-gradient(circle at top,#1a1a1a,#000);
-font-family:Arial,Helvetica,sans-serif;
-color:#fff;
-}
-
-.login{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.login-box{
-background:var(--card);
-padding:35px;
-border-radius:20px;
-border:1px solid var(--border);
-width:320px;
-text-align:center;
-}
-
-.login-box img{ width:120px; margin-bottom:15px; }
-
-.login-box input,
-.login-box button{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:none;
-margin-top:10px;
-}
-
-.login-box button{
-background:var(--gold);
-font-weight:bold;
-cursor:pointer;
-}
-
-.erro{ color:#ff6b6b;font-size:13px }
-
-.painel{ display:none }
-
-header{
-text-align:center;
-padding:20px;
-}
-
-header img{ width:130px }
-
-.sair{
-margin-top:10px;
-background:#1f1f1f;
-color:var(--gold);
-border:1px solid var(--border);
-padding:8px 90px;
-border-radius:10px;
-cursor:pointer;
-}
-
-.card{
-background:linear-gradient(180deg,#141414,#0a0a0a);
-border:1px solid var(--border);
-border-radius:20px;
-max-width:1100px;
-margin:20px auto;
-padding:30px;
-}
-
-.grid,.cards-investidor{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-}
-
-.item{
-background:var(--card);
-border:1px solid var(--border);
-padding:18px;
-border-radius:14px;
-transition:0.4s;
-}
-
-.item span{ color:var(--muted);font-size:13px }
-.item strong{ display:block;margin-top:6px;font-size:20px }
-
-.destaque{
-animation:piscar 1s ease;
-}
-
-@keyframes piscar{
-0%{ background:#1f1f1f }
-100%{ background:var(--card) }
-}
-
-.progress-bar{
-margin-top:20px;
-height:30px;
-background:#1f1f1f;
-border-radius:20px;
-overflow:hidden;
-}
-
-.progress{
-height:100%;
-background:linear-gradient(90deg,#a8872f,var(--gold));
-width:0%;
-transition:0.6s;
-}
-
-.simulador{
-margin-top:30px;
-}
-
-.simulador input,
-.simulador button{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:none;
-margin-top:10px;
-}
-
-.simulador button{
-background:var(--gold);
-font-weight:bold;
-cursor:pointer;
-}
-
-.botao-historico{
-margin-top:25px;
-width:100%;
-padding:12px;
-border-radius:12px;
-background:#1f1f1f;
-color:var(--gold);
-border:1px solid var(--border);
-cursor:pointer;
-font-weight:bold;
-}
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-}
-
-th,td{
-padding:10px;
-border-bottom:1px solid var(--border);
-}
-
-th{ color:var(--gold);font-size:13px }
-
-@media print{
-  body{
-    background:#fff;
-    color:#000;
-  }
-
-  .login,
-  .botao-historico,
-  .simulador,
-  header,
-  .progress-bar,
-  .grid,
-  .cards-investidor{
-    display:none !important;
-  }
-
-  .card{
-    border:none;
-    box-shadow:none;
-  }
-
-  table{
-    width:100%;
-  }
-
-  th{
-    color:#000;
-  }
-}
-
+*{box-sizing:border-box;}
+body{margin:0;background:radial-gradient(circle at top,#1a1a1a,#000);font-family:Arial,Helvetica,sans-serif;color:#fff;}
+.login{height:100vh;display:flex;justify-content:center;align-items:center;}
+.login-box{background:var(--card);padding:35px;border-radius:20px;border:1px solid var(--border);width:320px;text-align:center;}
+.login-box img{width:120px;margin-bottom:15px;}
+.login-box input,.login-box button{width:100%;padding:12px;border-radius:10px;border:none;margin-top:10px;}
+.login-box button{background:var(--gold);font-weight:bold;cursor:pointer;}
+.erro{color:#ff6b6b;font-size:13px;}
+.painel{display:none;}
+header{text-align:center;padding:20px;}
+header img{width:130px;}
+.sair{margin-top:10px;background:#1f1f1f;color:var(--gold);border:1px solid var(--border);padding:8px 90px;border-radius:10px;cursor:pointer;}
+.card{background:linear-gradient(180deg,#141414,#0a0a0a);border:1px solid var(--border);border-radius:20px;max-width:1100px;margin:20px auto;padding:30px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;}
+.item{background:var(--card);border:1px solid var(--border);padding:18px;border-radius:14px;transition:0.4s;cursor:pointer;}
+.item span{color:var(--muted);font-size:13px;}
+.item strong{display:block;margin-top:6px;font-size:20px;}
+.item:hover{transform:translateY(-5px);background: linear-gradient(180deg,#1f1f1f,#2a2a2a);}
+.destaque{animation:piscar 1s ease;}
+@keyframes piscar{0%{background:#1f1f1f;}100%{background:var(--card);}}
+.progress-bar{margin-top:20px;height:30px;background:#1f1f1f;border-radius:20px;overflow:hidden;}
+.progress{height:100%;background:linear-gradient(90deg,#a8872f,var(--gold));width:0%;transition:0.6s;position:relative;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#000;}
+#textoBarra{position:absolute;font-size:12px;color:#000;}
+.simulador{margin-top:30px;}
+.simulador input,.simulador button{width:100%;padding:12px;border-radius:10px;border:none;margin-top:10px;}
+.simulador button{background:var(--gold);font-weight:bold;cursor:pointer;}
+.botao-historico{margin-top:25px;width:100%;padding:12px;border-radius:12px;background:#1f1f1f;color:var(--gold);border:1px solid var(--border);cursor:pointer;font-weight:bold;}
+table{width:100%;border-collapse:collapse;margin-top:20px;}
+th,td{padding:10px;border-bottom:1px solid var(--border);}
+th{color:var(--gold);font-size:13px;}
+#toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#151515;color:#d4af37;padding:15px 25px;border-radius:12px;border:1px solid #2a2a2a;font-weight:bold;z-index:9999;}
+#toast.show{display:block;animation:fadeInOut 2s forwards;}
+@keyframes fadeInOut{0%{opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{opacity:0;}}
 .loading-overlay{
-  position:fixed;
+  position: fixed;
   top:0;
   left:0;
   width:100%;
   height:100%;
-  background:rgba(0,0,0,0.85);
-  display:none;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
+  background: rgba(0,0,0,0.85);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
 }
-
 .loading-box{
   background:#151515;
   border:1px solid #2a2a2a;
   padding:30px 40px;
   border-radius:18px;
   text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
 }
-
-.loading-box p{
-  margin-top:15px;
-  color:#d4af37;
-  font-weight:bold;
-}
-
 .spinner{
   width:45px;
   height:45px;
   border:4px solid #2a2a2a;
   border-top:4px solid #d4af37;
   border-radius:50%;
-  animation:spin 1s linear infinite;
+  animation: spin 1s linear infinite;
   margin:auto;
 }
-
 @keyframes spin{
-  from{ transform:rotate(0deg); }
-  to{ transform:rotate(360deg); }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
-
-.progress{
+#modalPix{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
   height:100%;
-  background:linear-gradient(90deg,#a8872f,var(--gold));
-  width:0%;
-  transition:0.6s;
-
-  /* NOVO */
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: #000;
+  background:rgba(0,0,0,0.8);
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
 }
-
-#textoBarra{
-  position: absolute;
-  font-size: 12px;
-  color: #000;
+#modalPix > div{
+  background:#151515;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  max-width:350px;
+  width:90%;
+  position:relative;
 }
-
-.progress span{
-  position: absolute;
-  white-space: nowrap;
+#modalPix button{
+  margin-top:15px;
+  padding:10px 20px;
+  border:none;
+  border-radius:10px;
+  background:var(--gold);
+  cursor:pointer;
+  font-weight:bold;
 }
-
 </style>
 </head>
-
 <body>
 
-<div class="login" id="login">
-<div class="login-box">
-<img src="logotipo.png">
-<input id="cpf" placeholder="CPF">
-<input id="senha" type="password" placeholder="Senha">
-<button onclick="entrar()">Entrar</button>
-<div class="erro" id="erro"></div>
-</div>
+<!-- LOADING -->
+<div id="loading" class="loading-overlay">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <p>Verificando credenciais...</p>
+  </div>
 </div>
 
+<!-- LOGIN -->
+<div class="login" id="login">
+  <div class="login-box">
+    <img src="logotipo.png">
+    <input id="cpf" placeholder="CPF">
+    <input id="senha" type="password" placeholder="Senha">
+    <button onclick="entrar()">Entrar</button>
+    <div class="erro" id="erro"></div>
+  </div>
+</div>
+
+<!-- PAINEL -->
 <div class="painel" id="painel">
 <header>
-<img src="logotipo.png">
-<h3 id="nomeUsuario"></h3>
-<button class="sair" onclick="sair()">Sair</button>
+  <img src="logotipo.png">
+  <h3 id="nomeUsuario"></h3>
+  <button class="sair" onclick="sair()">Sair</button>
 </header>
 
 <h2 id="nomeInvestimento" style="text-align:center;color:#d4af37;margin-bottom:25px;"></h2>
 
 <section class="card">
-
 <div class="grid">
-<div class="item"><span>Valor da Ação</span><strong id="valorAcao"></strong></div>
-<div class="item"><span>Disponível para Investir</span><strong id="disponivel"></strong></div>
-<div class="item"><span>Retorno da Ação</span><strong id="retornoAcao"></strong></div>
-<div class="item"><span>Início</span><strong id="inicio"></strong></div>
-<div class="item"><span>Término</span><strong id="termino"></strong></div>
+  <div class="item"><span>Valor da Ação</span><strong id="valorAcao"></strong></div>
+  <div class="item"><span>Disponível para Investir</span><strong id="disponivel"></strong></div>
+  <div class="item"><span>Retorno da Ação</span><strong id="retornoAcao"></strong></div>
+  <div class="item"><span>Início</span><strong id="inicio"></strong></div>
+  <div class="item"><span>Término</span><strong id="termino"></strong></div>
 </div>
 
 <div class="progress-bar">
-  <div class="progress" id="barra">
-    <span id="textoBarra">0%</span>
-  </div>
+  <div class="progress" id="barra"><span id="textoBarra">0%</span></div>
 </div>
 
 <div class="simulador">
@@ -315,49 +163,61 @@ th{ color:var(--gold);font-size:13px }
 <p id="resultado"></p>
 </div>
 
-<h3 style="text-align:center;color:var(--gold);margin:30px 0">
-ACOMPANHE SEU INVESTIMENTO
-</h3>
+<h3 style="text-align:center;color:var(--gold);margin:30px 0">ACOMPANHE SEU INVESTIMENTO</h3>
 
-<div class="cards-investidor">
-<div class="item" id="cardInvestido">
-<span>Total Investido</span><strong id="totalInvestido"></strong>
-</div>
-<div class="item destaque" id="cardRecebido">
-<span>Total Recebido</span><strong id="totalRecebido"></strong>
-</div>
+<div class="grid">
+  <div class="item" id="cardInvestido"><span>Total Investido</span><strong id="totalInvestido"></strong></div>
+  <div class="item destaque" id="cardRecebido"><span>Total Recebido</span><strong id="totalRecebido"></strong></div>
 </div>
 
-<button class="botao-historico" onclick="toggleHistorico()">
-Ver histórico de recebimentos
-</button>
-
-<button class="botao-historico" onclick="enviarPdf()">
-📄 Enviar histórico por e-mail
-</button>
-
+<button class="botao-historico" onclick="toggleHistorico()">Ver histórico de recebimentos</button>
+<button class="botao-historico" onclick="enviarPdf()">📄 Enviar histórico por e-mail</button>
 
 <div id="historico" style="display:none">
 <table>
-<thead>
-<tr>
-<th>Transação</th>
-<th>Recebido</th>
-<th>Data</th>
-<th>Hora</th>
-</tr>
-</thead>
+<thead><tr><th>Transação</th><th>Recebido</th><th>Data</th><th>Hora</th></tr></thead>
 <tbody id="tabelaHistorico"></tbody>
 </table>
 </div>
 
+<!-- CARDS PIX -->
+<section class="card">
+<h3 style="color: var(--gold); text-align:center; margin-bottom:15px;">Valores sugeridos para investir</h3>
+<div class="grid" id="cardsSugeridos"></div>
 </section>
+
+<!-- TOAST -->
+<div id="toast">Código PIX copiado!</div>
+
+<!-- MODAL PIX -->
+<div id="modalPix">
+  <div>
+    <h3 style="color:var(--gold);margin-bottom:15px;">Pagar com Pix</h3>
+    <div id="qrcode"></div>
+    <p id="pixValor" style="margin-top:15px;color:#fff;font-weight:bold;"></p>
+    <button onclick="fecharModal()">Fechar</button>
+  </div>
 </div>
 
 <script>
 const URL="https://script.google.com/macros/s/AKfycbz3z6-Fp3aRENvOzgTeOz5xleCaWcD69yulLhZzXf4EiYAEp_Okr1h2T0wzmWp1u48p/exec";
-let retornoPct=0;
-let ultimoTotal=0;
+let retornoPct=0, ultimoTotal=0;
+
+// Declarar referências
+const cpf = document.getElementById("cpf");
+const senha = document.getElementById("senha");
+const erro = document.getElementById("erro");
+const loading = document.getElementById("loading");
+const login = document.getElementById("login");
+const painel = document.getElementById("painel");
+const totalInvestido = document.getElementById("totalInvestido");
+const totalRecebido = document.getElementById("totalRecebido");
+const barra = document.getElementById("barra");
+const textoBarra = document.getElementById("textoBarra");
+const nomeUsuario = document.getElementById("nomeUsuario");
+const nomeInvestimento = document.getElementById("nomeInvestimento");
+const tabelaHistorico = document.getElementById("tabelaHistorico");
+const cardRecebido = document.getElementById("cardRecebido");
 
 function entrar(){
   erro.innerText = "";
@@ -368,127 +228,169 @@ function entrar(){
     .then(r => r.json())
     .then(d => {
       loading.style.display = "none";
-
-      if(d.erro){
-        erro.innerText = d.erro;
-        return;
-      }
-
+      if(d.erro){ erro.innerText = d.erro; return; }
       login.style.display = "none";
       painel.style.display = "block";
-
       atualizarPainel(d);
-
-      setInterval(() => {
-        fetch(`${URL}?cpf=${cpf.value}&senha=${senha.value}`)
-          .then(r => r.json())
-          .then(atualizarPainel);
-      }, 5000);
     })
-    .catch(err => {
-      loading.style.display = "none";
-      erro.innerText = "Erro ao conectar ao servidor";
-      console.error(err);
-    });
+    .catch(err => { loading.style.display = "none"; erro.innerText = "Erro ao conectar ao servidor"; console.error(err); });
 }
 
+
+// =========================
+// ATUALIZAÇÃO DO PAINEL
+// =========================
 function atualizarPainel(d){
-nomeUsuario.innerText="Olá, "+d.usuario.nome;
-nomeInvestimento.innerText = d.investimento.nome;
+  document.getElementById("nomeUsuario").innerText="Olá, "+d.usuario.nome;
+  document.getElementById("nomeInvestimento").innerText = d.investimento.nome;
+  document.getElementById("valorAcao").innerText="R$ "+d.investimento.valorAcao.toFixed(2);
+  document.getElementById("disponivel").innerText="R$ "+d.investimento.disponivelInvestir.toFixed(2);
+  document.getElementById("retornoAcao").innerText=d.investimento.retornoAcao+"%";
+  document.getElementById("inicio").innerText=d.investimento.inicio;
+  document.getElementById("termino").innerText=d.investimento.termino;
 
-valorAcao.innerText="R$ "+d.investimento.valorAcao.toFixed(2);
-disponivel.innerText="R$ "+d.investimento.disponivelInvestir.toFixed(2);
-retornoAcao.innerText=d.investimento.retornoAcao+"%";
-inicio.innerText=d.investimento.inicio;
-termino.innerText=d.investimento.termino;
+  const percentual=Math.min((d.investimento.totalInvestidoAcao/d.investimento.valorAcao)*100,100);
+  barra.style.width=percentual+"%";
+  textoBarra.innerText = percentual>=100?"🚀 INVESTIMENTO ENCERRADO":percentual.toFixed(1)+"% • R$ "+d.investimento.totalInvestidoAcao.toFixed(2)+" de R$ "+d.investimento.valorAcao.toFixed(2);
 
-const percentual = Math.min(
-  (d.investimento.totalInvestidoAcao / d.investimento.valorAcao) * 100,
-  100
-);
+  totalInvestido.innerText="R$ "+d.usuario.investimento.toFixed(2);
+  totalRecebido.innerText="R$ "+d.totalRecebido.toFixed(2);
 
-barra.style.width = percentual + "%";
+  if(d.totalRecebido>ultimoTotal){ 
+      cardRecebido.classList.add("destaque"); 
+      setTimeout(()=>cardRecebido.classList.remove("destaque"),1000);
+  }
+  ultimoTotal=d.totalRecebido;
 
-if (percentual >= 100) {
-  textoBarra.innerText = "🚀 INVESTIMENTO ENCERRADO";
-  barra.style.background = "linear-gradient(90deg,#00c853,#00e676)";
-} else {
-  textoBarra.innerText =
-    percentual.toFixed(1) + "% • R$ " +
-    d.investimento.totalInvestidoAcao.toFixed(2) +
-    " de R$ " +
-    d.investimento.valorAcao.toFixed(2);
-}
+  tabelaHistorico.innerHTML="";
+  d.historico.forEach(h=>{
+      tabelaHistorico.innerHTML+=`<tr><td>${h.transacao}</td><td>R$ ${h.recebido.toFixed(2)}</td><td>${h.data}</td><td>${h.hora}</td></tr>`;
+  });
 
-totalInvestido.innerText="R$ "+d.usuario.investimento.toFixed(2);
-totalRecebido.innerText="R$ "+d.totalRecebido.toFixed(2);
-
-if(d.totalRecebido>ultimoTotal){
-cardRecebido.classList.add("destaque");
-setTimeout(()=>cardRecebido.classList.remove("destaque"),1000);
-}
-ultimoTotal=d.totalRecebido;
-
-tabelaHistorico.innerHTML="";
-d.historico.forEach(h=>{
-tabelaHistorico.innerHTML+=`
-<tr>
-<td>${h.transacao}</td>
-<td>R$ ${h.recebido.toFixed(2)}</td>
-<td>${h.data}</td>
-<td>${h.hora}</td>
-</tr>`;
-});
-
-retornoPct=d.investimento.retornoAcao;
+  retornoPct=d.investimento.retornoAcao;
+  gerarCardsInvestimento(d.investimento.disponivelInvestir,d.investimento.valorAcao);
 }
 
 function toggleHistorico(){
-historico.style.display=historico.style.display==="none"?"block":"none";
+    document.getElementById("historico").style.display=
+        document.getElementById("historico").style.display==="none"?"block":"none";
 }
 
 function simular(){
-const v=parseFloat(valorSim.value);
-if(!v) return;
-const lucro=v*(retornoPct/100);
-resultado.innerText=`Total estimado: R$ ${(v+lucro).toFixed(2)} (lucro R$ ${lucro.toFixed(2)})`;
+    const v=parseFloat(document.getElementById("valorSim").value); 
+    if(!v) return; 
+    const lucro=v*(retornoPct/100); 
+    document.getElementById("resultado").innerText=
+        `Total estimado: R$ ${(v+lucro).toFixed(2)} (lucro R$ ${lucro.toFixed(2)})`;
 }
 
-function sair(){
-location.reload();
-}
+function sair(){location.reload();}
 
 function enviarPdf(){
   loading.style.display="flex";
-  document.querySelector(".loading-box p").innerText =
-    "Enviando relatório para seu e-mail...";
-
+  document.querySelector(".loading-box p").innerText ="Enviando relatório para seu e-mail...";
   fetch(`${URL}?cpf=${cpf.value}&senha=${senha.value}&acao=pdf`)
-    .then(r => r.json())
-    .then(d => {
-      loading.style.display="none";
-
-      if(d.erro){
-        alert("Erro: " + d.erro);
-      } else {
-        alert("📧 PDF enviado com sucesso para seu e-mail!");
-      }
+    .then(r=>r.json())
+    .then(d=>{
+      loading.style.display="none"; 
+      if(d.erro) alert("Erro: "+d.erro); 
+      else alert("📧 PDF enviado com sucesso para seu e-mail!");
     })
-    .catch(err => {
-      loading.style.display="none";
-      alert("Erro ao gerar PDF");
-      console.error(err);
+    .catch(err=>{
+        loading.style.display="none"; 
+        alert("Erro ao gerar PDF"); 
+        console.error(err);
     });
 }
 
+// =========================
+// CARDS PIX DINÂMICOS
+// =========================
+function gerarCardsInvestimento(disponivel, valorAcao){
+  const container=document.getElementById('cardsSugeridos'); 
+  container.innerHTML="";
+  for(let valor=100; valor<=disponivel && valor<=valorAcao;){
+    const card=document.createElement('div');
+    card.className='item';
+    card.innerHTML=`<span>Investir</span><strong>R$ ${valor.toFixed(2)}</strong>`;
+    card.addEventListener("click",()=>abrirPix(valor));
+    container.appendChild(card);
+    if(valor<1000) valor+=100; else if(valor<5000) valor+=500; else valor+=1000;
+  }
+}
+
+// ===== CRC16 (OBRIGATÓRIO) =====
+function crc16(payload) {
+  let polinomio = 0x1021;
+  let resultado = 0xFFFF;
+
+  for (let i = 0; i < payload.length; i++) {
+    resultado ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      if ((resultado & 0x8000) !== 0) {
+        resultado = (resultado << 1) ^ polinomio;
+      } else {
+        resultado <<= 1;
+      }
+      resultado &= 0xFFFF;
+    }
+  }
+  return resultado.toString(16).toUpperCase().padStart(4, '0');
+}
+
+// ===== GERA PIX IGUAL AO GERADORDEPIX =====
+function gerarPix(valor) {
+  const chavePix = "59739723000150"; // CNPJ
+  const nome = "MENALMEI";
+  const cidade = "GUARUJA";
+  const txid = "MENALMEI";
+
+  const valorFormatado = valor.toFixed(2);
+
+  let payload =
+    "000201" +
+    "26360014BR.GOV.BCB.PIX" +
+    "01" + chavePix.length.toString().padStart(2, '0') + chavePix +
+    "52040000" +
+    "5303986" +
+    "54" + valorFormatado.length.toString().padStart(2, '0') + valorFormatado +
+    "5802BR" +
+    "59" + nome.length.toString().padStart(2, '0') + nome +
+    "60" + cidade.length.toString().padStart(2, '0') + cidade +
+    "62" + (txid.length + 4).toString().padStart(2, '0') +
+    "05" + txid.length.toString().padStart(2, '0') + txid +
+    "6304";
+
+  const crc = crc16(payload);
+  return payload + crc;
+}
+
+// ===== ABRE MODAL PIX =====
+function abrirPix(valor) {
+  const codigoPix = gerarPix(valor);
+
+  document.getElementById("modalPix").style.display = "flex";
+  document.getElementById("pixValor").innerText = `Valor: R$ ${valor.toFixed(2)}`;
+
+  const qr = document.getElementById("qrcode");
+  qr.innerHTML = "";
+  new QRCode(qr, {
+    text: codigoPix,
+    width: 200,
+    height: 200
+  });
+
+  navigator.clipboard.writeText(codigoPix);
+  mostrarToast("Código Pix copiado!");
+}
+
+function fecharModal(){document.getElementById('modalPix').style.display='none';}
+function mostrarToast(msg){
+  const t=document.getElementById("toast"); 
+  t.innerText=msg; 
+  t.className="show"; 
+  setTimeout(()=>t.className="",2000);
+}
 </script>
-
-<div id="loading" class="loading-overlay">
-  <div class="loading-box">
-    <div class="spinner"></div>
-    <p>Enviando relatório para seu e-mail…</p>
-  </div>
-</div>
-
 </body>
 </html>
