@@ -42,7 +42,7 @@ header img{width:130px;}
 table{width:100%;border-collapse:collapse;margin-top:20px;}
 th,td{padding:10px;border-bottom:1px solid var(--border);}
 th{color:var(--gold);font-size:13px;}
-#toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#151515;color:#d4af37;padding:15px 25px;border-radius:12px;border:1px solid #2a2a2a;font-weight:bold;z-index:9999;}
+#toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#151515;color:#d4af37;padding:15px 25px;border-radius:12px;border:1px solid #2a2a2a;font-weight:bold;z-index:10000;}
 #toast.show{display:block;animation:fadeInOut 2s forwards;}
 @keyframes fadeInOut{0%{opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{opacity:0;}}
 .loading-overlay{
@@ -110,6 +110,12 @@ th{color:var(--gold);font-size:13px;}
   cursor:pointer;
   font-weight:bold;
 }
+
+#qrcode {
+  margin: 0 auto;  /* centraliza horizontalmente */
+  display: block;  /* garante que seja tratado como bloco */
+}
+
 </style>
 </head>
 <body>
