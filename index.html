@@ -6,23 +6,36 @@
 <title>Menalmei</title>
 
 <style>
-/* RESET */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* BODY */
 body {
-    background: linear-gradient(135deg, #050b1a, #0a1633, #020615);
+    background: linear-gradient(
+        135deg,
+        #050b1a,
+        #0a1633,
+        #1a0f14,
+        #020615
+    );
     color: #fff;
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     overflow: hidden;
 }
 
+/* CANVAS */
+canvas {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+}
 
-/* HEADER */
+#particles { z-index: 1; }
+#snow { z-index: 2; }
+
+/* CONTEÚDO */
 header {
     height: 100vh;
     display: flex;
@@ -34,63 +47,79 @@ header {
     z-index: 10;
 }
 
-/* LOGO */
 header img {
     width: 240px;
-    margin-bottom: 25px;
-    filter: drop-shadow(0 0 10px rgba(76,110,220,0.6));
+    margin-bottom: 20px;
 }
 
-/* SUBTÍTULO */
-header p {
-    font-size: 18px;
-    margin-bottom: 45px;
+.natal-texto {
+    font-size: 14px;
+    letter-spacing: 4px;
+    margin-bottom: 14px;
+    font-weight: bold;
+
+    background: linear-gradient(90deg, #ff4d4d, #ffd700, #3cff9a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    text-shadow: 0 0 18px rgba(255,77,77,0.35);
+}
+
+#contador {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 30px;
+}
+
+.time-box span {
+    font-size: 26px;
+    font-weight: bold;
+    color: #3cff9a;
+    text-shadow: 0 0 10px rgba(60,255,154,0.5);
+}
+
+
+.time-box small {
+    font-size: 11px;
     letter-spacing: 2px;
-    opacity: 0.9;
-    color: #dde5f3;
+    opacity: 0.7;
 }
 
-/* BOTÕES */
+header p {
+    font-size: 16px;
+    letter-spacing: 2px;
+    margin-bottom: 35px;
+    opacity: 0.85;
+}
+
 a.btn {
     width: 260px;
-    padding: 16px;
-    margin: 10px;
+    padding: 16px 0;
+    margin: 8px;
     text-decoration: none;
     color: #fff;
-    background: #1e2a4f; /* azul escuro */
-    border: 2px solid #4c6edc; /* destaque */
+    border: 1px solid #fff;
     border-radius: 40px;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    transition: 0.35s ease;
+    letter-spacing: 2px;
+    font-size: 14px;
+    transition: 0.3s;
 }
 
 a.btn:hover {
-    background: #33487a; /* tom mais claro ao passar */
-    border-color: #5a7cf2;
-    transform: translateY(-3px);
+    background: linear-gradient(135deg, #ff4d4d, #b30000);
+    color: #fff;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 0 20px rgba(255,77,77,0.6);
 }
 
-/* PARTÍCULAS */
-#particles {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* FOOTER */
 footer {
     position: fixed;
     bottom: 12px;
     width: 100%;
     text-align: center;
     font-size: 12px;
-    opacity: 0.75;
-    letter-spacing: 1px;
-    z-index: 15;
-    color: #c8c8c8;
+    opacity: 0.6;
+    z-index: 10;
 }
 
 /* WHATSAPP */
@@ -105,24 +134,58 @@ footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 6px 22px rgba(37,211,102,0.55);
     z-index: 20;
-    transition: transform 0.3s ease;
+    box-shadow: 0 6px 22px rgba(37,211,102,0.6);
 }
-.whatsapp-float:hover {
-    transform: scale(1.15);
+
+/* =======================
+   MODO ANO NOVO
+======================= */
+
+body.ano-novo {
+    background: linear-gradient(135deg, #020617, #0a1633, #2a1a00);
 }
+
+/* texto topo */
+body.ano-novo .natal-texto {
+    color: #ffd700;
+    text-shadow: 0 0 14px rgba(255,215,0,0.8);
+}
+
+/* números do contador */
+body.ano-novo .time-box span {
+    color: #ffd700;
+    text-shadow: 0 0 14px rgba(255,215,0,0.8);
+}
+
+/* botões */
+body.ano-novo a.btn:hover {
+    background: linear-gradient(135deg, #ffd700, #ffae00);
+    color: #000;
+    box-shadow: 0 0 25px rgba(255,215,0,0.7);
+}
+
 </style>
 </head>
 
 <body>
 
 <canvas id="particles"></canvas>
+<canvas id="snow"></canvas>
 
 <header>
     <img src="logotipo.png" alt="Menalmei">
 
-    <p> STREETWEAR • RELÓGIOS • TÊNIS</p>
+    <div class="natal-texto" id="evento-texto"></div>
+
+    <div id="contador">
+        <div class="time-box"><span id="dias">00</span><small>DIAS</small></div>
+        <div class="time-box"><span id="horas">00</span><small>HORAS</small></div>
+        <div class="time-box"><span id="minutos">00</span><small>MIN</small></div>
+        <div class="time-box"><span id="segundos">00</span><small>SEG</small></div>
+    </div>
+
+    <p>STREETWEAR • RELÓGIOS • TÊNIS</p>
 
     <a class="btn" href="https://www.menalmei.com/" target="_blank">LOJA ONLINE</a>
     <a class="btn" href="https://www.instagram.com/menalmeiofc/" target="_blank">INSTAGRAM</a>
@@ -133,72 +196,139 @@ footer {
 Menalmei • CNPJ: 59.739.723/0001-50 © 2025
 </footer>
 
-<!-- BOTÃO WHATSAPP -->
 <a href="https://wa.me/5513981996771?text=Olá!%20Quero%20saber%20mais%20sobre%20os%20produtos%20da%20Menalmei."
-   class="whatsapp-float"
-   target="_blank">
-   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="28">
+class="whatsapp-float" target="_blank">
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="28">
 </a>
 
 <script>
-/* PARTICLES BACKGROUND */
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+/* =========================
+   DETECTOR DE EVENTO
+========================= */
+const hoje = new Date();
+const anoAtual = hoje.getFullYear();
+
+const natal = new Date(anoAtual, 11, 25, 0, 0, 0);
+const anoNovo = new Date(anoAtual + 1, 0, 1, 0, 0, 0);
+
+const eventoTexto = document.getElementById('evento-texto');
+let dataAlvo;
+let modoNatal = true;
+
+if (hoje <= natal) {
+    // 🎄 NATAL
+    eventoTexto.textContent = '🎄 ESPECIAL DE NATAL';
+    dataAlvo = natal;
+} else {
+    // 🎆 ANO NOVO
+    document.body.classList.add('ano-novo');
+    eventoTexto.textContent = '✨ CONTAGEM REGRESSIVA • ANO NOVO';
+    dataAlvo = anoNovo;
+    modoNatal = false;
 }
-resize();
 
-const particles = [], count = 55;
-for (let i = 0; i < count; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 1,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3
-    });
+/* =========================
+   CONTADOR UNIVERSAL
+========================= */
+function atualizarContador() {
+    const agora = new Date();
+    const diff = dataAlvo - agora;
+
+    const d = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+    const h = Math.max(0, Math.floor(diff / (1000 * 60 * 60) % 24));
+    const m = Math.max(0, Math.floor(diff / (1000 * 60) % 60));
+    const s = Math.max(0, Math.floor(diff / 1000 % 60));
+
+    dias.textContent = d;
+    horas.textContent = h.toString().padStart(2, '0');
+    minutos.textContent = m.toString().padStart(2, '0');
+    segundos.textContent = s.toString().padStart(2, '0');
 }
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+setInterval(atualizarContador, 1000);
+atualizarContador();
 
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.fill();
+/* =========================
+   PARTICULAS
+========================= */
+const p = particles.getContext('2d');
+
+function resizeCanvas() {
+    particles.width = innerWidth;
+    particles.height = innerHeight;
+    snow.width = innerWidth;
+    snow.height = innerHeight;
+}
+resizeCanvas();
+
+const dots = Array.from({ length: 50 }, () => ({
+    x: Math.random() * particles.width,
+    y: Math.random() * particles.height,
+    vx: (Math.random() - 0.5) * 0.4,
+    vy: (Math.random() - 0.5) * 0.4
+}));
+
+function animateParticles() {
+    p.clearRect(0, 0, particles.width, particles.height);
+    dots.forEach(d => {
+        p.beginPath();
+        p.arc(d.x, d.y, 2, 0, Math.PI * 2);
+        p.fillStyle = 'rgba(255,255,255,0.5)';
+        p.fill();
+
+        d.x += d.vx;
+        d.y += d.vy;
+
+        if (d.x < 0 || d.x > particles.width) d.vx *= -1;
+        if (d.y < 0 || d.y > particles.height) d.vy *= -1;
     });
+    requestAnimationFrame(animateParticles);
+}
+animateParticles();
 
-    for (let i = 0; i < count; i++) {
-        for (let j = i + 1; j < count; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 110) {
-                ctx.beginPath();
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = 'rgba(255,255,255,' + (1 - dist / 110) + ')';
-                ctx.lineWidth = 0.6;
-                ctx.stroke();
-            }
-        }
+/* =========================
+   NEVE (SÓ NO NATAL)
+========================= */
+const s = snow.getContext('2d');
+
+const flakes = Array.from({ length: 80 }, () => ({
+    x: Math.random() * snow.width,
+    y: Math.random() * snow.height,
+    r: Math.random() * 2 + 1,
+    v: Math.random() + 0.5
+}));
+
+function snowing() {
+    if (!modoNatal) {
+        snow.style.display = 'none';
+        return;
     }
 
-    particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+    s.clearRect(0, 0, snow.width, snow.height);
+    s.fillStyle = 'rgba(255,255,255,0.8)';
+
+    flakes.forEach(f => {
+        s.beginPath();
+        s.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+        s.fill();
+
+        f.y += f.v;
+        if (f.y > snow.height) {
+            f.y = 0;
+            f.x = Math.random() * snow.width;
+        }
     });
 
-    requestAnimationFrame(draw);
+    requestAnimationFrame(snowing);
 }
-draw();
-window.addEventListener('resize', resize);
+snowing();
+
+/* =========================
+   RESIZE
+========================= */
+window.addEventListener('resize', resizeCanvas);
 </script>
+
 
 </body>
 </html>
