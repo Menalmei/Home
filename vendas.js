@@ -335,4 +335,19 @@ function removerItem(index) {
     atualizarTotal();
 }
 
+async function atualizarProdutosPeriodicamente() {
+    try {
+        const novosProdutos = await fetch(`${API}?tipo=produtos`).then(r => r.json());
+
+        // Aqui você pode comparar se houve mudanças antes de re-renderizar
+        produtos = novosProdutos;
+        renderProdutos(produtos);
+    } catch (e) {
+        console.error("Erro ao atualizar produtos:", e);
+    }
+}
+
+// Atualiza a cada 5 segundos
+setInterval(atualizarProdutosPeriodicamente, 5000);
+
 
