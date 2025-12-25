@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>PDV - Frente de Caixa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    background: #f2f2f2;
+}
+
+/* LADO ESQUERDO */
+.esquerda {
+    width: 65%;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+#busca {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#listaProdutos {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+
+    /* 🔥 NÃO estica as linhas */
+    grid-auto-rows: max-content;
+
+    gap: 10px;
+    overflow-y: auto;
+}
+
+
+.produto {
+    background: #fff;
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+
+    height: 180px;
+
+    border: 1.5px solid #000;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+
+.produto img {
+    width: 100%;
+    height: 110px;
+    object-fit: contain;
+}
+
+.produto .estoque {
+    position: absolute;
+    bottom: 8px;
+    right: 6px;
+    background: #000;
+    color: #fff;
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.preco-produto {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000;
+    margin-top: 2px;
+}
+
+.produto:hover {
+    transform: translateY(2px);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+/* ===== CAMISETA ===== */
+.tipo-camiseta {
+    border-color: #000;
+}
+
+.tipo-camiseta .badge {
+    background: #000;
+}
+
+/* ===== PERFUME ===== */
+.tipo-perfume {
+    border-color: #b8860b; /* dourado */
+}
+
+.tipo-perfume .badge {
+    background: #b8860b;
+}
+
+/* ===== TENIS ===== */
+.tipo-tenis {
+    border-color: #1e40af; /* azul */
+}
+
+.tipo-tenis .badge {
+    background: #1e40af;
+}
+
+/* ===== RELÓGIO ===== */
+.tipo-relogio {
+    border-color: #15803d; /* verde */
+}
+
+.tipo-relogio .badge {
+    background: #15803d;
+}
+
+//* ======== REFINO VISUAL ========*/
+
+.tipo-perfume .preco-produto {
+    color: #b8860b;
+}
+
+.tipo-tenis .preco-produto {
+    color: #1e40af;
+}
+
+.tipo-relogio .preco-produto {
+    color: #15803d;
+}
+
+
+/* LADO DIREITO */
+.direita {
+    width: 35%;
+    background: #fff;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #ccc;
+}
+
+#carrinho {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.carrinho-header {
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 30px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #555;
+    border-bottom: 1px solid #ddd;
+    padding: 6px 0;
+    margin-bottom: 6px;
+}
+
+.carrinho-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 80px 30px;
+    align-items: center;
+    font-size: 14px;
+    padding: 6px 0;
+    border-bottom: 1px dashed #e5e5e5;
+}
+
+.col-qtd {
+    text-align: center;
+}
+
+.col-valor {
+    text-align: right;
+    font-weight: 600;
+}
+
+.remover-item {
+    background: transparent;
+    border: none;
+    color: #dc2626;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#total {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.cupom-area {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 3px;
+}
+
+.cupom-area input {
+    flex: 1;
+    padding: 6px;
+}
+
+button {
+    padding: 12px;
+    font-size: 16px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* MENSAGEM */
+#mensagemVenda {
+    display: none;
+    margin-top: 10px;
+    background: #16a34a;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.badge {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background: #000;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nome-produto {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111;
+    margin-top: 4px;
+    line-height: 1.2;
+
+    /* Limita a 2 linhas */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Mantém o comprovante invisível na tela */
+#comprovante {
+    display: none; /* NÃO aparecer no layout principal */
+    width: 280px;  /* largura padrão para impressão */
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    text-align: center;
+}
+
+.comp {
+    width: 280px;
+    font-family: monospace;
+    font-size: 12px;
+    text-align: center;
+    color: #000;
+}
+
+.comp-logo {
+    width: 120px;
+    margin-bottom: 4px;
+}
+
+.comp-empresa {
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+.comp-data {
+    font-size: 11px;
+    margin-bottom: 6px;
+}
+
+.comp hr {
+    border: none;
+    border-top: 1px dashed #000;
+    margin: 6px 0;
+}
+
+.comp-header,
+.comp-item {
+    display: grid;
+    grid-template-columns: 40px 1fr 80px;
+    gap: 4px;
+}
+
+.comp-header {
+    font-weight: bold;
+    border-bottom: 1px dashed #000;
+    padding-bottom: 4px;
+    margin-bottom: 4px;
+}
+
+.comp-item span:nth-child(1) {
+    text-align: center;
+}
+
+.comp-item span:nth-child(3) {
+    text-align: right;
+}
+
+.comp-resumo {
+    border-top: 1px dashed #000;
+    margin-top: 6px;
+    padding-top: 4px;
+    text-align: right;
+}
+
+.comp-resumo div {
+    margin-top: 2px;
+}
+
+.comp-pagamento,
+.comp-troco {
+    margin-top: 4px;
+    font-size: 11px;
+}
+
+.comp-msg {
+    margin-top: 8px;
+    font-size: 11px;
+}
+
+
+
+
+/* ===============================================================
+   RESPONSIVIDADE - CELULAR
+   ========================= =======================================*/
+@media (max-width: 768px) {
+
+    body {
+        flex-direction: column;
+        height: auto;
+    }
+
+    /* LADOS VIRAM COLUNA */
+    .esquerda,
+    .direita {
+        width: 100%;
+        height: auto;
+    }
+
+    /* BUSCA */
+    #busca {
+        font-size: 16px;
+    }
+
+    /* GRID DE PRODUTOS */
+    #listaProdutos {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        max-height: 55vh;
+    }
+
+    /* CARD PRODUTO */
+    .produto {
+        height: 160px;
+        padding: 6px;
+    }
+
+    .produto img {
+        height: 85px;
+    }
+
+    .nome-produto {
+        font-size: 12px;
+    }
+
+    .preco-produto {
+        font-size: 13px;
+    }
+
+    .badge {
+        font-size: 10px;
+        padding: 2px 5px;
+    }
+
+    /* CARRINHO */
+    #carrinho {
+        max-height: 30vh;
+        overflow-y: auto;
+    }
+
+    #total {
+        font-size: 17px;
+    }
+
+    /* BOTÕES */
+    button {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    /* MODAL PAGAMENTO */
+    #modalPagamento > div {
+        width: 90%;
+    }
+
+    /* COMPROVANTE */
+    #comprovante {
+        width: 100%;
+        padding: 10px;
+    }
+
+    #comprovante img {
+        width: 100px;
+    }
+}
+
+
+
+</style>
+</head>
+
+<body>
+
+<div class="esquerda">
+    <input type="text" id="busca" placeholder="Buscar produto...">
+    <div id="listaProdutos"></div>
+</div>
+
+<div class="direita">
+    <div class="carrinho-header">
+    <span class="col-qtd">QTD</span>
+    <span class="col-item">ITEM</span>
+    <span class="col-valor">VALOR</span>
+</div>
+
+    <div id="carrinho"></div>
+    <div id="total">Total: R$ 0,00</div>
+
+    <div class="cupom-area">
+        <input type="text" id="cupom" placeholder="Cupom">
+        <button onclick="aplicarCupom()">Aplicar</button>
+    </div>
+
+    <div id="infoCupom"></div>
+
+    <button onclick="finalizar()">Finalizar Venda</button>
+    <button onclick="cancelarVenda()" style="
+    background:#dc2626;
+    margin-top:6px">
+    Cancelar Venda
+    </button>
+
+    <div id="mensagemVenda"></div>
+</div>
+
+<script src="vendas.js"></script>
+
+<!-- MODAL PAGAMENTO -->
+<div id="modalPagamento" style="
+display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
+
+  <div style="background:#fff;padding:20px;width:280px;border-radius:8px;text-align:center">
+
+    <h3>Forma de Pagamento</h3>
+
+    <button onclick="confirmarPagamento('Pix')" style="width:100%;margin-bottom:8px">Pix</button>
+    <button onclick="confirmarPagamento('Cartão')" style="width:100%;margin-bottom:8px">Cartão</button>
+    <button onclick="confirmarPagamento('Dinheiro')" style="width:100%">Dinheiro</button>
+
+    <div id="pagamentoDinheiro" style="display:none;margin-top:10px">
+    <input 
+        type="number" 
+        id="valorPago" 
+        placeholder="Valor pago" 
+        oninput="calcularTroco()"
+        style="width:100%;padding:8px"
+    >
+
+    <div id="trocoInfo" style="margin-top:5px;font-weight:bold"></div>
+
+    <button 
+        onclick="confirmarDinheiro()" 
+        style="width:100%;margin-top:10px;background:#2563eb"
+    >
+        Confirmar Pagamento
+    </button>
+</div>
+
+
+    <button onclick="fecharPagamento()" style="width:100%;margin-top:10px">Cancelar</button>
+  </div>
+</div>
+
+<!-- COMPROVANTE -->
+<div id="comprovante" class="comp">
+
+    <img src="Imagens/logoretrato.png" class="comp-logo">
+
+    <div class="comp-empresa">
+        MENALMEI<br>
+        CNPJ: 59.739.723/0001-50
+    </div>
+
+    <hr>
+
+    <h3>COMPROVANTE DE VENDA</h3>
+    <div class="comp-data" id="compData"></div>
+
+    <div class="comp-header">
+        <span>QTD</span>
+        <span>ITEM</span>
+        <span>VALOR</span>
+    </div>
+
+    <div id="compItens"></div>
+
+    <div class="comp-resumo">
+        <div id="compSubtotal"></div>
+        <div id="compDesconto"></div>
+        <div id="compTotal"></div>
+    </div>
+
+    <div class="comp-pagamento" id="compPagamento"></div>
+    <div class="comp-troco" id="compTroco"></div>
+
+    <p class="comp-msg">Obrigado pela preferência!</p>
+</div>
+
+
+</body>
+</html>
