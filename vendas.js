@@ -213,7 +213,7 @@ function gerarComprovante(pagamento) {
 function imprimir() {
     const conteudo = document.getElementById("comprovante").outerHTML;
 
-    const w = window.open("", "_blank", "width=300,height=600");
+    const w = window.open("", "_blank");
     w.document.write(`
         <html>
         <head>
@@ -225,79 +225,27 @@ function imprimir() {
                     text-align: center;
                     margin: 10px;
                 }
-
-                .comp-logo {
-                    width: 100px; /* reduz tamanho do logo */
-                    height: auto;
-                    margin-bottom: 10px;
-                }
-
-                .comp-empresa {
-                    font-size: 12px;
-                    margin-bottom: 5px;
-                }
-
-                hr {
-                    border: none;
-                    border-top: 1px dashed #000;
-                    margin: 8px 0;
-                }
-
-                .comp-header {
-                    display: flex;
-                    justify-content: space-between;
-                    font-weight: bold;
-                    border-bottom: 1px dashed #000;
-                    padding-bottom: 4px;
-                    margin-top: 10px;
-                }
-
-                .comp-header span {
-                    width: 33%;
-                    text-align: center;
-                }
-
-                .comp-item {
-                    display: flex;
-                    justify-content: space-between;
-                    margin: 4px 0;
-                }
-
-                .comp-item span {
-                    width: 33%;
-                    text-align: center;
-                }
-
-                .comp-resumo {
-                    margin-top: 15px; /* espaço extra entre itens e resumo */
-                    text-align: right;
-                    border-top: 1px dashed #000;
-                    padding-top: 5px;
-                }
-
-                .comp-msg {
-                    margin-top: 15px;
-                }
-
-                .comp-pagamento, .comp-troco {
-                    margin-top: 5px;
-                    text-align: left;
-                }
+                .comp-logo { width: 100px; height: auto; margin-bottom: 10px; }
+                .comp-empresa { font-size: 12px; margin-bottom: 5px; }
+                hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
+                .comp-header { display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px dashed #000; padding-bottom: 4px; margin-top: 10px; }
+                .comp-header span { width: 33%; text-align: center; }
+                .comp-item { display: flex; justify-content: space-between; margin: 4px 0; }
+                .comp-item span { width: 33%; text-align: center; }
+                .comp-resumo { margin-top: 15px; text-align: right; border-top: 1px dashed #000; padding-top: 5px; }
+                .comp-msg { margin-top: 15px; }
+                .comp-pagamento, .comp-troco { margin-top: 5px; text-align: left; }
             </style>
         </head>
         <body>
             ${conteudo}
-            <script>
-                window.onload = function() {
-                    window.print();
-                    window.close();
-                }
-            </script>
+            <p style="margin-top:15px; font-weight:bold;">Para imprimir, use o menu do navegador.</p>
         </body>
         </html>
     `);
     w.document.close();
 }
+
 
 
 
