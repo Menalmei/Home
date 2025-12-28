@@ -1,4 +1,4 @@
-const API = "https://script.google.com/macros/s/AKfycbz3bDyKhQyatssuNqjnI7wR4yM_N0LSRHKdfPIghs-2a7b3EI4KgzFNoHR-pCJN1E_k/exec";
+const API = "https://script.google.com/macros/s/AKfycbzSYctUQUnUyhgUeYhp7AmnYq77oJCtH0NkAkJkWBysZnmibXYGQWcbeAtXIZPIVbo-/exec";
 
 let produtos = [];
 let cupons = [];

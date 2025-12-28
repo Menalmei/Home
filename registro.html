@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+  margin:0;
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f3f4f6;
+  color:#111;
+  overflow:hidden; /* remove scroll da página */
+}
+
+.container{
+  padding:20px;
+  max-width:1200px;
+  margin:auto;
+}
+
+/* RESUMO */
+.cards-resumo{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.resumo{
+  background:#fff;
+  border-radius:14px;
+  padding:18px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.resumo span{
+  font-size:13px;
+  color:#555;
+}
+
+.resumo h2{
+  margin:5px 0 0;
+  font-size:26px;
+}
+
+/* LAYOUT PRINCIPAL */
+.area-principal{
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:20px;
+  height:calc(100vh - 220px); /* cabe tudo na tela */
+}
+
+/* GRÁFICO */
+.grafico-box{
+  background:#fff;
+  border-radius:14px;
+  padding:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+/* HISTÓRICO */
+.historico-box{
+  background:#fff;
+  border-radius:14px;
+  padding:15px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  display:flex;
+  flex-direction:column;
+}
+
+.historico-box h2{
+  margin:0 0 10px;
+  font-size:18px;
+}
+
+/* SCROLL AUTOMÁTICO QUANDO MAIS DE 4 CARDS */
+.cards-vendas{
+  overflow-y:auto;
+  padding-right:5px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+
+  max-height: calc(4 * 70px + 3 * 10px); /* 4 cards + gaps */
+}
+
+.venda-card{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.06);
+}
+
+.venda-card h3{
+  margin:0 0 6px;
+  font-size:15px;
+}
+
+.venda-card p{
+  margin:2px 0;
+  font-size:13px;
+}
+
+.valor{
+  font-weight:bold;
+  font-size:16px;
+  margin-top:6px;
+}
+
+.loading{position:fixed;inset:0;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9999}
+.spinner{width:40px;height:40px;border:5px solid #e5e7eb;border-top:5px solid #16a34a;border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- RESUMO -->
+  <div class="cards-resumo">
+    <div class="resumo">
+      <span>Faturamento do mês</span>
+      <h2 id="totalMes">R$ 0,00</h2>
+    </div>
+    <div class="resumo">
+      <span>Pedidos</span>
+      <h2 id="totalPedidos">0</h2>
+    </div>
+    <div class="resumo">
+      <span>Ticket médio</span>
+      <h2 id="ticketMedio">R$ 0,00</h2>
+    </div>
+  </div>
+
+  <!-- ÁREA PRINCIPAL -->
+  <div class="area-principal">
+
+    <!-- GRÁFICO -->
+    <div class="grafico-box">
+      <canvas id="graficoVendas"></canvas>
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div class="historico-box">
+      <h2>Histórico de Vendas</h2>
+      <div class="cards-vendas" id="listaVendas"></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="loading" id="loading">
+  <div class="spinner"></div>
+  <p>Carregando dados...</p>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbz6LsdvvSV33ivVOAvYIW5Nx0ckBp9kMP7GqI9eekmfi1PCzNAoiA3wffdo-jS9LE2V/exec";
+
+function converterDataBR(dataBR) {
+  const [dia, mes, ano] = dataBR.split("/");
+  return new Date(ano, mes - 1, dia);
+}
+
+function parseValor(valor) {
+  if (!valor) return 0;
+  let str = String(valor).replace("R$", "").trim();
+  str = str.replace(/\./g, "").replace(",", ".");
+  return parseFloat(str) || 0;
+}
+
+let grafico;
+
+async function carregarDashboard(){
+  try {
+    const res = await fetch(`${API}?tipo=registros`);
+    const dados = await res.json();
+
+    const hoje = new Date();
+    const mesAtual = hoje.getMonth();
+    const anoAtual = hoje.getFullYear();
+
+    let totalMes = 0;
+    let pedidosMes = 0;
+    let vendasPorDia = {};
+
+    const lista = document.getElementById("listaVendas");
+    lista.innerHTML = "";
+
+    dados.reverse().forEach(v => {
+      const dataVenda = converterDataBR(v.data);
+      const valor = parseValor(v.total);
+
+      if (
+        dataVenda.getMonth() === mesAtual &&
+        dataVenda.getFullYear() === anoAtual
+      ) {
+        totalMes += valor;
+        pedidosMes++;
+
+        const dia = dataVenda.getDate();
+        vendasPorDia[dia] = (vendasPorDia[dia] || 0) + valor;
+      }
+
+      lista.innerHTML += `
+        <div class="venda-card">
+          <h3>Pedido #${v.pedido}</h3>
+          <p>📅 ${v.data}</p>
+          <p>⏰ ${v.hora}</p>
+          <div class="valor">R$ ${valor.toFixed(2)}</div>
+        </div>
+      `;
+    });
+
+    document.getElementById("totalMes").innerText = `R$ ${totalMes.toFixed(2)}`;
+    document.getElementById("totalPedidos").innerText = pedidosMes;
+    document.getElementById("ticketMedio").innerText =
+      pedidosMes ? `R$ ${(totalMes / pedidosMes).toFixed(2)}` : "R$ 0,00";
+
+    montarGrafico(vendasPorDia);
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    document.getElementById("loading").style.display = "none";
+  }
+}
+
+function montarGrafico(vendasPorDia) {
+  const dias = Object.keys(vendasPorDia).sort((a,b) => a - b);
+  const valores = dias.map(d => vendasPorDia[d]);
+
+  const ctx = document.getElementById("graficoVendas");
+
+  if (grafico) grafico.destroy();
+
+  grafico = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: dias,
+      datasets: [{
+        label: "Vendas do mês (R$)",
+        data: valores,
+        tension: 0.4,
+        fill: true,
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
+// Atualização em tempo real a cada 5 segundos
+carregarDashboard(); // primeira carga
+setInterval(carregarDashboard, 5000); // recarrega a cada 5s
+
+</script>
+</body>
+</html>
