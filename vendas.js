@@ -180,10 +180,8 @@ async function concluirVenda(forma) {
     mostrarLoadingVenda();
 
     try {
-        // Calcula total
         const totalPedido = calcularTotal();
 
-        // Cria array simplificado de itens
         const itensSimplificados = carrinho.map(i => ({
             id: i.id,
             produto: i.produto,
@@ -191,7 +189,6 @@ async function concluirVenda(forma) {
             preco: i.preco
         }));
 
-        // Envia ao servidor
         await fetch(API, {
             method: "POST",
             body: JSON.stringify({
@@ -201,16 +198,23 @@ async function concluirVenda(forma) {
             })
         });
 
+        // 1️⃣ Gera comprovante ANTES de limpar o carrinho
         gerarComprovante(forma);
         mostrarComprovante();
 
-        // Limpa venda
+        // 2️⃣ Dá um pequeno delay para garantir renderização
+        await new Promise(resolve => setTimeout(resolve, 100));
+
+        // 3️⃣ Gera PDF (opcional, se for clicar no botão)
+        // await imprimir();
+
+        mostrarToast("Venda realizada com sucesso ✔");
+
+        // 4️⃣ Limpa venda APÓS geração do comprovante
         carrinho = [];
         desconto = 0;
         atualizarCarrinho();
         fecharPagamento();
-
-        mostrarToast("Venda realizada com sucesso ✔");
 
         // Atualiza dashboard
         carregarDados(false);
@@ -222,6 +226,7 @@ async function concluirVenda(forma) {
         esconderLoadingVenda();
     }
 }
+
 
 
 
@@ -293,19 +298,26 @@ async function imprimir() {
 
     const comprovante = document.getElementById("comprovante");
 
-    // Garantir que o comprovante esteja visível
+    // Certifica que o elemento está visível
     comprovante.style.display = "block";
 
-    // Gerar PDF do conteúdo do HTML
+    // Ajusta largura para A4
+    comprovante.style.width = "210mm";
+    comprovante.style.padding = "10px";
+
     await doc.html(comprovante, {
-        callback: function (doc) {
-            doc.save("comprovante.pdf"); // Baixa o PDF
+        callback: function(doc) {
+            doc.save("comprovante.pdf");
         },
         x: 10,
         y: 10,
-        html2canvas: { scale: 0.5 } // Ajusta o tamanho se necessário
+        html2canvas: { scale: 0.7, useCORS: true }
     });
+
+    comprovante.style.width = "";
 }
+
+
 
 
 
