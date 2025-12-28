@@ -5,13 +5,43 @@ let cupons = [];
 let carrinho = [];
 let desconto = 0;
 
-// ================= DADOS =================
-async function carregarDados() {
-    produtos = await fetch(`${API}?tipo=produtos`).then(r => r.json());
-    cupons = await fetch(`${API}?tipo=cupons`).then(r => r.json());
-    renderProdutos(produtos);
+document.addEventListener("DOMContentLoaded", () => {
+
+    esconderLoadingEstoque(); // garante estado inicial
+    carregarDados();
+
+});
+
+function mostrarLoadingEstoque() {
+    document.getElementById("loadingEstoque").style.display = "flex";
 }
-carregarDados();
+
+function esconderLoadingEstoque() {
+    document.getElementById("loadingEstoque").style.display = "none";
+}
+
+
+// ================= DADOS =================
+async function carregarDados(mostrarLoadingTela = true) {
+
+    if (mostrarLoadingTela) {
+        mostrarLoadingEstoque();
+    }
+
+    try {
+        produtos = await fetch(`${API}?tipo=produtos`).then(r => r.json());
+        cupons = await fetch(`${API}?tipo=cupons`).then(r => r.json());
+        renderProdutos(produtos);
+    } catch (e) {
+        alert("Erro ao carregar estoque");
+        console.error(e);
+    } finally {
+        if (mostrarLoadingTela) {
+            esconderLoadingEstoque();
+        }
+    }
+}
+
 
 // ================= PRODUTOS =================
 function renderProdutos(lista) {
@@ -46,6 +76,7 @@ function renderProdutos(lista) {
         `;
     });
 }
+
 
 
 // ================= BUSCA =================
@@ -144,21 +175,45 @@ function calcularTroco() {
 }
 
 async function concluirVenda(forma) {
-    await fetch(API, { method: "POST", body: JSON.stringify({ tipo:"venda", pagamento:forma, itens:carrinho }) });
-    gerarComprovante(forma);
+    // 🔄 MOSTRA LOADING
+    mostrarLoadingVenda();
 
-    carrinho = [];
-    desconto = 0;
-    atualizarCarrinho();
-    fecharPagamento();
+    try {
+        // 🧾 Envia a venda
+        await fetch(API, {
+            method: "POST",
+            body: JSON.stringify({
+                tipo: "venda",
+                pagamento: forma,
+                itens: carrinho
+            })
+        });
 
-    const msg = document.getElementById("mensagemVenda");
-    msg.innerText = "Venda realizada com sucesso!";
-    msg.style.display = "block";
-    setTimeout(() => msg.style.display = "none", 4000);
+        // 🧾 Gera e mostra comprovante
+        gerarComprovante(forma);
+        mostrarComprovante();
 
-    carregarDados();
+        // 🔄 Limpa venda
+        carrinho = [];
+        desconto = 0;
+        atualizarCarrinho();
+        fecharPagamento();
+
+        // ✅ Mensagem de sucesso
+        mostrarToast("Venda realizada com sucesso ✔");
+
+        // 🔁 Atualiza dados
+        carregarDados(false);
+
+    } catch (erro) {
+        console.error(erro);
+        mostrarToast("Erro ao finalizar venda ❌");
+    } finally {
+        // ❌ ESCONDE LOADING (sempre)
+        esconderLoadingVenda();
+    }
 }
+
 
 // ================= COMPROVANTE =================
 function gerarComprovante(pagamento) {
@@ -206,47 +261,32 @@ function gerarComprovante(pagamento) {
         compTroco.innerText = "";
     }
 
-    imprimir();
 }
+
+function continuarComprando() {
+    document.getElementById("comprovante").style.display = "none";
+
+    carrinho = [];
+    desconto = 0;
+
+    atualizarCarrinho();
+
+    document.getElementById("cupom").value = "";
+    document.getElementById("infoCupom").innerText = "";
+}
+
 
 
 function imprimir() {
-    const conteudo = document.getElementById("comprovante").outerHTML;
+    const comp = document.getElementById("comprovante");
 
-    const w = window.open("", "_blank");
-    w.document.write(`
-        <html>
-        <head>
-            <title>Comprovante</title>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    font-size: 12px;
-                    text-align: center;
-                    margin: 10px;
-                }
-                .comp-logo { width: 100px; height: auto; margin-bottom: 10px; }
-                .comp-empresa { font-size: 12px; margin-bottom: 5px; }
-                hr { border: none; border-top: 1px dashed #000; margin: 8px 0; }
-                .comp-header { display: flex; justify-content: space-between; font-weight: bold; border-bottom: 1px dashed #000; padding-bottom: 4px; margin-top: 10px; }
-                .comp-header span { width: 33%; text-align: center; }
-                .comp-item { display: flex; justify-content: space-between; margin: 4px 0; }
-                .comp-item span { width: 33%; text-align: center; }
-                .comp-resumo { margin-top: 15px; text-align: right; border-top: 1px dashed #000; padding-top: 5px; }
-                .comp-msg { margin-top: 15px; }
-                .comp-pagamento, .comp-troco { margin-top: 5px; text-align: left; }
-            </style>
-        </head>
-        <body>
-            ${conteudo}
-            <p style="margin-top:15px; font-weight:bold;">Para imprimir, use o menu do navegador.</p>
-        </body>
-        </html>
-    `);
-    w.document.close();
+    comp.style.display = "block";   // garante que existe
+    comp.style.margin = "0 auto";   // centraliza
+
+    setTimeout(() => {
+        window.print();
+    }, 100);
 }
-
-
 
 
 function confirmarDinheiro() {
@@ -280,14 +320,12 @@ function cancelarVenda() {
 function removerItem(index) {
     carrinho.splice(index, 1);
     atualizarCarrinho();
-    atualizarTotal();
+    
 }
 
 async function atualizarProdutosPeriodicamente() {
     try {
         const novosProdutos = await fetch(`${API}?tipo=produtos`).then(r => r.json());
-
-        // Aqui você pode comparar se houve mudanças antes de re-renderizar
         produtos = novosProdutos;
         renderProdutos(produtos);
     } catch (e) {
@@ -295,7 +333,32 @@ async function atualizarProdutosPeriodicamente() {
     }
 }
 
+function mostrarComprovante() {
+    document.getElementById("comprovante").style.display = "block";
+    window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+}
+
+function mostrarToast(mensagem) {
+    const toast = document.getElementById("toast");
+    toast.textContent = mensagem;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000); // 3 segundos
+}
+
+function mostrarLoadingVenda() {
+    document.getElementById("loadingVenda").style.display = "flex";
+}
+
+function esconderLoadingVenda() {
+    document.getElementById("loadingVenda").style.display = "none";
+}
+
+
 // Atualiza a cada 5 segundos
 setInterval(atualizarProdutosPeriodicamente, 5000);
+
 
 
