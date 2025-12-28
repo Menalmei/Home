@@ -288,34 +288,19 @@ function continuarComprando() {
     document.getElementById("infoCupom").innerText = "";
 }
 
-function imprimirComprovante() {
+function imprimir() {
     const comprovante = document.getElementById("comprovante");
 
-    // Cria uma nova janela
-    const printWindow = window.open('', '', 'width=600,height=800');
+    // garante que o comprovante esteja visível antes de imprimir
+    comprovante.style.display = "flex"; // ou 'block'
 
-    // Adiciona o conteúdo do comprovante na nova janela
-    printWindow.document.write(`
-        <html>
-        <head>
-            <title>Comprovante</title>
-            <style>
-                body { font-family: Arial, sans-serif; padding: 20px; }
-                .comp-item { display: flex; justify-content: space-between; margin-bottom: 5px; }
-                strong { font-size: 1.2em; }
-            </style>
-        </head>
-        <body>
-            ${comprovante.innerHTML}
-        </body>
-        </html>
-    `);
+    // dispara a impressão nativa do navegador
+    window.print();
 
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    // opcional: mantém o comprovante visível ou oculta após impressão
+    // comprovante.style.display = "none";
 }
+
 
 function confirmarDinheiro() {
     const pago = Number(document.getElementById("valorPago").value);

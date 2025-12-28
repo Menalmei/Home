@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>PDV - Frente de Caixa</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 
 <style>
 * {
@@ -549,6 +549,7 @@ button {
 @media print {
     body * {
         visibility: hidden;
+
     }
 
     #comprovante,
@@ -560,9 +561,10 @@ button {
         position: absolute;
         left: 50%;
         top: 0;
-        transform: translateX(-50%) scale(1.5);
-        transform-origin: top center;
+        transform: translateX(-50%); 
+        scale:1;
         width: 280px;
+        height: auto;
     }
      .acoes-comprovante {
         display: none;
@@ -571,11 +573,6 @@ button {
      header, footer {
         display: none !important;
     }
-}
-
-@page {
-    size: A4;
-    margin: 0;
 }
 
 
@@ -616,7 +613,6 @@ button {
 
     <div id="mensagemVenda"></div>
 </div>
-
 
 <script src="vendas.js"></script>
 
@@ -693,7 +689,7 @@ background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
     <p class="comp-msg">Obrigado pela preferência!</p>
 
     <div class="acoes-comprovante">
-     	<button onclick="imprimirComprovante()">Imprimir</button>
+     	<button type="button" onclick="imprimir()">Imprimir</button>
      	<button type="button" onclick="continuarComprando()">🛒 Continuar vendendo</button>
     </div>
  </div>
