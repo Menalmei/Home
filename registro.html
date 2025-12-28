@@ -84,11 +84,11 @@ body{
   flex-direction:column;
   gap:10px;
 
-  max-height: calc(4 * 70px + 3 * 10px); /* 4 cards + gaps */
+  max-height: calc(4 * 81px + 3 * 10px); /* 4 cards + gaps */
 }
 
 .venda-card{
-  background:#f9fafb;
+  background:linear-gradient(135deg, #7aff6b, #dcff3d);
   border-radius:12px;
   padding:14px;
   box-shadow:0 4px 10px rgba(0,0,0,.06);
@@ -159,7 +159,7 @@ body{
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbz6LsdvvSV33ivVOAvYIW5Nx0ckBp9kMP7GqI9eekmfi1PCzNAoiA3wffdo-jS9LE2V/exec";
+const API = "https://script.google.com/macros/s/AKfycbyx4ACKVv1R2LbAaY_i1RdN_-53ve-D-YWKW1dU4YjXwll0fSTJhcsjlI-hzVVLL--Z/exec";
 
 function converterDataBR(dataBR) {
   const [dia, mes, ano] = dataBR.split("/");
@@ -168,10 +168,18 @@ function converterDataBR(dataBR) {
 
 function parseValor(valor) {
   if (!valor) return 0;
-  let str = String(valor).replace("R$", "").trim();
-  str = str.replace(/\./g, "").replace(",", ".");
+  let str = String(valor).trim();
+
+  // Substitui vírgula por ponto se houver
+  str = str.replace(",", ".");
+
+  // Remove qualquer "R$" ou espaço
+  str = str.replace("R$", "").trim();
+
+  // Converte para número
   return parseFloat(str) || 0;
 }
+
 
 let grafico;
 

@@ -1,4 +1,4 @@
-const API = "https://script.google.com/macros/s/AKfycbzSYctUQUnUyhgUeYhp7AmnYq77oJCtH0NkAkJkWBysZnmibXYGQWcbeAtXIZPIVbo-/exec";
+const API = "https://script.google.com/macros/s/AKfycbyx4ACKVv1R2LbAaY_i1RdN_-53ve-D-YWKW1dU4YjXwll0fSTJhcsjlI-hzVVLL--Z/exec";
 
 let produtos = [];
 let cupons = [];
@@ -177,44 +177,52 @@ function calcularTroco() {
 }
 
 async function concluirVenda(forma) {
-    // 🔄 MOSTRA LOADING
     mostrarLoadingVenda();
 
     try {
-        // 🧾 Envia a venda
+        // Calcula total
+        const totalPedido = calcularTotal();
+
+        // Cria array simplificado de itens
+        const itensSimplificados = carrinho.map(i => ({
+            id: i.id,
+            produto: i.produto,
+            qtd: i.qtd,
+            preco: i.preco
+        }));
+
+        // Envia ao servidor
         await fetch(API, {
             method: "POST",
             body: JSON.stringify({
                 tipo: "venda",
                 pagamento: forma,
-                itens: carrinho
+                itens: itensSimplificados
             })
         });
 
-        // 🧾 Gera e mostra comprovante
         gerarComprovante(forma);
         mostrarComprovante();
 
-        // 🔄 Limpa venda
+        // Limpa venda
         carrinho = [];
         desconto = 0;
         atualizarCarrinho();
         fecharPagamento();
 
-        // ✅ Mensagem de sucesso
         mostrarToast("Venda realizada com sucesso ✔");
 
-        // 🔁 Atualiza dados
+        // Atualiza dashboard
         carregarDados(false);
 
     } catch (erro) {
         console.error(erro);
         mostrarToast("Erro ao finalizar venda ❌");
     } finally {
-        // ❌ ESCONDE LOADING (sempre)
         esconderLoadingVenda();
     }
 }
+
 
 
 // ================= COMPROVANTE =================
