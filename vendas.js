@@ -198,25 +198,22 @@ async function concluirVenda(forma) {
             })
         });
 
-        // 1️⃣ Gera comprovante ANTES de limpar o carrinho
+        // Gera o comprovante
         gerarComprovante(forma);
         mostrarComprovante();
 
-        // 2️⃣ Dá um pequeno delay para garantir renderização
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        // 3️⃣ Gera PDF (opcional, se for clicar no botão)
-        // await imprimir();
+        // Chame a impressão AQUI, antes de limpar o carrinho
+        // imprimirComprovante(); // descomente se quiser imprimir automático
 
         mostrarToast("Venda realizada com sucesso ✔");
 
-        // 4️⃣ Limpa venda APÓS geração do comprovante
+        // Limpa o carrinho APÓS impressão
         carrinho = [];
         desconto = 0;
         atualizarCarrinho();
         fecharPagamento();
 
-        // Atualiza dashboard
+        // Atualiza dados
         carregarDados(false);
 
     } catch (erro) {
@@ -226,6 +223,7 @@ async function concluirVenda(forma) {
         esconderLoadingVenda();
     }
 }
+
 
 
 
@@ -290,36 +288,34 @@ function continuarComprando() {
     document.getElementById("infoCupom").innerText = "";
 }
 
-
-
-async function imprimir() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
+function imprimirComprovante() {
     const comprovante = document.getElementById("comprovante");
 
-    // Certifica que o elemento está visível
-    comprovante.style.display = "block";
+    // Cria uma nova janela
+    const printWindow = window.open('', '', 'width=600,height=800');
 
-    // Ajusta largura para A4
-    comprovante.style.width = "210mm";
-    comprovante.style.padding = "10px";
+    // Adiciona o conteúdo do comprovante na nova janela
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Comprovante</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                .comp-item { display: flex; justify-content: space-between; margin-bottom: 5px; }
+                strong { font-size: 1.2em; }
+            </style>
+        </head>
+        <body>
+            ${comprovante.innerHTML}
+        </body>
+        </html>
+    `);
 
-    await doc.html(comprovante, {
-        callback: function(doc) {
-            doc.save("comprovante.pdf");
-        },
-        x: 10,
-        y: 10,
-        html2canvas: { scale: 0.7, useCORS: true }
-    });
-
-    comprovante.style.width = "";
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
 }
-
-
-
-
 
 function confirmarDinheiro() {
     const pago = Number(document.getElementById("valorPago").value);
