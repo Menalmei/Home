@@ -287,16 +287,26 @@ function continuarComprando() {
 
 
 
-function imprimir() {
-    const comp = document.getElementById("comprovante");
+async function imprimir() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    comp.style.display = "block";   // garante que existe
-    comp.style.margin = "0 auto";   // centraliza
+    const comprovante = document.getElementById("comprovante");
 
-    setTimeout(() => {
-        window.print();
-    }, 100);
+    // Garantir que o comprovante esteja visível
+    comprovante.style.display = "block";
+
+    // Gerar PDF do conteúdo do HTML
+    await doc.html(comprovante, {
+        callback: function (doc) {
+            doc.save("comprovante.pdf"); // Baixa o PDF
+        },
+        x: 10,
+        y: 10,
+        html2canvas: { scale: 0.5 } // Ajusta o tamanho se necessário
+    });
 }
+
 
 
 function confirmarDinheiro() {
