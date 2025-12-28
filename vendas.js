@@ -358,7 +358,7 @@ function esconderLoadingVenda() {
 
 
 // Atualiza a cada 5 segundos
-setInterval(atualizarProdutosPeriodicamente, 5000);
+setInterval(atualizarProdutosPeriodicamente, 300000);
 
 
 
