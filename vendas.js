@@ -71,7 +71,9 @@ function renderProdutos(lista) {
                     R$ ${Number(p.preco).toFixed(2)}
                 </div>
 
-                <div class="estoque">${p.estoque}</div>
+                <div class="tamanho">${p.tamanho}</div>
+                <div class="estoque">Qtd: ${p.estoque}</div>
+
             </div>
         `;
     });
@@ -358,7 +360,7 @@ function esconderLoadingVenda() {
 
 
 // Atualiza a cada 5 segundos
-setInterval(atualizarProdutosPeriodicamente, 300000);
+setInterval(atualizarProdutosPeriodicamente, 60000);
 
 
 
