@@ -31,7 +31,7 @@ async function carregarDados(mostrarLoadingTela = true) {
     try {
         produtos = await fetch(`${API}?tipo=produtos`).then(r => r.json());
         cupons = await fetch(`${API}?tipo=cupons`).then(r => r.json());
-        renderProdutos(produtos);
+        renderCategorias();
     } catch (e) {
         alert("Erro ao carregar estoque");
         console.error(e);
@@ -42,9 +42,36 @@ async function carregarDados(mostrarLoadingTela = true) {
     }
 }
 
+function renderCategorias() {
+    const area = document.getElementById("listaProdutos");
+    area.innerHTML = "";
+
+    // pega categorias únicas
+    const categorias = [...new Set(produtos.map(p => p.tipo))];
+
+    categorias.forEach(cat => {
+        area.innerHTML += `
+            <div class="produto" onclick="selecionarCategoria('${cat}')">
+                <img src="Imagens/Categorias/${cat}.png"
+                     onerror="this.src='Imagens/Produtos/sem-imagem.png'">
+                <div class="nome-produto">${cat}</div>
+            </div>
+        `;
+    });
+}
+
+function selecionarCategoria(categoria) {
+    categoriaSelecionada = categoria;
+
+    const filtrados = produtos.filter(p => p.tipo === categoria);
+    renderProdutos(filtrados);
+
+    mostrarBotaoVoltar();
+}
+
 
 // ================= PRODUTOS =================
-function renderProdutos(lista) {
+function renderProdutos(lista = []) {
     const area = document.getElementById("listaProdutos");
     area.innerHTML = "";
 
@@ -59,8 +86,6 @@ function renderProdutos(lista) {
 
         area.innerHTML += `
             <div class="produto tipo-${tipoClasse}" onclick="addCarrinho('${p.id}')">
-
-                <div class="badge">${p.tipo}</div>
 
                 <img src="Imagens/Produtos/${p.produto}.png"
                      onerror="this.src='Imagens/Produtos/sem-imagem.png'">
@@ -84,8 +109,35 @@ function renderProdutos(lista) {
 // ================= BUSCA =================
 document.getElementById("busca").addEventListener("input", e => {
     const v = e.target.value.toLowerCase();
-    renderProdutos(produtos.filter(p => p.produto.toLowerCase().includes(v)));
+
+    let lista = produtos;
+
+    if (categoriaSelecionada) {
+        lista = lista.filter(p => p.tipo === categoriaSelecionada);
+    }
+
+    renderProdutos(
+        lista.filter(p => p.produto.toLowerCase().includes(v))
+    );
 });
+
+
+
+function mostrarBotaoVoltar() {
+    document.getElementById("btnVoltar").style.display = "block";
+}
+
+function esconderBotaoVoltar() {
+    document.getElementById("btnVoltar").style.display = "none";
+}
+
+function voltarCategorias() {
+    categoriaSelecionada = null;
+    document.getElementById("busca").value = "";
+    esconderBotaoVoltar();
+    renderCategorias();
+}
+
 
 // ================= CARRINHO =================
 function addCarrinho(id) {
@@ -371,7 +423,7 @@ function esconderLoadingVenda() {
 
 
 // Atualiza a cada 5 segundos
-setInterval(atualizarProdutosPeriodicamente, 60000);
+//setInterval(atualizarProdutosPeriodicamente, 60000);
 
 
 
