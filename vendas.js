@@ -46,19 +46,32 @@ function renderCategorias() {
     const area = document.getElementById("listaProdutos");
     area.innerHTML = "";
 
-    // pega categorias únicas
     const categorias = [...new Set(produtos.map(p => p.tipo))];
 
     categorias.forEach(cat => {
+
+        // 🔥 SOMA TOTAL DO ESTOQUE (COLUNA G)
+        const totalPecas = produtos
+            .filter(p => p.tipo === cat)
+            .reduce((soma, p) => soma + Number(p.estoque || 0), 0);
+
         area.innerHTML += `
-            <div class="produto" onclick="selecionarCategoria('${cat}')">
-                <img src="Imagens/Categorias/${cat}.png"
-                     onerror="this.src='Imagens/Produtos/sem-imagem.png'">
+            <div class="produto categoria" onclick="selecionarCategoria('${cat}')">
+
+                <div class="img-categoria">
+
+                    <img src="Imagens/Categorias/${cat}.png"
+                         onerror="this.src='Imagens/Produtos/sem-imagem.png'">
+                </div>
+                <span class="quantidade-categoria">${totalPecas}</span>
                 <div class="nome-produto">${cat}</div>
             </div>
         `;
     });
 }
+
+
+
 
 function selecionarCategoria(categoria) {
     categoriaSelecionada = categoria;
@@ -252,6 +265,7 @@ async function concluirVenda(forma) {
 
         // Gera o comprovante
         gerarComprovante(forma);
+        gerarComprovanteA4(forma);
         mostrarComprovante();
 
         // Chame a impressão AQUI, antes de limpar o carrinho
@@ -327,6 +341,80 @@ function gerarComprovante(pagamento) {
     }
 
 }
+
+function gerarComprovanteA4(pagamento) {
+
+  const itensBody = document.getElementById("a4-itens");
+  const totalSpan = document.getElementById("a4-total");
+  const dataSpan = document.getElementById("a4-data");
+
+  const subtotalSpan = document.getElementById("a4-subtotal");
+  const descontoSpan = document.getElementById("a4-desconto");
+  const totalResumoSpan = document.getElementById("a4-total-resumo");
+  const pagamentoSpan = document.getElementById("a4-pagamento");
+  const trocoSpan = document.getElementById("a4-troco");
+
+  const linhaDesconto = document.getElementById("linha-desconto");
+  const linhaTroco = document.getElementById("linha-troco");
+
+  // 🔒 segurança
+  if (!itensBody || !totalSpan || !dataSpan) return;
+
+  let subtotal = 0;
+
+  // ITENS
+  itensBody.innerHTML = carrinho.map(i => {
+    const totalItem = i.qtd * i.preco;
+    subtotal += totalItem;
+
+    return `
+      <tr>
+        <td>${i.produto}</td>
+        <td>${i.qtd}</td>
+        <td>R$ ${i.preco.toFixed(2)}</td>
+        <td>R$ ${totalItem.toFixed(2)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  // DESCONTO
+  let valorDesconto = 0;
+  let totalFinal = subtotal;
+
+  if (desconto > 0) {
+    valorDesconto = subtotal * (desconto / 100);
+    totalFinal -= valorDesconto;
+
+    linhaDesconto.style.display = "flex";
+    descontoSpan.innerText = `- R$ ${valorDesconto.toFixed(2)}`;
+  } else {
+    linhaDesconto.style.display = "none";
+  }
+
+  // SUBTOTAL
+  subtotalSpan.innerText = `R$ ${subtotal.toFixed(2)}`;
+
+  // TOTAL
+  totalResumoSpan.innerText = `R$ ${totalFinal.toFixed(2)}`;
+  totalSpan.innerText = totalFinal.toFixed(2);
+
+  // PAGAMENTO
+  pagamentoSpan.innerText = pagamento;
+
+  // TROCO (somente dinheiro)
+  if (pagamento === "Dinheiro" && typeof troco !== "undefined" && troco > 0) {
+    linhaTroco.style.display = "flex";
+    trocoSpan.innerText = `R$ ${troco.toFixed(2)}`;
+  } else {
+    linhaTroco.style.display = "none";
+  }
+
+  // DATA
+  dataSpan.innerText = new Date().toLocaleString("pt-BR");
+}
+
+
+
 
 function continuarComprando() {
     document.getElementById("comprovante").style.display = "none";
@@ -420,6 +508,7 @@ function mostrarLoadingVenda() {
 function esconderLoadingVenda() {
     document.getElementById("loadingVenda").style.display = "none";
 }
+
 
 
 // Atualiza a cada 5 segundos

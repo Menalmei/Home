@@ -459,6 +459,109 @@ button {
 }
 
 
+#comprovante-a4 {
+  display: none;
+  position: relative;
+  width: 210mm;
+  height: 297mm;          /* 🔥 FIXA EM UMA PÁGINA */
+  overflow: hidden;
+  page-break-after: avoid;
+  page-break-before: avoid;
+  padding: 30px;
+}
+
+
+.bg-a4 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 210mm;
+  height: 297mm;
+
+  object-fit: cover;     /* ou contain */
+  opacity: 0.08;
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+
+/* Header */
+.a4-header {
+  text-align: center;
+  border-bottom: 2px solid #000;
+  padding-bottom: 10px;
+}
+
+.a4-header h1 {
+  margin: 0;
+  font-size: 32px;
+}
+
+/* Info */
+.a4-info {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  font-size: 14px;
+}
+
+/* Tabela */
+.a4-tabela {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.a4-tabela th,
+.a4-tabela td {
+  border: 1px solid #000;
+  padding: 10px;
+  text-align: left;
+  color: #000;
+}
+
+.a4-tabela th {
+  background: #transparent;
+}
+
+/* Total */
+.a4-total {
+  font-size: 22px;
+  font-weight: bold;
+  border-top: 2px solid #232938;
+  padding-top: 10px;
+  text-align: right
+}
+
+/* Footer */
+.a4-footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.a4-resumo {
+  margin-top: 25px;
+  border-top: 2px dashed #000;
+  padding-top: 12px;
+  font-size: 14px;
+}
+
+.linha-resumo {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.linha-resumo.destaque {
+  font-weight: bold;
+  font-size: 16px;
+  margin-top: 8px;
+  border-top: 1px solid #000;
+  padding-top: 6px;
+}
+
+
 
 
 
@@ -549,34 +652,43 @@ button {
 @media print {
     body * {
         visibility: hidden;
-
     }
 
-    #comprovante,
-    #comprovante * {
+    #comprovante-a4,
+    #comprovante-a4 * {
         visibility: visible;
+
     }
 
-    #comprovante {
+    /* 🔥 LIBERA O FUNDO (PATTERN) */
+    // #comprovante-a4::before {
+        // visibility: visible;
+        // z-index: 0;
+    // }
+
+    #comprovante-a4 {
+        display: block;
         position: absolute;
-        left: 50%;
+        left: 0;
         top: 0;
-        transform: translateX(-50%); 
-        scale:1;
-        width: 280px;
-        height: auto;
-    }
-     .acoes-comprovante {
-        display: none;
-    }
-
-     header, footer {
-        display: none !important;
+        width: 210mm;
     }
 }
 
 
+.quantidade-categoria {
+    background: #dfdede;
+    color: #000000;
+    width: fit-content;
+    padding: 2px 20px;
+    border-radius: 4px;
+    margin: 0 auto 1px;
+    font-weight: 400;
+}
 
+.logo-comprovante {
+    max-width: 140px;
+}
 </style>
 </head>
 
@@ -703,6 +815,83 @@ background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
     </div>
  </div>
 </div>
+
+
+<div id="comprovante-a4">
+
+<img src="Imagens/Icone.png" class="bg-a4">
+
+  <div class="a4-header">
+    <img src="Imagens/logoretrato.png" alt="Menalmei" class="logo-comprovante">
+  </div>
+
+  <div class="a4-info">
+    <div>
+      <span>CNPJ:</span>
+      <span>59.723.739/0001-50</span>
+    </div>
+    <div>
+      <strong>Data:</strong> <span id="a4-data"></span>
+    </div>
+  </div>
+
+  <table class="a4-tabela">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Qtd</th>
+        <th>Valor</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody id="a4-itens"></tbody>
+  </table>
+
+<div class="a4-resumo">
+
+  <div class="linha-resumo">
+    <span>Subtotal</span>
+    <span id="a4-subtotal"></span>
+  </div>
+
+  <div class="linha-resumo" id="linha-desconto">
+    <span>Desconto</span>
+    <span id="a4-desconto"></span>
+  </div>
+
+  <div class="linha-resumo destaque">
+    <span>Total</span>
+    <span id="a4-total-resumo"></span>
+  </div>
+
+  <div class="linha-resumo">
+    <span>Forma de pagamento</span>
+    <span id="a4-pagamento"></span>
+  </div>
+
+  <div class="linha-resumo" id="linha-troco">
+    <span>Troco</span>
+    <span id="a4-troco"></span>
+  </div>
+
+</div>
+
+
+  <div class="a4-total">
+    <h2>Total: R$ <span id="a4-total"></span></h2>
+  </div>
+
+  <div class="a4-footer">
+    <p>Obrigado por comprar na <strong>Menalmei</strong> 🤍</p>
+   <p>Trocas em até 3 dias com etiqueta</p>
+   <p>Instagram: @menalmei</p>
+  </div>
+</div>
+
+
+
+
+
 
 <div id="toast" class="toast">
     Venda realizada com sucesso ✔
