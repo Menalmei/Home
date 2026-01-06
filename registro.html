@@ -293,7 +293,7 @@ button:hover{opacity:.9}
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbx3hjSGM8Xp7vLuYda2gksGC7Gt1bfPQTjAcVF-LhYUs-M2T1Efpus51cDeWtyHtaMp/exec";
+const API = "https://script.google.com/macros/s/AKfycbwYgAW9WlamF3c9YYK4LAy7SYWgnQsDS4PWgDwp_iPDbVy_BdalCVy3G_jseog1sxrd/exec";
 
 let grafico;
 let dadosGlobais = [];
@@ -317,21 +317,10 @@ function setComparacao(id, valor){
   }
 }
 
-function formatarData(valor) {
-  if (!valor) return "";
-
-  // Se vier como "dd/MM/yyyy" (já correto)
-  if (String(valor).includes("/")) {
-    return valor;
-  }
-
-  // Se vier como ISO ou Date
-  const partes = String(valor).substring(0, 10).split("-");
-  if (partes.length === 3) {
-    return `${partes[2]}/${partes[1]}/${partes[0]}`;
-  }
-
-  return valor;
+function extrairDataBR(dataStr){
+  // dataStr = "dd/MM/yyyy"
+  const [dia, mes, ano] = dataStr.split("/").map(Number);
+  return { dia, mes, ano };
 }
 
 
@@ -358,6 +347,24 @@ function formatarHora(valor) {
   return valor;
 }
 
+function normalizarDataBR(valor) {
+  if (!valor) return "";
+
+  // Já está em dd/MM/yyyy
+  if (typeof valor === "string" && valor.includes("/")) {
+    return valor;
+  }
+
+  // ISO / Date
+  const d = new Date(valor);
+  if (isNaN(d)) return "";
+
+  const dia = String(d.getDate()).padStart(2, "0");
+  const mes = String(d.getMonth() + 1).padStart(2, "0");
+  const ano = d.getFullYear();
+
+  return `${dia}/${mes}/${ano}`;
+}
 
 function carregarDashboard(){
   fetch(`${API}?tipo=registros`)
@@ -377,42 +384,49 @@ function carregarDashboard(){
       let pedidosHoje = 0;
       let lucroHoje = 0;
 
-      const hojeStr = new Date().toLocaleDateString("pt-BR");
+      const hojeBR = new Date().toLocaleDateString("pt-BR");
 
 
       const lista = document.getElementById("listaVendas");
       lista.innerHTML = "";
 
       dados.reverse().forEach(v => {
-        const data = new Date(v.data.split("/").reverse().join("-"));
+
+        const dataBR = normalizarDataBR(v.data);
+        v.data = dataBR; // 🔥 padroniza tudo
+
+        const { dia, mes: mesVenda, ano: anoVenda } = extrairDataBR(dataBR);
+
         const valor = parseValor(v.total);
         const custo = parseValor(v.custo);
 	
-        if (v.data === hojeStr) {
+        if (v.data === hojeBR) {
          totalHoje += valor;
          lucroHoje += (valor - custo);
          pedidosHoje++;
         }
 
 
-        if(data.getMonth()===mes && data.getFullYear()===ano){
+        if (mesVenda - 1 === mes && anoVenda === ano) {
           totalMes += valor;
           lucroMes += (valor - custo);
           pedidosMes++;
 
-          const d = data.getDate();
-          vendasPorDia[d] = (vendasPorDia[d]||0)+valor;
+          const d = dia;
+	  vendasPorDia[d] = (vendasPorDia[d] || 0) + valor;
+
         }
 
-        if(data.getMonth()===mes-1 && data.getFullYear()===ano){
-          totalMesAnt += valor;
-          lucroMesAnt += (valor - custo);
-        }
+        if (mesVenda - 1 === mes - 1 && anoVenda === ano) {
+ 	  totalMesAnt += valor;
+  	  lucroMesAnt += (valor - custo);
+	}
+
 
         lista.innerHTML += `
           <div class="venda-card">
             <h3>Pedido #${v.pedido}</h3>
-            <p>📅 ${formatarData(v.data)} • ⏰ ${formatarHora(v.hora)}</p>
+            <p>📅 ${v.data} • ⏰ ${formatarHora(v.hora)}</p>
             <div class="valor">R$ ${valor.toFixed(2)}</div>
           </div>`;
       });
@@ -493,9 +507,10 @@ function exportarPDF(){
   const ano = hoje.getFullYear();
 
   const registrosMes = dadosGlobais.filter(r=>{
-    const d = new Date(r.data.split("/").reverse().join("-"));
-    return d.getMonth() === mes && d.getFullYear() === ano;
-  });
+  const { mes: m, ano: a } = extrairDataBR(r.data);
+  return m - 1 === mes && a === ano;
+});
+
 
   let faturamento = 0;
   let lucro = 0;
