@@ -6,113 +6,216 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
+:root{
+  --bg: #0b1220;
+  --card: #111a2e;
+  --card-soft: #16213e;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --green: #22c55e;
+  --red: #ef4444;
+  --blue: #38bdf8;
+}
+
+*{box-sizing:border-box}
+
 body{
   margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:#f3f4f6;
-  color:#111;
-  overflow:hidden; /* remove scroll da página */
+  font-family: 'Inter', Arial, sans-serif;
+  background:linear-gradient(180deg,#050b18,#0b1220);
+  color:var(--text);
+  overflow:hidden;
 }
 
 .container{
-  padding:20px;
-  max-width:1200px;
+  padding:24px;
+  max-width:1300px;
   margin:auto;
 }
 
-/* RESUMO */
 .cards-resumo{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-bottom:20px;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-bottom:22px;
 }
 
 .resumo{
-  background:#fff;
-  border-radius:14px;
-  padding:18px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  background:linear-gradient(180deg,var(--card),var(--card-soft));
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 15px 35px rgba(0,0,0,.4);
+  position:relative;
 }
 
 .resumo span{
   font-size:13px;
-  color:#555;
+  color:var(--muted);
 }
 
 .resumo h2{
-  margin:5px 0 0;
-  font-size:26px;
+  margin:8px 0 4px;
+  font-size:28px;
+  font-weight:700;
 }
 
-/* LAYOUT PRINCIPAL */
+.compare{
+  font-size:13px;
+  font-weight:600;
+}
+
+.compare.positivo{color:var(--green)}
+.compare.negativo{color:var(--red)}
+
 .area-principal{
   display:grid;
-  grid-template-columns:2fr 1fr;
-  gap:20px;
-  height:calc(100vh - 220px); /* cabe tudo na tela */
+  grid-template-columns:2.2fr 1fr;
+  gap:22px;
+  height:calc(100vh - 260px);
 }
 
-/* GRÁFICO */
-.grafico-box{
-  background:#fff;
-  border-radius:14px;
-  padding:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
-
-/* HISTÓRICO */
+.grafico-box,
 .historico-box{
-  background:#fff;
-  border-radius:14px;
-  padding:15px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-  display:flex;
-  flex-direction:column;
+  background:linear-gradient(180deg,var(--card),var(--card-soft));
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 15px 35px rgba(0,0,0,.4);
+  height: 100%;
+  max-height: 90%
 }
 
-.historico-box h2{
-  margin:0 0 10px;
-  font-size:18px;
-}
-
-/* SCROLL AUTOMÁTICO QUANDO MAIS DE 4 CARDS */
 .cards-vendas{
   overflow-y:auto;
-  padding-right:5px;
   display:flex;
   flex-direction:column;
-  gap:10px;
-
-  max-height: calc(4 * 81px + 3 * 10px); /* 4 cards + gaps */
+  gap:12px;
+  max-height: 90%
 }
 
 .venda-card{
-  background:linear-gradient(135deg, #7aff6b, #dcff3d);
-  border-radius:12px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:14px;
   padding:14px;
-  box-shadow:0 4px 10px rgba(0,0,0,.06);
 }
 
 .venda-card h3{
   margin:0 0 6px;
-  font-size:15px;
+  font-size:14px;
 }
 
 .venda-card p{
   margin:2px 0;
-  font-size:13px;
+  font-size:12px;
+  color:var(--muted);
 }
 
 .valor{
-  font-weight:bold;
-  font-size:16px;
   margin-top:6px;
+  font-size:16px;
+  font-weight:700;
+  color:var(--green);
 }
 
-.loading{position:fixed;inset:0;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9999}
-.spinner{width:40px;height:40px;border:5px solid #e5e7eb;border-top:5px solid #16a34a;border-radius:50%;animation:spin 1s linear infinite}
+.exportar{
+  text-align:right;
+  margin-bottom:10px;
+}
+
+button{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  border:none;
+  color:#fff;
+  padding:10px 16px;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+button:hover{opacity:.9}
+
+.loading{
+  position:fixed;
+  inset:0;
+  background:rgba(5,11,24,.95);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:9999;
+}
+
+.spinner{
+  width:40px;
+  height:40px;
+  border:4px solid rgba(255,255,255,.1);
+  border-top:4px solid var(--blue);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+
 @keyframes spin{to{transform:rotate(360deg)}}
+
+.btn-pdf{
+  background:#0ea5e9;
+  color:#fff;
+  padding:10px 16px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.cards-hoje{
+  display:flex;
+  justify-content:center;
+  gap:28px;
+  margin-bottom:22px;
+}
+
+.hoje-card{
+  min-width:200px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:12px 16px;
+  text-align:center;
+  box-shadow:0 8px 20px rgba(0,0,0,.35);
+}
+
+.hoje-card span{
+  font-size:12px;
+  color:var(--muted);
+}
+
+.hoje-card h3{
+  margin:6px 0 0;
+  font-size:20px;
+  font-weight:700;
+}
+
+.hoje-card.lucro-positivo h3{ color:var(--green) }
+.hoje-card.lucro-negativo h3{ color:var(--red) }
+
+
+
+@media print{
+  body *{
+    visibility:hidden;
+  }
+  #relatorioPDF, #relatorioPDF *{
+    visibility:visible;
+  }
+  #relatorioPDF{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+  }
+}
+
+
 </style>
 </head>
 
@@ -120,33 +223,64 @@ body{
 
 <div class="container">
 
+
   <!-- RESUMO -->
-  <div class="cards-resumo">
+    <div class="cards-resumo">
     <div class="resumo">
       <span>Faturamento do mês</span>
       <h2 id="totalMes">R$ 0,00</h2>
+      <div class="compare" id="compareFaturamento"></div>
     </div>
+
     <div class="resumo">
       <span>Pedidos</span>
       <h2 id="totalPedidos">0</h2>
     </div>
+
     <div class="resumo">
       <span>Ticket médio</span>
       <h2 id="ticketMedio">R$ 0,00</h2>
     </div>
+
+    <div class="resumo">
+      <span>Lucro do mês</span>
+      <h2 id="lucroMes">R$ 0,00</h2>
+      <div class="compare" id="compareLucro"></div>
+    </div>
   </div>
+
+<div class="cards-hoje">
+  <div class="hoje-card">
+    <span>Faturamento hoje</span>
+    <h3 id="totalHoje">R$ 0,00</h3>
+  </div>
+
+  <div class="hoje-card">
+    <span>Pedidos hoje</span>
+    <h3 id="pedidosHoje">0</h3>
+  </div>
+
+  <div class="hoje-card">
+    <span>Lucro hoje</span>
+    <h3 id="lucroHoje">R$ 0,00</h3>
+  </div>
+</div>
+
+
 
   <!-- ÁREA PRINCIPAL -->
   <div class="area-principal">
 
-    <!-- GRÁFICO -->
     <div class="grafico-box">
       <canvas id="graficoVendas"></canvas>
     </div>
 
-    <!-- HISTÓRICO -->
     <div class="historico-box">
-      <h2>Histórico de Vendas</h2>
+      <div class="exportar">
+        <button onclick="exportarPDF()" class="btn-pdf">
+           Exportar Relatório do Mês (PDF)
+        </button>
+      </div>
       <div class="cards-vendas" id="listaVendas"></div>
     </div>
 
@@ -159,117 +293,236 @@ body{
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyx4ACKVv1R2LbAaY_i1RdN_-53ve-D-YWKW1dU4YjXwll0fSTJhcsjlI-hzVVLL--Z/exec";
-
-function converterDataBR(dataBR) {
-  const [dia, mes, ano] = dataBR.split("/");
-  return new Date(ano, mes - 1, dia);
-}
-
-function parseValor(valor) {
-  if (!valor) return 0;
-  let str = String(valor).trim();
-
-  // Substitui vírgula por ponto se houver
-  str = str.replace(",", ".");
-
-  // Remove qualquer "R$" ou espaço
-  str = str.replace("R$", "").trim();
-
-  // Converte para número
-  return parseFloat(str) || 0;
-}
-
+const API = "https://script.google.com/macros/s/AKfycbyZ1ZzsqaMOQoLqN2Cqd1KdDLVAr5cdJJPDkgQ9SwGubbc2HqXArQMCuVvyC1J2bAps/exec";
 
 let grafico;
+let dadosGlobais = [];
 
-async function carregarDashboard(){
-  try {
-    const res = await fetch(`${API}?tipo=registros`);
-    const dados = await res.json();
+function parseValor(v){
+  return Number(String(v).replace("R$","").replace(",",".")) || 0;
+}
 
-    const hoje = new Date();
-    const mesAtual = hoje.getMonth();
-    const anoAtual = hoje.getFullYear();
+function setComparacao(id, valor){
+  const el = document.getElementById(id);
+  if(!el) return;
 
-    let totalMes = 0;
-    let pedidosMes = 0;
-    let vendasPorDia = {};
-
-    const lista = document.getElementById("listaVendas");
-    lista.innerHTML = "";
-
-    dados.reverse().forEach(v => {
-      const dataVenda = converterDataBR(v.data);
-      const valor = parseValor(v.total);
-
-      if (
-        dataVenda.getMonth() === mesAtual &&
-        dataVenda.getFullYear() === anoAtual
-      ) {
-        totalMes += valor;
-        pedidosMes++;
-
-        const dia = dataVenda.getDate();
-        vendasPorDia[dia] = (vendasPorDia[dia] || 0) + valor;
-      }
-
-      lista.innerHTML += `
-        <div class="venda-card">
-          <h3>Pedido #${v.pedido}</h3>
-          <p>📅 ${v.data}</p>
-          <p>⏰ ${v.hora}</p>
-          <div class="valor">R$ ${valor.toFixed(2)}</div>
-        </div>
-      `;
-    });
-
-    document.getElementById("totalMes").innerText = `R$ ${totalMes.toFixed(2)}`;
-    document.getElementById("totalPedidos").innerText = pedidosMes;
-    document.getElementById("ticketMedio").innerText =
-      pedidosMes ? `R$ ${(totalMes / pedidosMes).toFixed(2)}` : "R$ 0,00";
-
-    montarGrafico(vendasPorDia);
-
-  } catch (e) {
-    console.error(e);
-  } finally {
-    document.getElementById("loading").style.display = "none";
+  if(valor > 0){
+    el.textContent = `▲ ${valor.toFixed(1)}%`;
+    el.className = "compare positivo";
+  }else if(valor < 0){
+    el.textContent = `▼ ${Math.abs(valor).toFixed(1)}%`;
+    el.className = "compare negativo";
+  }else{
+    el.textContent = "";
   }
 }
 
-function montarGrafico(vendasPorDia) {
-  const dias = Object.keys(vendasPorDia).sort((a,b) => a - b);
-  const valores = dias.map(d => vendasPorDia[d]);
 
-  const ctx = document.getElementById("graficoVendas");
+function carregarDashboard(){
+  fetch(`${API}?tipo=registros`)
+    .then(r => r.json())
+    .then(dados => {
+      dadosGlobais = dados;
 
-  if (grafico) grafico.destroy();
+      const hoje = new Date();
+      const mes = hoje.getMonth();
+      const ano = hoje.getFullYear();
 
-  grafico = new Chart(ctx, {
-    type: "line",
-    data: {
-      labels: dias,
-      datasets: [{
-        label: "Vendas do mês (R$)",
-        data: valores,
-        tension: 0.4,
-        fill: true,
-        borderWidth: 2
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: { y: { beginAtZero: true } }
-    }
+      let totalMes=0, pedidosMes=0, lucroMes=0;
+      let totalMesAnt=0, lucroMesAnt=0;
+      let vendasPorDia = {};
+
+      let totalHoje = 0;
+      let pedidosHoje = 0;
+      let lucroHoje = 0;
+
+      const hojeStr = new Date().toLocaleDateString("pt-BR");
+
+
+      const lista = document.getElementById("listaVendas");
+      lista.innerHTML = "";
+
+      dados.reverse().forEach(v => {
+        const data = new Date(v.data.split("/").reverse().join("-"));
+        const valor = parseValor(v.total);
+        const custo = parseValor(v.custo);
+	
+        if (v.data === hojeStr) {
+         totalHoje += valor;
+         lucroHoje += (valor - custo);
+         pedidosHoje++;
+        }
+
+
+        if(data.getMonth()===mes && data.getFullYear()===ano){
+          totalMes += valor;
+          lucroMes += (valor - custo);
+          pedidosMes++;
+
+          const d = data.getDate();
+          vendasPorDia[d] = (vendasPorDia[d]||0)+valor;
+        }
+
+        if(data.getMonth()===mes-1 && data.getFullYear()===ano){
+          totalMesAnt += valor;
+          lucroMesAnt += (valor - custo);
+        }
+
+        lista.innerHTML += `
+          <div class="venda-card">
+            <h3>Pedido #${v.pedido}</h3>
+            <p>📅 ${v.data}</p>
+            <p>⏰ ${v.hora}</p>
+            <div class="valor">R$ ${valor.toFixed(2)}</div>
+          </div>`;
+      });
+
+	document.getElementById("totalHoje").innerText =
+ 	 totalHoje.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+	document.getElementById("pedidosHoje").innerText = pedidosHoje;
+
+	document.getElementById("lucroHoje").innerText =
+  	 lucroHoje.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+const cardLucro = document.getElementById("lucroHoje").parentElement;
+
+cardLucro.classList.remove("lucro-positivo", "lucro-negativo");
+
+if (lucroHoje > 0) {
+  cardLucro.classList.add("lucro-positivo");
+} else if (lucroHoje < 0) {
+  cardLucro.classList.add("lucro-negativo");
+}
+
+      document.getElementById("totalMes").innerText =
+        totalMes.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+
+      document.getElementById("lucroMes").innerText =
+        lucroMes.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+
+      document.getElementById("totalPedidos").innerText = pedidosMes;
+      document.getElementById("ticketMedio").innerText =
+        pedidosMes ? (totalMes/pedidosMes).toLocaleString("pt-BR",{style:"currency",currency:"BRL"}) : "R$ 0,00";
+
+      const percentualFaturamento =
+        totalMesAnt ? ((totalMes - totalMesAnt) / totalMesAnt) * 100 : 0;
+
+      const percentualLucro =
+        lucroMesAnt ? ((lucroMes - lucroMesAnt) / lucroMesAnt) * 100 : 0;
+
+      setComparacao("compareFaturamento", percentualFaturamento);
+      setComparacao("compareLucro", percentualLucro);
+
+
+      montarGrafico(vendasPorDia);
+    })
+    .finally(()=>document.getElementById("loading").style.display="none");
+}
+
+function montarGrafico(v){
+  const dias = Object.keys(v);
+  const valores = Object.values(v);
+  if(grafico) grafico.destroy();
+
+  grafico = new Chart(document.getElementById("graficoVendas"),{
+    type:"line",
+    data:{labels:dias,datasets:[{data:valores,fill:true,tension:.4}]},
+    options:{plugins:{legend:{display:false}}}
   });
 }
 
-// Atualização em tempo real a cada 5 segundos
-carregarDashboard(); // primeira carga
-setInterval(carregarDashboard, 5000); // recarrega a cada 5s
+function exportarCSV(){
+  let csv = "Pedido,Data,Hora,Valor,Custo,Lucro\n";
+  dadosGlobais.forEach(v=>{
+    const valor=parseValor(v.total);
+    const custo=parseValor(v.custo);
+    csv += `${v.pedido},${v.data},${v.hora},${valor},${custo},${valor-custo}\n`;
+  });
 
+  const blob = new Blob([csv],{type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "registros.csv";
+  a.click();
+}
+
+function exportarPDF(){
+  const hoje = new Date();
+  const mes = hoje.getMonth();
+  const ano = hoje.getFullYear();
+
+  const registrosMes = dadosGlobais.filter(r=>{
+    const d = new Date(r.data.split("/").reverse().join("-"));
+    return d.getMonth() === mes && d.getFullYear() === ano;
+  });
+
+  let faturamento = 0;
+  let lucro = 0;
+
+  const tbody = document.getElementById("pdfTabela");
+  tbody.innerHTML = "";
+
+  registrosMes.forEach(r=>{
+    const valor = Number(r.total) || 0;
+    const custo = Number(r.custo) || 0;
+    const lucroPedido = valor - custo;
+
+    faturamento += valor;
+    lucro += lucroPedido;
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${r.pedido}</td>
+        <td>${r.data}</td>
+        <td>${valor.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</td>
+        <td>${lucroPedido.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})}</td>
+      </tr>
+    `;
+  });
+
+  document.getElementById("infoMes").innerText =
+    hoje.toLocaleDateString("pt-BR",{month:"long",year:"numeric"});
+
+  document.getElementById("pdfPedidos").innerText = registrosMes.length;
+  document.getElementById("pdfFaturamento").innerText =
+    faturamento.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  document.getElementById("pdfLucro").innerText =
+    lucro.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+
+  document.getElementById("relatorioPDF").style.display = "block";
+  window.print();
+  document.getElementById("relatorioPDF").style.display = "none";
+}
+
+
+carregarDashboard();
+setInterval(carregarDashboard,5000);
 </script>
+
+<div id="relatorioPDF" style="display:none; padding:30px; font-family:Arial">
+  <h1>Relatório Mensal</h1>
+  <p id="infoMes"></p>
+
+  <div style="margin:20px 0">
+    <p><strong>Total de pedidos:</strong> <span id="pdfPedidos"></span></p>
+    <p><strong>Faturamento:</strong> <span id="pdfFaturamento"></span></p>
+    <p><strong>Lucro:</strong> <span id="pdfLucro"></span></p>
+  </div>
+
+  <table border="1" width="100%" cellspacing="0" cellpadding="6">
+    <thead>
+      <tr>
+        <th>Pedido</th>
+        <th>Data</th>
+        <th>Valor</th>
+        <th>Lucro</th>
+      </tr>
+    </thead>
+    <tbody id="pdfTabela"></tbody>
+  </table>
+</div>
+
+
 </body>
 </html>
