@@ -431,6 +431,9 @@ function continuarComprando() {
 async function imprimir() {
     const elemento = document.getElementById("comprovante-a4");
 
+   // mostra temporariamente
+    elemento.style.display = "block";
+
     // Renderiza o canvas da div
     const canvas = await html2canvas(elemento, {
         scale: 2,
@@ -465,6 +468,8 @@ async function imprimir() {
     pdf.addImage(imgData, "PNG", marginX, marginY, finalWidth, finalHeight);
 
     pdf.save("comprovante.pdf");
+
+elemento.style.display = "none";
 }
 
 
