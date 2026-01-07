@@ -428,18 +428,47 @@ function continuarComprando() {
     document.getElementById("infoCupom").innerText = "";
 }
 
-function imprimir() {
-    const comprovante = document.getElementById("comprovante");
+async function imprimir() {
+    const elemento = document.getElementById("comprovante-a4");
 
-    // garante que o comprovante esteja visível antes de imprimir
-    comprovante.style.display = "flex"; // ou 'block'
+    // Renderiza o canvas da div
+    const canvas = await html2canvas(elemento, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: "#ffffff"
+    });
 
-    // dispara a impressão nativa do navegador
-    window.print();
+    const imgData = canvas.toDataURL("image/png");
 
-    // opcional: mantém o comprovante visível ou oculta após impressão
-    // comprovante.style.display = "none";
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pageWidth = pdf.internal.pageSize.getWidth();  // largura total do A4
+    const pageHeight = pdf.internal.pageSize.getHeight(); // altura total do A4
+
+    // Mantém proporção da imagem
+    const imgWidth = pageWidth - 10; // deixa 10mm de margem de cada lado
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    // Se a altura ultrapassar a página, ajusta para caber na altura
+    let finalWidth = imgWidth;
+    let finalHeight = imgHeight;
+    if (imgHeight > pageHeight - 10) {
+        finalHeight = pageHeight - 10;
+        finalWidth = (canvas.width * finalHeight) / canvas.height;
+    }
+
+    // Adiciona a imagem centralizada
+    const marginX = (pageWidth - finalWidth) / 2;
+    const marginY = 10; // margem superior
+    pdf.addImage(imgData, "PNG", marginX, marginY, finalWidth, finalHeight);
+
+    pdf.save("comprovante.pdf");
 }
+
+
+
 
 
 function confirmarDinheiro() {
