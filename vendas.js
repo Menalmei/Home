@@ -436,7 +436,7 @@ async function imprimir() {
 
     // Renderiza o canvas da div
     const canvas = await html2canvas(elemento, {
-        scale: 2,
+        scale: 1,
         useCORS: true,
         allowTaint: false,
         backgroundColor: "#ffffff"
