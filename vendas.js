@@ -642,38 +642,95 @@ function sairModoTV() {
 }
 
 async function copiarImagem(canvas) {
-  return new Promise(resolve => {
-    canvas.toBlob(async blob => {
-      const item = new ClipboardItem({ "image/png": blob });
-      await navigator.clipboard.write([item]);
-      resolve();
+  try {
+    if (!navigator.clipboard || !window.ClipboardItem) {
+      throw new Error("Clipboard não suportado");
+    }
+
+    return new Promise(resolve => {
+      canvas.toBlob(async blob => {
+        try {
+          const item = new ClipboardItem({ "image/png": blob });
+          await navigator.clipboard.write([item]);
+          resolve(true);
+        } catch (err) {
+          console.warn("Falha ao copiar imagem:", err);
+          resolve(false);
+        }
+      });
     });
-  });
+  } catch (err) {
+    console.warn("Clipboard indisponível:", err);
+    return false;
+  }
 }
+
 
 function abrirWhatsapp(numero, mensagem) {
   const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
   window.open(url, "_blank");
 }
 
-async function enviarComprovanteWhatsapp() {
+async function enviarComprovante() {
+  const comprovante = document.getElementById("comprovante");
+
+  const canvas = await html2canvas(comprovante, {
+    scale: 2,
+    backgroundColor: "#fff"
+  });
+
+  if (isMobile()) {
+    fluxoMobile(canvas);
+  } else {
+    fluxoPC(canvas);
+  }
+}
+
+async function fluxoPC(canvas) {
   const numero = prompt("Digite o número com DDD:");
   if (!numero) return;
 
-  const canvas = await html2canvas(document.getElementById("comprovante-a4"));
+  const copiado = await copiarImagem(canvas);
 
-  // 1️⃣ copia a imagem
-  await copiarImagem(canvas);
+  const mensagem = copiado
+    ? "Olá! Segue seu comprovante de compra. 📄✅\n\n(O comprovante já está copiado, é só colar 😉)"
+    : "Olá! Segue seu comprovante de compra. 📄✅\n\n(O comprovante será enviado em imagem.)";
 
-  // 2️⃣ abre o WhatsApp com texto
-  abrirWhatsapp(
-    numero,
-    "Olá! Segue seu comprovante de compra. 📄✅"
-  );
+  const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, "_blank");
 
-  alert("Comprovante copiado! No WhatsApp é só colar (CTRL+V) e enviar.");
+  if (copiado) {
+    alert("Comprovante copiado! No WhatsApp é só colar (CTRL+V) e enviar.");
+  } else {
+    alert("WhatsApp aberto. Se preferir, baixe o comprovante e envie como imagem.");
+  }
 }
 
+
+function fluxoMobile(canvas) {
+  canvas.toBlob(blob => {
+    const file = new File([blob], "comprovante.png", { type: "image/png" });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      navigator.share({
+        title: "Comprovante de Venda",
+        text: "Segue seu comprovante de compra.",
+        files: [file]
+      });
+    } else {
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "comprovante.png";
+      link.click();
+    }
+  });
+}
+
+
+
+function isMobile() {
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
 
 
 
