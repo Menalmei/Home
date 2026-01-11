@@ -709,24 +709,30 @@ async function fluxoPC(canvas) {
 
 function fluxoMobile(canvas) {
   canvas.toBlob(blob => {
-    // 1️ Baixa a imagem
+    // 1️⃣ Baixa a imagem
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = "comprovante.png";
     link.click();
 
-    // 2️ Pede o número
+    // 2️⃣ Aguarda interação real do usuário
     setTimeout(() => {
-      const numero = prompt("Digite o número com DDD:");
-      if (!numero) return;
-
-      // 3️ Abre WhatsApp na conversa
-      const mensagem = "Segue seu comprovante de compra!";
-      const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
-      window.location.href = url;
-    }, 500);
+      solicitarNumeroWhatsapp();
+    }, 300);
   });
 }
+
+function solicitarNumeroWhatsapp() {
+  const numero = prompt("Digite o número com DDD:");
+  if (!numero) return;
+
+  const mensagem = "Segue seu comprovante de compra 📄";
+  const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+
+  // 3️⃣ Agora sim abre o WhatsApp
+  window.location.href = url;
+}
+
 
 
 
