@@ -726,12 +726,13 @@ function solicitarNumeroWhatsapp() {
   const numero = prompt("Digite o número com DDD:");
   if (!numero) return;
 
-  const mensagem = "Segue seu comprovante de compra 📄";
-  const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+  const mensagem = encodeURIComponent("Segue seu comprovante de compra 📄");
 
-  // 3️⃣ Agora sim abre o WhatsApp
+  const url = `intent://send/?phone=55${numero}&text=${mensagem}#Intent;scheme=whatsapp;package=com.whatsapp;end;`;
+
   window.location.href = url;
 }
+
 
 
 
