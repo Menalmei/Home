@@ -641,41 +641,40 @@ function sairModoTV() {
   modoTVAtivo = false;
 }
 
-async function enviarComprovanteWhatsApp() {
+async function copiarImagem(canvas) {
+  return new Promise(resolve => {
+    canvas.toBlob(async blob => {
+      const item = new ClipboardItem({ "image/png": blob });
+      await navigator.clipboard.write([item]);
+      resolve();
+    });
+  });
+}
 
-  const numero = prompt("Digite o WhatsApp do cliente (DDD + número):");
+function abrirWhatsapp(numero, mensagem) {
+  const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, "_blank");
+}
+
+async function enviarComprovanteWhatsapp() {
+  const numero = prompt("Digite o número com DDD:");
   if (!numero) return;
 
-  const comprovante = document.getElementById("comprovante-a4");
+  const canvas = await html2canvas(document.getElementById("comprovante-a4"));
 
-  // gera imagem
-  const canvas = await html2canvas(comprovante, {
-    scale: 2,
-    backgroundColor: "#ffffff"
-  });
+  // 1️⃣ copia a imagem
+  await copiarImagem(canvas);
 
-  // converte em blob
-  canvas.toBlob(async (blob) => {
+  // 2️⃣ abre o WhatsApp com texto
+  abrirWhatsapp(
+    numero,
+    "Olá! Segue seu comprovante de compra. 📄✅"
+  );
 
-    // tenta copiar imagem (Chrome / Edge)
-    try {
-      await navigator.clipboard.write([
-        new ClipboardItem({ "image/png": blob })
-      ]);
-    } catch (e) {
-      alert("Imagem gerada! Caso não cole automático, use Ctrl + V no WhatsApp.");
-    }
-
-    // abre WhatsApp
-    const mensagem = `
-Olá! 👋
-Segue o comprovante da sua compra na *Menalmei* 🤍
-`;
-    const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
-    window.open(url, "_blank");
-
-  }, "image/png");
+  alert("Comprovante copiado! No WhatsApp é só colar (CTRL+V) e enviar.");
 }
+
+
 
 
 

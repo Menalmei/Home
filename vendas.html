@@ -460,8 +460,10 @@ button {
 
 
 #comprovante-a4 {
-    display: none;
-    position: relative;
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    
     width: auto;       /* largura do A4 */
     height: auto;      /* altura do A4 */
     min-width: 800px;
@@ -921,7 +923,7 @@ background:rgba(0,0,0,0.5);align-items:center;justify-content:center;">
 
     <div class="acoes-comprovante">
      	<!-- <button type="button" onclick="imprimir()">Imprimir</button> -->
-        <button type="button" onclick="enviarComprovanteWhatsApp()">📲 Enviar WhatsApp</button>
+        <button type="button" onclick="enviarComprovanteWhatsapp()">📲 Enviar WhatsApp</button>
      	<button type="button" onclick="continuarComprando()">🛒 Continuar vendendo</button>
     </div>
  </div>
