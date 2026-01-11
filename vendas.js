@@ -674,7 +674,7 @@ function abrirWhatsapp(numero, mensagem) {
 async function enviarComprovante() {
   const comprovante = document.getElementById("comprovante-a4");
 
-  const canvas = await html2canvas(comprovante-a4, {
+  const canvas = await html2canvas(comprovante, {
     scale: 2,
     backgroundColor: "#fff"
   });
