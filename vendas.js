@@ -667,9 +667,13 @@ async function copiarImagem(canvas) {
 
 
 function abrirWhatsapp(numero, mensagem) {
-  const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, "_blank");
+  const texto = encodeURIComponent(mensagem);
+
+  const url = `https://api.whatsapp.com/send/?phone=55${numero}&text=${texto}&type=phone_number&app_absent=0`;
+
+  window.location.href = url;
 }
+
 
 async function enviarComprovante() {
   const comprovante = document.getElementById("comprovante-a4");
