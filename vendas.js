@@ -641,6 +641,42 @@ function sairModoTV() {
   modoTVAtivo = false;
 }
 
+async function enviarComprovanteWhatsApp() {
+
+  const numero = prompt("Digite o WhatsApp do cliente (DDD + número):");
+  if (!numero) return;
+
+  const comprovante = document.getElementById("comprovante-a4");
+
+  // gera imagem
+  const canvas = await html2canvas(comprovante, {
+    scale: 2,
+    backgroundColor: "#ffffff"
+  });
+
+  // converte em blob
+  canvas.toBlob(async (blob) => {
+
+    // tenta copiar imagem (Chrome / Edge)
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({ "image/png": blob })
+      ]);
+    } catch (e) {
+      alert("Imagem gerada! Caso não cole automático, use Ctrl + V no WhatsApp.");
+    }
+
+    // abre WhatsApp
+    const mensagem = `
+Olá! 👋
+Segue o comprovante da sua compra na *Menalmei* 🤍
+`;
+    const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
+    window.open(url, "_blank");
+
+  }, "image/png");
+}
+
 
 
 
