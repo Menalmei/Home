@@ -428,18 +428,63 @@ function continuarComprando() {
     document.getElementById("infoCupom").innerText = "";
 }
 
-function imprimir() {
-    const comprovante = document.getElementById("comprovante");
+async function imprimir() {
+    const elemento = document.getElementById("comprovante-a4");
 
-    // garante que o comprovante esteja visível antes de imprimir
-    comprovante.style.display = "flex"; // ou 'block'
+    // Mostra temporariamente
+    elemento.style.display = "block";
 
-    // dispara a impressão nativa do navegador
-    window.print();
+    // Salva tamanho original
+    const originalStyle = {
+        width: elemento.style.width,
+        height: elemento.style.height,
+        padding: elemento.style.padding
+    };
 
-    // opcional: mantém o comprovante visível ou oculta após impressão
-    // comprovante.style.display = "none";
+    // Ajusta para proporção A4 e remove padding/margens
+    elemento.style.width = "210mm"; // largura A4
+    elemento.style.height = "297mm"; // altura A4
+    elemento.style.padding = "5";
+    elemento.style.boxSizing = "border-box";
+
+    // Renderiza canvas
+    const canvas = await html2canvas(elemento, {
+        scale: 2,
+        useCORS: true,
+        allowTaint: false,
+        backgroundColor: "#ffffff"
+    });
+
+    // Restaura estilo original
+    elemento.style.width = originalStyle.width;
+    elemento.style.height = originalStyle.height;
+    elemento.style.padding = originalStyle.padding;
+
+    const imgData = canvas.toDataURL("image/png");
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    // Ajusta imagem para preencher a largura da página
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgProps = pdf.getImageProperties(imgData);
+    const imgWidth = pageWidth;
+    const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+    // Centraliza verticalmente caso fique menor que a página
+    const marginY = Math.max((pageHeight - imgHeight) / 2, 0);
+
+    pdf.addImage(imgData, "PNG", 0, marginY, imgWidth, imgHeight);
+    pdf.save("comprovante.pdf");
+
+    elemento.style.display = "none";
 }
+
+
+
+
+
 
 
 function confirmarDinheiro() {
@@ -508,6 +553,95 @@ function mostrarLoadingVenda() {
 function esconderLoadingVenda() {
     document.getElementById("loadingVenda").style.display = "none";
 }
+
+function mostrarTela(tela) {
+
+  // botões ativos
+  document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('ativo'));
+  event.currentTarget?.classList.add('ativo');
+
+  // telas
+  const vendasEsquerda = document.querySelector('.esquerda');
+  const vendasDireita  = document.querySelector('.direita');
+  const registros      = document.getElementById('tela-registros');
+  const comprovantes   = document.getElementById('tela-comprovantes');
+
+  // esconde tudo
+  vendasEsquerda.style.display = 'none';
+  vendasDireita.style.display  = 'none';
+  registros.style.display      = 'none';
+  comprovantes.style.display   = 'none';
+
+  if (tela === 'vendas') {
+    vendasEsquerda.style.display = '';
+    vendasDireita.style.display  = '';
+  }
+
+  if (tela === 'registros') {
+    registros.style.display = 'block';
+    registros.querySelector('iframe').src = 'registro.html';
+  }
+
+  if (tela === 'comprovantes') {
+    comprovantes.style.display = 'block';
+    comprovantes.querySelector('iframe').src = 'comprovante.html';
+  }
+}
+
+window.addEventListener("message", function (event) {
+
+  const menu = document.querySelector('.menu-inferior');
+
+  if (!menu) return;
+
+  if (event.data.modoTV === true) {
+    menu.style.display = 'none';
+  }
+
+  if (event.data.modoTV === false) {
+    menu.style.display = 'flex';
+  }
+});
+
+let modoTVAtivo = false;
+
+function toggleModoTV() {
+  modoTVAtivo ? sairModoTV() : entrarModoTV();
+}
+
+function entrarModoTV() {
+
+  const el = document.documentElement;
+
+  if (el.requestFullscreen) {
+    el.requestFullscreen();
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen();
+  }
+
+  document.body.classList.add('modo-tv');
+
+  document.querySelector('.menu-inferior')?.style.setProperty('display', 'none');
+
+  document.getElementById('btnModoTV').innerText = '↩ Sair do modo TV';
+  modoTVAtivo = true;
+}
+
+function sairModoTV() {
+
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  }
+
+  document.body.classList.remove('modo-tv');
+
+  document.querySelector('.menu-inferior')?.style.setProperty('display', 'flex');
+
+  document.getElementById('btnModoTV').innerText = '📺 Modo TV';
+  modoTVAtivo = false;
+}
+
+
 
 
 
