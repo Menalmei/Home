@@ -672,9 +672,9 @@ function abrirWhatsapp(numero, mensagem) {
 }
 
 async function enviarComprovante() {
-  const comprovante = document.getElementById("comprovante");
+  const comprovante = document.getElementById("comprovante-a4");
 
-  const canvas = await html2canvas(comprovante, {
+  const canvas = await html2canvas(comprovante-a4, {
     scale: 2,
     backgroundColor: "#fff"
   });
@@ -693,8 +693,8 @@ async function fluxoPC(canvas) {
   const copiado = await copiarImagem(canvas);
 
   const mensagem = copiado
-    ? "Olá! Segue seu comprovante de compra. 📄✅\n\n(O comprovante já está copiado, é só colar 😉)"
-    : "Olá! Segue seu comprovante de compra. 📄✅\n\n(O comprovante será enviado em imagem.)";
+    ? "Olá! Segue seu comprovante de compra. 📄✅"
+    : "Olá! Segue seu comprovante de compra. 📄✅";
 
   const url = `https://wa.me/55${numero}?text=${encodeURIComponent(mensagem)}`;
   window.open(url, "_blank");
