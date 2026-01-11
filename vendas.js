@@ -709,20 +709,16 @@ async function fluxoPC(canvas) {
 
 function fluxoMobile(canvas) {
   canvas.toBlob(blob => {
-    const file = new File([blob], "comprovante.png", { type: "image/png" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "comprovante.png";
+    link.click();
 
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      navigator.share({
-        title: "Comprovante de Venda",
-        text: "Segue seu comprovante de compra.",
-        files: [file]
-      });
-    } else {
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "comprovante.png";
-      link.click();
-    }
+    setTimeout(() => {
+      const msg = "Segue seu comprovante de compra 📄";
+      const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+      window.location.href = url;
+    }, 500);
   });
 }
 
