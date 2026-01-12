@@ -215,6 +215,36 @@ button:hover{opacity:.9}
   }
 }
 
+/* ===== Correção impressão mobile (páginas em branco) ===== */
+@media print {
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  body * {
+    display: none !important;
+  }
+
+  #relatorioPDF {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    page-break-after: auto !important;
+    page-break-before: auto !important;
+  }
+
+  #relatorioPDF * {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+}
+
+
 /* ===========================
    MOBILE – até 768px
 =========================== */
@@ -222,6 +252,7 @@ button:hover{opacity:.9}
 
   body {
     overflow: auto;
+    
   }
 
   .container {
@@ -312,30 +343,6 @@ button:hover{opacity:.9}
 
 .venda-card {
   touch-action: pan-y;
-}
-
-/* ===== Correção viewport mobile (bug do 100vh) ===== */
-@media (max-width: 768px) {
-
-  html, body {
-    height: auto;
-    min-height: 100%;
-  }
-
-  .area-principal {
-    height: auto !important;
-    min-height: auto;
-  }
-
-  .grafico-box,
-  .historico-box {
-    height: auto !important;
-    max-height: none !important;
-  }
-
-  .cards-vendas {
-    max-height: none !important;
-  }
 }
 
 
