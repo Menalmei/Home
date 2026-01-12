@@ -282,9 +282,6 @@ button:hover{opacity:.9}
   }
 }
 
-#graficoVendas {
-   width: 100%;
-}
 /* ===========================
    MOBILE PAISAGEM
 =========================== */
@@ -315,6 +312,30 @@ button:hover{opacity:.9}
 
 .venda-card {
   touch-action: pan-y;
+}
+
+/* ===== Correção viewport mobile (bug do 100vh) ===== */
+@media (max-width: 768px) {
+
+  html, body {
+    height: auto;
+    min-height: 100%;
+  }
+
+  .area-principal {
+    height: auto !important;
+    min-height: auto;
+  }
+
+  .grafico-box,
+  .historico-box {
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .cards-vendas {
+    max-height: none !important;
+  }
 }
 
 
