@@ -38,7 +38,7 @@ body{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:18px;
-  margin-bottom:22px;
+  margin-bottom:10px;
 }
 
 .resumo{
@@ -171,7 +171,7 @@ button:hover{opacity:.9}
   display:flex;
   justify-content:center;
   gap:28px;
-  margin-bottom:22px;
+  margin-bottom:10px;
 }
 
 .hoje-card{
@@ -200,29 +200,14 @@ button:hover{opacity:.9}
 
 
 
-@media print{
-  body *{
-    visibility:hidden;
-  }
-  #relatorioPDF, #relatorioPDF *{
-    visibility:visible;
-  }
-  #relatorioPDF{
-    position:absolute;
-    left:0;
-    top:0;
-    width:100%;
-  }
-}
-
-/* ===== Correção impressão mobile (páginas em branco) ===== */
 @media print {
 
   html, body {
     margin: 0 !important;
     padding: 0 !important;
-    height: auto !important;
-    overflow: visible !important;
+    background: #fff !important;
+    color: #000 !important;
+    font-family: Arial, sans-serif;
   }
 
   body * {
@@ -231,18 +216,61 @@ button:hover{opacity:.9}
 
   #relatorioPDF {
     display: block !important;
-    position: static !important;
     width: 100% !important;
-    page-break-after: auto !important;
-    page-break-before: auto !important;
+    padding: 24px !important;
   }
 
   #relatorioPDF * {
-    display: block !important;
+    display: revert !important;
     visibility: visible !important;
   }
 
+  /* ===== FORÇA ESTRUTURA DE TABELA ===== */
+  table {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed;
+    font-size: 12px;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tbody {
+    display: table-row-group !important;
+  }
+
+  tr {
+    display: table-row !important;
+    page-break-inside: avoid;
+  }
+
+  th, td {
+    display: table-cell !important;
+    border: 1px solid #999 !important;
+    padding: 6px 8px !important;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+
+  th {
+    background: #f2f2f2;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  /* Alinhamento financeiro */
+  th:nth-child(3),
+  th:nth-child(4),
+  td:nth-child(3),
+  td:nth-child(4) {
+    text-align: right;
+  }
+
 }
+
 
 
 /* ===========================
@@ -639,6 +667,22 @@ function exportarPDF(){
   const registrosMes = dadosGlobais.filter(r=>{
   const { mes: m, ano: a } = extrairDataBR(r.data);
   return m - 1 === mes && a === ano;
+});
+
+// Ordena do primeiro pedido para o último
+registrosMes.sort((a, b) => {
+  const da = extrairDataBR(a.data);
+  const db = extrairDataBR(b.data);
+
+  const dataA = new Date(da.ano, da.mes - 1, da.dia);
+  const dataB = new Date(db.ano, db.mes - 1, db.dia);
+
+  // Primeiro por data, depois por número do pedido
+  if (dataA.getTime() !== dataB.getTime()) {
+    return dataA - dataB;
+  }
+
+  return Number(a.pedido) - Number(b.pedido);
 });
 
 
