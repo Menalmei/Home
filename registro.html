@@ -81,7 +81,7 @@ body{
   border-radius:20px;
   padding:20px;
   box-shadow:0 15px 35px rgba(0,0,0,.4);
-  height: 62%;
+  height: 50%;
   max-height: 90%
 }
 
@@ -213,6 +213,108 @@ button:hover{opacity:.9}
     top:0;
     width:100%;
   }
+}
+
+/* ===========================
+   MOBILE – até 768px
+=========================== */
+@media (max-width: 768px) {
+
+  body {
+    overflow: auto;
+  }
+
+  .container {
+    padding: 14px;
+  }
+
+  /* RESUMO → 1 coluna */
+  .cards-resumo {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .resumo h2 {
+    font-size: 22px;
+  }
+
+  /* CARDS HOJE → coluna */
+  .cards-hoje {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hoje-card {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* ÁREA PRINCIPAL → coluna */
+  .area-principal {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 1px;
+  }
+
+  /* GRÁFICO */
+  .grafico-box {
+    height: 260px;
+  }
+
+  /* HISTÓRICO */
+  .historico-box {
+    height: auto;
+    max-height: none;
+  }
+
+  .cards-vendas {
+    max-height: 320px;
+  }
+
+  /* BOTÃO */
+  .exportar {
+    text-align: center;
+  }
+
+  button,
+  .btn-pdf {
+    width: 100%;
+  }
+}
+
+#graficoVendas {
+   width: 100%;
+}
+/* ===========================
+   MOBILE PAISAGEM
+=========================== */
+@media (max-width: 768px) and (orientation: landscape) {
+
+  .cards-resumo {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cards-hoje {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hoje-card {
+    flex: 1 1 45%;
+  }
+
+  .grafico-box {
+    height: 220px;
+  }
+
+  .cards-vendas {
+    max-height: 240px;
+  }
+}
+
+.venda-card {
+  touch-action: pan-y;
 }
 
 
