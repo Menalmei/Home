@@ -101,17 +101,48 @@
       border-radius: 6px;
     }
 
-    /* PREÇOS */
     .precos {
-      background: #0a1a2f;
-      padding: 25px;
-      border-radius: 8px;
-      margin-bottom: 40px;
-    }
+  background: linear-gradient(135deg, #0a1a2f, #020617);
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 50px;
+}
 
-    .precos p {
-      margin: 8px 0;
-    }
+.precos h2 {
+  margin-bottom: 20px;
+}
+
+.tabela-precos {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linha-preco {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.04);
+  padding: 14px 18px;
+  border-radius: 8px;
+}
+
+.linha-preco span {
+  font-size: 16px;
+}
+
+.linha-preco strong {
+  font-size: 17px;
+  color: #8fb4ff;
+}
+
+.obs-preco {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #d0d0d0;
+  line-height: 1.6;
+}
+
 
     /* BOTÃO */
     .botao {
@@ -199,6 +230,34 @@ body {
   }
 }
 
+.cor-item {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.cor-item img {
+  width: 100%;
+  display: block;
+}
+
+.cor-item span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 6px 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,0.75),
+    rgba(0,0,0,0)
+  );
+  text-align: center;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
 
   </style>
 </head>
@@ -234,31 +293,144 @@ body {
     <!-- CORES UNISSEX -->
     <h2>Cores Disponíveis – Unissex</h2>
     <div class="cores">
-      <img src="Catalogoimg\preto.jpg">
-      <img src="Catalogoimg\branco.jpg">
-      <img src="Catalogoimg\azulmarinho.jpg">
-      <img src="Catalogoimg\areia.jpg">
-      <img src="Catalogoimg\bordo.jpg">
-      <img src="Catalogoimg\marrom.jpg">
-      <img src="Catalogoimg\azul.jpg">
-      <img src="Catalogoimg\offwhite.jpg">
-      <img src="Catalogoimg\pink.jpg">
-      <img src="Catalogoimg\cinzamesclado.jpg">
-      <img src="Catalogoimg\verdemilitar.jpg">
-      <img src="Catalogoimg\laranja.jpg">
-      <img src="Catalogoimg\mostarda.jpg">
-      <img src="Catalogoimg\amarelo.jpg">
-      <img src="Catalogoimg\azulroyal.jpg">
-      <img src="Catalogoimg\vermelho.jpg">
-      <img src="Catalogoimg\verde.jpg">
+      <div class="cores">
+
+  <div class="cor-item">
+    <img src="Catalogoimg/preto.jpg"> <span>Preto</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/branco.jpg"> <span>Branco</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/azulmarinho.jpg"> <span>Azul Marinho</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/areia.jpg"> <span>Areia</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bordo.jpg"> <span>Bordô</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/marrom.jpg"> <span>Marrom</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/azul.jpg"> <span>Azul</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/offwhite.jpg"> <span>Off White</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/pink.jpg"> <span>Pink</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/cinzamesclado.jpg"> <span>Cinza Mesclado</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/verdemilitar.jpg"> <span>Verde Militar</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/laranja.jpg"> <span>Laranja</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/mostarda.jpg"> <span>Mostarda</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/amarelo.jpg"> <span>Amarelo</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/vermelho.jpg"> <span>Vermelho</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/verde.jpg"> <span>Verde</span>
+  </div>
+
+</div>
+
     </div>
 
     <!-- CORES BABYLOOK -->
     <h2>Cores Disponíveis – Babylook</h2>
     <div class="cores">
-      <img src="Catalogoimg\baby1.png">
-      <img src="Catalogoimg\baby2.png">
-      <img src="Catalogoimg\baby3.png">
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bpreta.jpg"> <span>Preta</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bbranca.jpg"> <span>Branca</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bazulmarinho.jpg"> <span>Azul Marinho</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bverdeclaro.jpg"> <span>Verde Claro</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bbordo.jpg"> <span>Bordô</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bmarrom.jpg"> <span>Marrom</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bazulturquesa.jpg"> <span>Azul Turquesa</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/boffwhite.jpg"> <span>Off White</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bpink.jpg"> <span>Pink</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bpessego.jpg"> <span>Pêssego</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bverdemilitar.jpg"> <span>Verde Militar</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/blaranja.jpg"> <span>Laranja</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/brosaclaro.jpg"> <span>Rosa Claro</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bsalmao.jpg"> <span>Salmão</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bvermelha.jpg"> <span>Vermelha</span>
+  </div>
+
+  <div class="cor-item">
+    <img src="Catalogoimg/bverde.jpg"> <span>Verde</span>
+  </div>
+
     </div>
 
     <!-- TABELAS -->
@@ -268,12 +440,48 @@ body {
       <img src="Catalogoimg\tabelababylook.png" alt="Tabela Babylook">
     </div>
 
-    <!-- PREÇOS -->
     <div class="precos">
-      <h2>Valores e Quantidade Mínima</h2>
-      <p>• Camiseta personalizada: conforme tabela enviada</p>
-      <p>• Pedido mínimo conforme modelo e estampa</p>
+
+  <h2>Valores e Quantidade Mínima</h2>
+
+  <div class="tabela-precos">
+    <div class="linha-preco">
+      <span>Acima de 10 camisetas</span>
+      <strong>R$ 50,00 / un</strong>
     </div>
+
+    <div class="linha-preco">
+      <span>Acima de 25 camisetas</span>
+      <strong>R$ 45,00 / un</strong>
+    </div>
+
+    <div class="linha-preco">
+      <span>Acima de 50 camisetas</span>
+      <strong>R$ 42,50 / un</strong>
+    </div>
+
+    <div class="linha-preco">
+      <span>Acima de 100 camisetas</span>
+      <strong>R$ 40,00 / un</strong>
+    </div>
+  </div>
+
+  <div class="obs-preco">
+    <p>
+      ✔ Orçamento inclui até <strong>2 estampas</strong>:
+      <br>
+      • 1 estampa pequena<br>
+      • 1 estampa grande
+    </p>
+
+    <p>
+      Para quantidades ou personalizações diferentes,
+      solicite um orçamento personalizado.
+    </p>
+  </div>
+
+</div>
+
 
     <!-- BOTÃO -->
     <div class="botao">
