@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Catálogo | Camisetas Personalizadas - MENALMEI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px;
+    }
+
+    h1, h2 {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    /* TOPO */
+    .topo {
+      text-align: center;
+      margin-bottom: 40px;
+      font-size: 30px;
+      line-height: 1.6;
+      font-weight: bold;
+    }
+
+
+    .topo img {
+      max-width: 220px;
+      margin-bottom: 15px;
+    }
+
+    /* DESTAQUE LATERAL */
+    .destaque {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      align-items: center;
+      margin-bottom: 50px;
+    }
+
+    .destaque img {
+      width: 100%;
+      border-radius: 8px;
+    }
+
+    .destaque-texto {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* COLAGEM DE MODELOS */
+    .modelos {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 15px;
+      margin-bottom: 50px;
+    }
+
+    .modelos img {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .modelos-secundarios {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 15px;
+    }
+
+    /* CORES */
+    .cores {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 40px;
+    }
+
+    .cores img {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    /* TABELAS */
+    .tabelas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .tabelas img {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    /* PREÇOS */
+    .precos {
+      background: #0a1a2f;
+      padding: 25px;
+      border-radius: 8px;
+      margin-bottom: 40px;
+    }
+
+    .precos p {
+      margin: 8px 0;
+    }
+
+    /* BOTÃO */
+    .botao {
+      text-align: center;
+    }
+
+    .botao a {
+      background: #0d2b5b;
+      color: #fff;
+      padding: 15px 35px;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      display: inline-block;
+    }
+
+    .botao a:hover {
+      background: #163f85;
+    }
+
+    @media (max-width: 768px) {
+      .destaque,
+      .modelos,
+      .tabelas {
+        grid-template-columns: 1fr;
+      }
+    }
+
+body {
+  background: linear-gradient(
+    270deg,
+    #000000,
+    #020617,
+    #020c2a,
+    #000000
+  );
+  background-size: 600% 600%;
+  animation: fundoPremium 20s ease infinite;
+}
+
+@keyframes fundoPremium {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.particles span {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  animation: floatParticle linear infinite;
+}
+
+@keyframes floatParticle {
+  from {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.2;
+  }
+  to {
+    transform: translateY(-10vh);
+    opacity: 0;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- TOPO -->
+    <div class="topo">
+      <img src="logoretratobranco.png" alt="Logo Menalmei">
+      <p>Camisetas personalizadas de alta qualidade, ideais para marcas, eventos, empresas e uso pessoal.</p>
+    </div>
+
+    <!-- DESTAQUE LATERAL -->
+    <div class="destaque">
+      <img src="Catalogoimg\destaque.png" alt="Modelo vestindo camiseta personalizada">
+      <div class="destaque-texto">
+        <h2>Personalização Profissional</h2>
+        <p>Trabalhamos com camisetas premium, estampas duráveis e acabamento profissional. Produção sob medida para sua necessidade.</p>
+      </div>
+    </div>
+
+    <!-- COLAGEM DE MODELOS -->
+    <h2>Modelos Desenvolvidos</h2>
+    <div class="modelos">
+      <img src="Catalogoimg\1.png" alt="Modelo principal">
+      <div class="modelos-secundarios">
+        <img src="Catalogoimg\2.png" alt="Modelo secundário">
+        <img src="Catalogoimg\3.png" alt="Modelo secundário">
+      </div>
+    </div>
+
+    <!-- CORES UNISSEX -->
+    <h2>Cores Disponíveis – Unissex</h2>
+    <div class="cores">
+      <img src="Catalogoimg\preto.jpg">
+      <img src="Catalogoimg\branco.jpg">
+      <img src="Catalogoimg\azulmarinho.jpg">
+      <img src="Catalogoimg\areia.jpg">
+      <img src="Catalogoimg\bordo.jpg">
+      <img src="Catalogoimg\marrom.jpg">
+      <img src="Catalogoimg\azul.jpg">
+      <img src="Catalogoimg\offwhite.jpg">
+      <img src="Catalogoimg\pink.jpg">
+      <img src="Catalogoimg\cinzamesclado.jpg">
+      <img src="Catalogoimg\verdemilitar.jpg">
+      <img src="Catalogoimg\laranja.jpg">
+      <img src="Catalogoimg\mostarda.jpg">
+      <img src="Catalogoimg\amarelo.jpg">
+      <img src="Catalogoimg\azulroyal.jpg">
+      <img src="Catalogoimg\vermelho.jpg">
+      <img src="Catalogoimg\verde.jpg">
+    </div>
+
+    <!-- CORES BABYLOOK -->
+    <h2>Cores Disponíveis – Babylook</h2>
+    <div class="cores">
+      <img src="Catalogoimg\baby1.png">
+      <img src="Catalogoimg\baby2.png">
+      <img src="Catalogoimg\baby3.png">
+    </div>
+
+    <!-- TABELAS -->
+    <h2>Tabela de Medidas</h2>
+    <div class="tabelas">
+      <img src="Catalogoimg\tabelaunissex.png" alt="Tabela Unissex">
+      <img src="Catalogoimg\tabelababylook.png" alt="Tabela Babylook">
+    </div>
+
+    <!-- PREÇOS -->
+    <div class="precos">
+      <h2>Valores e Quantidade Mínima</h2>
+      <p>• Camiseta personalizada: conforme tabela enviada</p>
+      <p>• Pedido mínimo conforme modelo e estampa</p>
+    </div>
+
+    <!-- BOTÃO -->
+    <div class="botao">
+      <a href="https://wa.me/5513981996771" target="_blank">Fazer orçamento</a>
+    </div>
+
+  </div>
+
+<div class="particles"></div>
+
+<script>
+  const particlesContainer = document.querySelector('.particles');
+const totalParticles = 80;
+
+for (let i = 0; i < totalParticles; i++) {
+  const particle = document.createElement('span');
+
+  const size = Math.random() * 3 + 2;
+  particle.style.width = `${size}px`;
+  particle.style.height = `${size}px`;
+
+  particle.style.left = Math.random() * 100 + 'vw';
+  particle.style.top = Math.random() * window.innerHeight + 'px';
+
+  particle.style.animationDuration = Math.random() * 30 + 20 + 's';
+  particle.style.animationDelay = `-${Math.random() * 30}s`;
+  particle.style.animationTimingFunction = 'linear';
+
+  particlesContainer.appendChild(particle);
+}
+
+</script>
+
+
+</body>
+</html>
