@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Sistema Açaiteria PRO</title>
+
+<script src="https://cdn.jsdelivr.net/npm/qz-tray/qz-tray.js"></script>
+
+<style>
+body { font-family: Arial; margin:0; background:#f4f6f8; display:flex; }
+.coluna { width:50%; padding:15px; }
+.caixa { background:white; padding:15px; border-radius:10px; }
+
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+.box {
+    background:#fff;
+    padding:8px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+.box b { display:block; margin-bottom:6px; }
+
+.box label {
+    display:block;
+    margin-bottom:4px;
+    cursor:pointer;
+}
+
+.pedido { border-radius:10px; padding:10px; margin-bottom:10px; }
+.preparo { background:#fff3cd; }
+.pronto { background:#d4edda; }
+
+button {
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.btn { background:#4CAF50; color:white; }
+.btn-sec { background:#ccc; }
+
+.header { font-weight:bold; cursor:pointer; padding:5px; }
+
+.status-ok { opacity:0.6; font-weight:bold; }
+
+.excluir { background:#dc3545; color:white; }
+
+.novo { animation:piscar 1s ease 3; }
+
+@keyframes piscar {
+    0% { background:#fff3cd; }
+    50% { background:#ffeeba; }
+    100% { background:#fff3cd; }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="som" preload="auto">
+<source src="som.mp3" type="audio/mpeg">
+</audio>
+
+<!-- CAIXA -->
+<div class="coluna">
+<div class="caixa">
+
+<h2>CAIXA</h2>
+
+<input id="cliente" placeholder="Nome do cliente" style="width:100%"><br><br>
+
+<b>Tamanho</b>
+<label><input type="radio" name="tamanho" value="330ml|14" checked> 🥤 330ml</label>
+<label><input type="radio" name="tamanho" value="550ml|18"> 🥤 550ml</label>
+<label><input type="radio" name="tamanho" value="770ml|25"> 🥤 770ml</label>
+
+<br>
+
+<div class="box">
+<b>🥤 Sucos de Açaí</b>
+<label><input type="radio" name="suco" value="" checked> Nenhum</label>
+<label><input type="radio" name="suco" value="Açaí com Morango|10"> Açaí com Morango (R$10)</label>
+<label><input type="radio" name="suco" value="Açaí com Maracujá|10"> Açaí com Maracujá (R$10)</label>
+<label><input type="radio" name="suco" value="Açaí com Banana|10"> Açaí com Banana (R$10)</label>
+<label><input type="radio" name="suco" value="Açaí Napolitano|10"> Açaí Napolitano (R$10)</label>
+<label><input type="radio" name="suco" value="Açaí com Nutella|15"> Açaí com Nutella (R$15)</label>
+<label><input type="radio" name="suco" value="Açaí com Leite em Pó e Leite Condensado|12">
+Açaí com Leite em Pó e Leite Condensado (R$12)</label>
+</div>
+
+<div class="grid">
+
+<div class="box">
+<b>🥣 Complementos</b>
+<label><input type="checkbox" value="Leite Condensado"> Leite Condensado</label>
+<label><input type="checkbox" value="Leite em Pó"> Leite em Pó</label>
+<label><input type="checkbox" value="Sucrilhos"> Sucrilhos</label>
+<label><input type="checkbox" value="Granola"> Granola</label>
+<label><input type="checkbox" value="Paçoca"> Paçoca</label>
+</div>
+
+<div class="box">
+<b>🍓 Frutas</b>
+<label><input type="checkbox" value="Morango"> Morango</label>
+<label><input type="checkbox" value="Uva"> Uva</label>
+<label><input type="checkbox" value="Banana"> Banana</label>
+</div>
+
+<div class="box">
+<b>🍫 Adicionais</b>
+<label><input type="checkbox" value="Nutella|5"> Nutella (+R$5)</label>
+<label><input type="checkbox" value="Ovomaltine|3"> Ovomaltine (+R$3)</label>
+<label><input type="checkbox" value="Confete de chocolate|3"> Confete (+R$3)</label>
+</div>
+
+</div>
+
+<button class="btn" onclick="criarPedido()">CRIAR PEDIDO</button>
+<button class="btn-sec" onclick="novoPedido()">LIMPAR</button>
+
+<hr>
+<h3>Total do Dia: R$ <span id="totalDia">0</span></h3>
+
+</div>
+</div>
+
+<!-- PRODUÇÃO -->
+<div class="coluna">
+<h2>PRODUÇÃO</h2>
+
+<div style="display:flex; gap:10px;">
+<div style="width:50%;">
+<h3>🟡 Em preparo</h3>
+<div id="colPreparo"></div>
+</div>
+
+<div style="width:50%;">
+<h3>🟢 Prontos</h3>
+<div id="colPronto"></div>
+</div>
+</div>
+
+</div>
+
+<script>
+let pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+let contador = pedidos.length + 1;
+
+function salvar() {
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+}
+
+function novoPedido() {
+    document.getElementById("cliente").value = "";
+    document.querySelectorAll("input[type=checkbox]").forEach(c => c.checked = false);
+    document.querySelectorAll('input[name="suco"]').forEach(r => r.checked = false);
+    document.querySelector('input[name="suco"][value=""]').checked = true;
+}
+
+function tocarSom() {
+    let som = document.getElementById("som");
+    som.currentTime = 0;
+    som.play().catch(()=>{});
+}
+
+document.addEventListener("click", () => {
+    let som = document.getElementById("som");
+    som.play().then(()=>{ som.pause(); som.currentTime=0; }).catch(()=>{});
+}, { once:true });
+
+async function conectarQZ() {
+    if (!qz.websocket.isActive()) {
+        await qz.websocket.connect();
+    }
+}
+
+async function imprimir(p) {
+    await conectarQZ();
+
+    let texto = "PEDIDO #" + p.numero + "\n\n" +
+                "Cliente: " + p.cliente + "\n\n" +
+                p.itens + "\n" +
+                "TOTAL: R$ " + p.total.toFixed(2) + "\n\n\n";
+
+    let printer = await qz.printers.getDefault();
+    let config = qz.configs.create(printer);
+
+    await qz.print(config, [{
+        type: 'raw',
+        format: 'plain',
+        data: texto + '\x1D\x56\x00'
+    }]);
+}
+
+function criarPedido() {
+    let cliente = document.getElementById("cliente").value;
+    let itensTxt = "";
+    let total = 0;
+
+    let sucoSel = document.querySelector('input[name="suco"]:checked');
+
+    if (sucoSel && sucoSel.value !== "") {
+        let [nome, preco] = sucoSel.value.split("|");
+        itensTxt += "SUCO: " + nome + "\n";
+        total += parseFloat(preco);
+    } else {
+        let [tam, preco] = document.querySelector('input[name="tamanho"]:checked').value.split("|");
+        itensTxt += "Açaí " + tam + "\n";
+        total += parseFloat(preco);
+
+        document.querySelectorAll("input[type=checkbox]:checked").forEach(c => {
+            if (c.value.includes("|")) {
+                let [nome, valor] = c.value.split("|");
+                itensTxt += "- " + nome + "\n";
+                total += parseFloat(valor);
+            } else {
+                itensTxt += "- " + c.value + "\n";
+            }
+        });
+    }
+
+    let pedido = {
+        numero: contador++,
+        cliente,
+        itens: itensTxt,
+        total,
+        status: "preparo"
+    };
+
+    pedidos.push(pedido);
+    salvar();
+    atualizarTela();
+    imprimir(pedido);
+    tocarSom();
+    novoPedido();
+}
+
+function atualizarTela() {
+    let preparo = "", pronto = "", totalDia = 0;
+
+    pedidos.forEach(p => {
+        totalDia += p.total;
+
+        let card = `
+        <div class="pedido ${p.status}">
+            <div class="header">#${p.numero} - ${p.cliente}</div>
+            ${p.itens.replace(/\n/g,"<br>")}
+            <b>R$ ${p.total.toFixed(2)}</b><br>
+
+            ${p.status==="preparo" ?
+            `<button onclick="mudarStatus(${p.numero})">✔ Pronto</button>` :
+            `<div class="status-ok">✅ Pronto</div>`}
+
+            <button onclick="excluirPedido(${p.numero})" class="excluir">🗑 Excluir</button>
+        </div>`;
+
+        p.status==="preparo" ? preparo+=card : pronto+=card;
+    });
+
+    colPreparo.innerHTML = preparo;
+    colPronto.innerHTML = pronto;
+    totalDia && (document.getElementById("totalDia").innerText = totalDia.toFixed(2));
+}
+
+function mudarStatus(n) {
+    let p = pedidos.find(x => x.numero === n);
+    p.status = "pronto";
+    salvar();
+    atualizarTela();
+}
+
+function excluirPedido(n) {
+    if (!confirm("Excluir pedido?")) return;
+    pedidos = pedidos.filter(p => p.numero !== n);
+    salvar();
+    atualizarTela();
+}
+
+atualizarTela();
+</script>
+
+</body>
+</html>
