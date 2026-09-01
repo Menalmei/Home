@@ -358,7 +358,9 @@ hr{
 
     padding:18px;
 
-    max-height:700px;
+    max-height:none;
+
+    overflow:visible;
 
     opacity:1;
 
@@ -1349,20 +1351,80 @@ Combo Casal
 <!-- BOTÕES -->
 <div class="acoes">
 
-<button id="btnCriarPedido"
+    <button
+        id="btnAdicionarCarrinho"
+        class="btn"
+        onclick="adicionarAoCarrinho()">
+
+        🛒 ADICIONAR AO CARRINHO
+
+    </button>
+
+    <button
+        id="btnCriarPedido"
         class="btn"
         onclick="criarPedido()">
 
-CRIAR PEDIDO
+        ✅ FINALIZAR PEDIDO
 
-</button>
+    </button>
 
-<button class="btn-sec"
+    <button
+        class="btn-sec"
         onclick="novoPedido()">
 
-LIMPAR
+        LIMPAR PEDIDO
 
-</button>
+    </button>
+
+</div>
+
+
+<!-- ============================== -->
+<!-- CARRINHO -->
+<!-- ============================== -->
+
+<div id="areaCarrinho"
+     style="
+        margin-top:20px;
+        background:#f9fafb;
+        border:1px solid #e5e7eb;
+        border-radius:16px;
+        padding:15px;
+     ">
+
+    <h3 style="color:#111827; margin-bottom:12px;">
+        🛒 Itens do Pedido
+    </h3>
+
+    <div id="listaCarrinho">
+
+        <div style="
+            color:#6b7280;
+            text-align:center;
+            padding:10px;
+        ">
+            Nenhum item adicionado
+        </div>
+
+    </div>
+
+    <div style="
+        margin-top:15px;
+        padding-top:12px;
+        border-top:1px solid #e5e7eb;
+        display:flex;
+        justify-content:space-between;
+        font-weight:bold;
+    ">
+
+        <span>Total:</span>
+
+        <span>
+            R$ <span id="totalCarrinho">0.00</span>
+        </span>
+
+    </div>
 
 </div>
 
@@ -1531,7 +1593,7 @@ R$ <span id="totalDia">0.00</span>
 <script>
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbzQFNw249hOQplBAt4WzlGdaOev5E1KYgn2bRWhC2z-7eotL51OmToVydzAqQXzsilT/exec";
+"https://script.google.com/macros/s/AKfycbzCsd_Z50ub39YIqjiLeMYgH_3RNX5fNGSRs7RYszkJlT7jfXoyAkn0qKlKU5TWERZl/exec";
 
 let senhaAdmin = "";
 
@@ -1686,6 +1748,14 @@ let pedidos = [];
 
 let contador = null;
 
+// ==============================
+// CARRINHO DO PEDIDO
+// ==============================
+
+let carrinho = [];
+
+let indiceEdicaoCarrinho = null;
+
 /* SALVAR */
 function salvar(){
 
@@ -1815,13 +1885,13 @@ async function imprimir(p){
 
         texto += "\x1B\x61\x01";
         texto += "MENALMEI GOURMET\n";
-        texto += "==============================\n";
+        texto += "------------------------------\n";
 
         texto += "\x1B\x21\x20";
         texto += "PEDIDO #" + p.numero + "\n";
 
         texto += "\x1B\x21\x00";
-        texto += "==============================\n\n";
+        texto += "------------------------------\n\n";
 
         texto += "\x1B\x61\x00";
 
@@ -1930,31 +2000,937 @@ console.log("ENVIANDO PARA PLANILHA", pedido);
 
 }
 
+// ============================================
+// MONTAR ITEM SELECIONADO
+// ============================================
+
+function montarItemSelecionado(){
+
+    let vendaSelecionada =
+        document.querySelector(
+            'input[name="tipoVenda"]:checked'
+        );
+
+    let tipoVenda =
+        vendaSelecionada
+        ? vendaSelecionada.value
+        : "Loja";
+
+
+    let itensTxt = "";
+
+    let total = 0;
+
+    let custoTotal = 0;
+
+
+    let complementos = [];
+
+    let frutas = [];
+
+    let adicionais = [];
+
+
+    // =========================
+    // SUCO
+    // =========================
+
+    let sucoSel =
+        document.querySelector(
+            'input[name="suco"]:checked'
+        );
+
+
+    if(
+        sucoSel &&
+        sucoSel.value !== ""
+    ){
+
+        let nome =
+            sucoSel.value;
+
+
+        let produto =
+            buscarProduto(
+                nome,
+                tipoVenda
+            );
+
+
+        if(!produto){
+
+            alert(
+                "Produto não encontrado: " +
+                nome
+            );
+
+            return null;
+
+        }
+
+
+        let preco =
+            parseFloat(
+                produto.valor
+                    .toString()
+                    .replace(",", ".")
+            ) || 0;
+
+
+        let custo =
+            parseFloat(
+                produto.custo
+                    .toString()
+                    .replace(",", ".")
+            ) || 0;
+
+
+        itensTxt +=
+            "SUCO: " + nome + "\n";
+
+
+        total += preco;
+
+        custoTotal += custo;
+
+
+        return {
+
+            tipo:"suco",
+
+            produto:nome,
+
+            complementos:[],
+
+            frutas:[],
+
+            adicionais:[],
+
+            descricao:itensTxt,
+
+            total:total,
+
+            custo:custoTotal
+
+        };
+
+    }
+
+
+    // =========================
+    // AÇAÍ / MARMITA / COMBO
+    // =========================
+
+    let tamanho =
+        document.querySelector(
+            'input[name="tamanho"]:checked'
+        );
+
+
+    if(!tamanho){
+
+        alert(
+            "Selecione um produto."
+        );
+
+        return null;
+
+    }
+
+
+    let tam =
+        tamanho.value;
+
+
+    let produto =
+        buscarProduto(
+            tam,
+            tipoVenda
+        );
+
+
+    if(!produto){
+
+        alert(
+            "Produto não encontrado: " +
+            tam
+        );
+
+        return null;
+
+    }
+
+
+    let preco =
+        parseFloat(
+            produto.valor
+                .toString()
+                .replace(",", ".")
+        ) || 0;
+
+
+    let custo =
+        parseFloat(
+            produto.custo
+                .toString()
+                .replace(",", ".")
+        ) || 0;
+
+
+    itensTxt +=
+        "Açaí " + tam + "\n";
+
+
+    total += preco;
+
+    custoTotal += custo;
+
+
+
+    // =========================
+    // COMPLEMENTOS
+    // =========================
+
+    document.querySelectorAll(
+        '#complementos input[type="checkbox"]:checked'
+    ).forEach(c => {
+
+        complementos.push(
+            c.value
+        );
+
+        itensTxt +=
+            "  - " + c.value + "\n";
+
+    });
+
+
+
+    // =========================
+    // FRUTAS
+    // =========================
+
+    document.querySelectorAll(
+        '#frutas input[type="checkbox"]:checked'
+    ).forEach(c => {
+
+        frutas.push(
+            c.value
+        );
+
+        itensTxt +=
+            "  - " + c.value + "\n";
+
+    });
+
+
+
+    // =========================
+    // ADICIONAIS
+    // =========================
+
+    let adicionaisSelecionados =
+        document.querySelectorAll(
+            '#adicionais input[type="checkbox"]:checked'
+        );
+
+
+    for(
+        let c of adicionaisSelecionados
+    ){
+
+        let nome =
+            c.value;
+
+
+        let adicional =
+            buscarProduto(
+                nome,
+                tipoVenda
+            );
+
+
+        if(!adicional){
+
+            alert(
+                "Produto não encontrado: " +
+                nome
+            );
+
+            return null;
+
+        }
+
+
+        adicionais.push(
+            nome
+        );
+
+
+        let precoAdicional =
+            parseFloat(
+                adicional.valor
+                    .toString()
+                    .replace(",", ".")
+            ) || 0;
+
+
+        let custoAdicional =
+            parseFloat(
+                adicional.custo
+                    .toString()
+                    .replace(",", ".")
+            ) || 0;
+
+
+        itensTxt +=
+            "  - " + nome + "\n";
+
+
+        total +=
+            precoAdicional;
+
+
+        custoTotal +=
+            custoAdicional;
+
+    }
+
+
+
+    return {
+
+        tipo:"acai",
+
+        produto:tam,
+
+        complementos:
+            complementos,
+
+        frutas:
+            frutas,
+
+        adicionais:
+            adicionais,
+
+        descricao:
+            itensTxt,
+
+        total:
+            total,
+
+        custo:
+            custoTotal
+
+    };
+
+}
+
+
+// ============================================
+// ADICIONAR AO CARRINHO
+// ============================================
+
+function adicionarAoCarrinho(){
+
+    let item =
+        montarItemSelecionado();
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    // =========================
+    // ESTÁ EDITANDO
+    // =========================
+
+    if(
+        indiceEdicaoCarrinho !== null
+    ){
+
+        carrinho[
+            indiceEdicaoCarrinho
+        ] = item;
+
+
+        indiceEdicaoCarrinho =
+            null;
+
+
+        let botao =
+            document.getElementById(
+                "btnAdicionarCarrinho"
+            );
+
+
+        if(botao){
+
+            botao.innerHTML =
+                "🛒 ADICIONAR AO CARRINHO";
+
+        }
+
+    }
+
+    // =========================
+    // NOVO ITEM
+    // =========================
+
+    else{
+
+        carrinho.push(
+            item
+        );
+
+    }
+
+
+    atualizarCarrinho();
+
+    limparSelecaoItem();
+
+}
+
+
+// ============================================
+// ATUALIZAR VISUAL DO CARRINHO
+// ============================================
+
+function atualizarCarrinho(){
+
+    let area =
+        document.getElementById(
+            "listaCarrinho"
+        );
+
+    let totalCarrinho = 0;
+
+
+    if(carrinho.length === 0){
+
+        area.innerHTML = `
+
+            <div style="
+                color:#6b7280;
+                text-align:center;
+                padding:10px;
+            ">
+                Nenhum item adicionado
+            </div>
+
+        `;
+
+        document.getElementById(
+            "totalCarrinho"
+        ).innerText = "0.00";
+
+        return;
+
+    }
+
+
+    let html = "";
+
+
+    carrinho.forEach(
+        (item, index) => {
+
+            totalCarrinho +=
+                Number(item.total || 0);
+
+
+            html += `
+
+                <div style="
+                    background:white;
+                    border:1px solid #e5e7eb;
+                    border-radius:12px;
+                    padding:12px;
+                    margin-bottom:10px;
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        gap:10px;
+                    ">
+
+                        <b>
+                            Item ${index + 1}
+                        </b>
+
+                        <b>
+                            R$ ${Number(item.total).toFixed(2)}
+                        </b>
+
+                    </div>
+
+                    <div style="
+                        margin-top:8px;
+                        font-size:14px;
+                        line-height:1.5;
+                    ">
+
+                        ${
+                            item.descricao
+                                .replace(
+                                    /\n/g,
+                                    "<br>"
+                                )
+                        }
+
+                    </div>
+
+
+                    <div style="
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+">
+
+    <button
+        type="button"
+        onclick="editarItemCarrinho(${index})"
+        style="
+            flex:1;
+            padding:9px;
+            background:#2563eb;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+        "
+    >
+
+        ✏️ Editar
+
+    </button>
+
+
+    <button
+        type="button"
+        onclick="removerItemCarrinho(${index})"
+        style="
+            flex:1;
+            padding:9px;
+            background:#dc2626;
+            color:white;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+        "
+    >
+
+        🗑 Remover
+
+    </button>
+
+</div>
+
+                </div>
+
+            `;
+
+        }
+    );
+
+
+    area.innerHTML =
+        html;
+
+
+    document.getElementById(
+        "totalCarrinho"
+    ).innerText =
+        totalCarrinho.toFixed(2);
+
+}
+
+
+// ============================================
+// REMOVER ITEM
+// ============================================
+
+function removerItemCarrinho(index){
+
+    carrinho.splice(
+        index,
+        1
+    );
+
+
+    // Se estava editando esse item
+    if(
+        indiceEdicaoCarrinho === index
+    ){
+
+        indiceEdicaoCarrinho =
+            null;
+
+        limparSelecaoItem();
+
+
+        let botao =
+            document.getElementById(
+                "btnAdicionarCarrinho"
+            );
+
+
+        if(botao){
+
+            botao.innerHTML =
+                "🛒 ADICIONAR AO CARRINHO";
+
+        }
+
+    }
+
+    // Se removeu algum item antes
+    // daquele que estava editando
+    else if(
+        indiceEdicaoCarrinho !== null &&
+        index < indiceEdicaoCarrinho
+    ){
+
+        indiceEdicaoCarrinho--;
+
+    }
+
+
+    atualizarCarrinho();
+
+}
+
+function editarItemCarrinho(index){
+
+    let item =
+        carrinho[index];
+
+
+    if(!item){
+
+        return;
+
+    }
+
+
+    // Guarda qual item estamos editando
+    indiceEdicaoCarrinho =
+        index;
+
+
+    // =========================
+    // LIMPA SELEÇÕES
+    // =========================
+
+    document.querySelectorAll(
+        "#complementos input[type=checkbox]"
+    ).forEach(c => {
+
+        c.checked = false;
+
+    });
+
+
+    document.querySelectorAll(
+        "#frutas input[type=checkbox]"
+    ).forEach(c => {
+
+        c.checked = false;
+
+    });
+
+
+    document.querySelectorAll(
+        "#adicionais input[type=checkbox]"
+    ).forEach(c => {
+
+        c.checked = false;
+
+    });
+
+
+    document.querySelectorAll(
+        'input[name="suco"]'
+    ).forEach(r => {
+
+        r.checked = false;
+
+    });
+
+
+
+    // =========================
+    // SE FOR SUCO
+    // =========================
+
+    if(
+        item.tipo === "suco"
+    ){
+
+        let radioSuco =
+            document.querySelector(
+                `input[name="suco"][value="${CSS.escape(item.produto)}"]`
+            );
+
+
+        if(radioSuco){
+
+            radioSuco.checked =
+                true;
+
+        }
+
+    }
+
+
+    // =========================
+    // SE FOR AÇAÍ
+    // =========================
+
+    else{
+
+
+        // TAMANHO
+        document.querySelectorAll(
+            'input[name="tamanho"]'
+        ).forEach(r => {
+
+            if(
+                r.value ===
+                item.produto
+            ){
+
+                r.checked =
+                    true;
+
+            }
+
+        });
+
+
+
+        // COMPLEMENTOS
+        document.querySelectorAll(
+            '#complementos input[type="checkbox"]'
+        ).forEach(c => {
+
+            c.checked =
+                item.complementos
+                    .includes(
+                        c.value
+                    );
+
+        });
+
+
+
+        // FRUTAS
+        document.querySelectorAll(
+            '#frutas input[type="checkbox"]'
+        ).forEach(c => {
+
+            c.checked =
+                item.frutas
+                    .includes(
+                        c.value
+                    );
+
+        });
+
+
+
+        // ADICIONAIS
+        document.querySelectorAll(
+            '#adicionais input[type="checkbox"]'
+        ).forEach(c => {
+
+            c.checked =
+                item.adicionais
+                    .includes(
+                        c.value
+                    );
+
+        });
+
+
+        // Marca "sem suco"
+        let nenhumSuco =
+            document.querySelector(
+                'input[name="suco"][value=""]'
+            );
+
+
+        if(nenhumSuco){
+
+            nenhumSuco.checked =
+                true;
+
+        }
+
+    }
+
+
+
+    // =========================
+    // ALTERA BOTÃO
+    // =========================
+
+    let botao =
+        document.getElementById(
+            "btnAdicionarCarrinho"
+        );
+
+
+    if(botao){
+
+        botao.innerHTML =
+            "💾 SALVAR ALTERAÇÃO";
+
+    }
+
+
+    // Volta para cima
+    // para facilitar a edição
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+// ============================================
+// LIMPAR SOMENTE SELEÇÃO DO ITEM
+// ============================================
+
+function limparSelecaoItem(){
+
+    document.querySelectorAll(
+        "input[type=checkbox]"
+    ).forEach(c => {
+
+        c.checked = false;
+
+    });
+
+
+    document.querySelectorAll(
+        'input[name="suco"]'
+    ).forEach(r => {
+
+        r.checked = false;
+
+    });
+
+
+    let nenhumSuco =
+        document.querySelector(
+            'input[name="suco"][value=""]'
+        );
+
+    if(nenhumSuco){
+
+        nenhumSuco.checked =
+            true;
+
+    }
+
+
+    // volta para 330ml
+    let tamanhoPadrao =
+        document.querySelector(
+            'input[name="tamanho"][value="330ml"]'
+        );
+
+    if(tamanhoPadrao){
+
+        tamanhoPadrao.checked =
+            true;
+
+    }
+
+}
+
 /* CRIAR PEDIDO */
 
 function criarPedido(){
 
-if (contador === null) {
+    if(contador === null){
 
-    alert("Aguarde o carregamento completo do sistema.");
+        alert(
+            "Aguarde o carregamento completo do sistema."
+        );
 
-    return;
+        return;
 
-}
+    }
+
 
     try{
 
+
+        // =========================
+        // CLIENTE
+        // =========================
+
         let cliente =
-            document.getElementById("cliente")
-            .value
-            .trim();
+            document
+                .getElementById(
+                    "cliente"
+                )
+                .value
+                .trim();
+
 
         if(cliente === ""){
 
-            alert("Digite o nome do cliente");
+            alert(
+                "Digite o nome do cliente"
+            );
+
             return;
 
         }
+
+
+        // =========================
+        // VERIFICA CARRINHO
+        // =========================
+
+        if(carrinho.length === 0){
+
+            alert(
+                "Adicione pelo menos um item ao carrinho."
+            );
+
+            return;
+
+        }
+
+
+        // =========================
+        // TIPO VENDA
+        // =========================
+
+        let vendaSelecionada =
+            document.querySelector(
+                'input[name="tipoVenda"]:checked'
+            );
+
+
+        let tipoVenda =
+            vendaSelecionada
+            ? vendaSelecionada.value
+            : "Loja";
+
+
+        // =========================
+        // JUNTA TODOS OS ITENS
+        // =========================
 
         let itensTxt = "";
 
@@ -1962,198 +2938,68 @@ if (contador === null) {
 
         let custoTotal = 0;
 
-        // tipo venda
-        let vendaSelecionada =
-            document.querySelector(
-                'input[name="tipoVenda"]:checked'
-            );
 
-        let tipoVenda =
-            vendaSelecionada
-            ? vendaSelecionada.value
-            : "Loja";
+        carrinho.forEach(
+            (item, index) => {
+
+
+                itensTxt +=
+                    "ITEM " +
+                    (index + 1) +
+                    "\n";
+
+                itensTxt +=
+                    "------------------------\n";
+
+                itensTxt +=
+                    item.descricao;
+
+                itensTxt +=
+                    "\n";
+
+
+                total +=
+                    Number(
+                        item.total || 0
+                    );
+
+
+                custoTotal +=
+                    Number(
+                        item.custo || 0
+                    );
+
+            }
+        );
+
+
+        // =========================
+        // TAXA
+        // =========================
 
         let taxa = 0;
 
-        // suco
-        let sucoSel =
-            document.querySelector(
-                'input[name="suco"]:checked'
-            );
-
-        // =========================
-        // SUCOS
-        // =========================
 
         if(
-            sucoSel &&
-            sucoSel.value !== ""
+            tipoVenda ===
+            "Ifood Proprio"
         ){
 
-            let nome = sucoSel.value;
-
-            let produto =
-                buscarProduto(nome, tipoVenda);
-
-            if(!produto){
-
-                alert("Produto não encontrado: " + nome);
-                return;
-
-            }
-
-            let preco =
-                parseFloat(
-                    produto.valor
-                        .toString()
-                        .replace(",", ".")
-                ) || 0;
-
-            let custo =
-                parseFloat(
-                    produto.custo
-                        .toString()
-                        .replace(",", ".")
-                ) || 0;
-
-            itensTxt +=
-                "SUCO: " + nome + "\n";
-
-            total += preco;
-
-            custoTotal += custo;
+            taxa =
+                total * 0.152;
 
         }
 
-        // =========================
-        // AÇAÍ
-        // =========================
+        else if(
+            tipoVenda ===
+            "Ifood Parceiro"
+        ){
 
-        else{
-
-            let tamanho =
-                document.querySelector(
-                    'input[name="tamanho"]:checked'
-                );
-
-            let tam = tamanho.value;
-
-            let produto =
-                buscarProduto(tam, tipoVenda);
-
-            if(!produto){
-
-                alert("Produto não encontrado: " + tam);
-                return;
-
-            }
-
-            let preco =
-                parseFloat(
-                    produto.valor
-                        .toString()
-                        .replace(",", ".")
-                ) || 0;
-
-            let custo =
-                parseFloat(
-                    produto.custo
-                        .toString()
-                        .replace(",", ".")
-                ) || 0;
-
-            itensTxt +=
-                "Açaí " + tam + "\n";
-
-            total += preco;
-
-            custoTotal += custo;
-
-            // =========================
-            // COMPLEMENTOS
-            // =========================
-
-            document.querySelectorAll(
-                '#complementos input[type="checkbox"]:checked'
-            ).forEach(c => {
-
-                itensTxt +=
-                    "- " + c.value + "\n";
-
-            });
-
-            // =========================
-            // FRUTAS
-            // =========================
-
-            document.querySelectorAll(
-                '#frutas input[type="checkbox"]:checked'
-            ).forEach(c => {
-
-                itensTxt +=
-                    "- " + c.value + "\n";
-
-            });
-
-            // =========================
-            // ADICIONAIS
-            // =========================
-
-            document.querySelectorAll(
-                '#adicionais input[type="checkbox"]:checked'
-            ).forEach(c => {
-
-                let nome = c.value;
-
-                let produto =
-                    buscarProduto(nome, tipoVenda);
-
-                if(!produto){
-
-                    alert("Produto não encontrado: " + nome);
-                    return;
-
-                }
-
-                let preco =
-                    parseFloat(
-                        produto.valor
-                            .toString()
-                            .replace(",", ".")
-                    ) || 0;
-
-                let custo =
-                    parseFloat(
-                        produto.custo
-                            .toString()
-                            .replace(",", ".")
-                    ) || 0;
-
-                itensTxt +=
-                    "- " + nome + "\n";
-
-                total += preco;
-
-                custoTotal += custo;
-
-            });
+            taxa =
+                total * 0.262;
 
         }
 
-        // =========================
-        // TAXAS IFOOD
-        // =========================
-
-        if(tipoVenda === "Ifood Proprio"){
-
-            taxa = total * 0.152;
-
-        }
-        else if(tipoVenda === "Ifood Parceiro"){
-
-            taxa = total * 0.262;
-
-        }
 
         // =========================
         // TOTAL / LUCRO
@@ -2162,66 +3008,103 @@ if (contador === null) {
         let totalFinal =
             total - taxa;
 
+
         let lucro =
-            totalFinal - custoTotal;
+            totalFinal -
+            custoTotal;
+
 
         // =========================
         // STATUS
         // =========================
 
-        let statusInicial = "preparo";
+        let statusInicial =
+            "preparo";
 
-        // pedidos do iFood entram finalizados
+
         if(
             tipoVenda === "Ifood Proprio" ||
             tipoVenda === "Ifood Parceiro"
         ){
 
-            statusInicial = "finalizado";
+            statusInicial =
+                "finalizado";
 
         }
 
+
         // =========================
-        // PEDIDO
+        // CRIA UM ÚNICO PEDIDO
         // =========================
 
         let pedido = {
 
-            numero: contador++,
+            numero:
+                contador++,
 
-            cliente,
+            cliente:
+                cliente,
 
-            itens: itensTxt,
+            itens:
+                itensTxt,
 
-            subtotal: total,
+            subtotal:
+                total,
 
-            taxa,
+            taxa:
+                taxa,
 
-            lucro,
+            lucro:
+                lucro,
 
-            total: totalFinal,
+            total:
+                totalFinal,
 
-            tipoVenda,
+            tipoVenda:
+                tipoVenda,
 
-            data: new Date().toISOString(),
+            data:
+                new Date()
+                    .toISOString(),
 
-            status: statusInicial,
+            status:
+                statusInicial,
 
             tempoFinal:
-                statusInicial === "finalizado"
+                statusInicial ===
+                "finalizado"
                 ? "00:00"
                 : null
 
         };
 
-        pedidos.push(pedido);
 
-        salvarVendaPlanilha(pedido);
+        // =========================
+        // SALVA PEDIDO
+        // =========================
+
+        pedidos.push(
+            pedido
+        );
+
+
+        salvarVendaPlanilha(
+            pedido
+        );
+
 
         atualizarTela();
+
         atualizarDashboard();
 
-        imprimir(pedido).catch(err => {
+
+        // =========================
+        // IMPRIME UMA ÚNICA COMANDA
+        // =========================
+
+        imprimir(
+            pedido
+        ).catch(err => {
 
             console.log(
                 "Erro impressão:",
@@ -2230,14 +3113,29 @@ if (contador === null) {
 
         });
 
+
         tocarSom();
+
+
+        // =========================
+        // LIMPA PARA PRÓXIMO CLIENTE
+        // =========================
+
+        carrinho = [];
+
+        atualizarCarrinho();
 
         novoPedido();
 
+
     }
+
     catch(err){
 
-        console.error(err);
+        console.error(
+            err
+        );
+
 
         alert(
             "Erro ao criar pedido:\n\n" +
