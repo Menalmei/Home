@@ -1344,26 +1344,6 @@ Combo Casal
 
     </label>
 
-    <label class="opcao-venda">
-
-        <input type="radio"
-               name="tipoVenda"
-               value="Ifood Proprio">
-
-        🛵 iFood Próprio (+15,2%)
-
-    </label>
-
-    <label class="opcao-venda">
-
-        <input type="radio"
-               name="tipoVenda"
-               value="Ifood Parceiro">
-
-        🍔 iFood Parceiro (+26,2%)
-
-    </label>
-
 </div>
 
 <!-- BOTÕES -->
@@ -1612,8 +1592,54 @@ function receberProdutos(dados){
     senhaAdmin = dados.senha || "";
 
     // PEDIDOS VINDOS DA PLANILHA
-    let pedidosAPI =
-        dados.pedidos || [];
+let pedidosAPI =
+    dados.pedidos || [];
+
+// ============================================
+// DIA OPERACIONAL: 03:00 até 02:59
+// ============================================
+
+const agora = new Date();
+
+// Início do período atual
+const inicioPeriodo = new Date(agora);
+
+// Se ainda não chegou às 03:00,
+// o período começou às 03:00 do dia anterior
+if(agora.getHours() < 3){
+
+    inicioPeriodo.setDate(
+        inicioPeriodo.getDate() - 1
+    );
+
+}
+
+inicioPeriodo.setHours(3, 0, 0, 0);
+
+// Fim do período = 03:00 do dia seguinte
+const fimPeriodo = new Date(inicioPeriodo);
+
+fimPeriodo.setDate(
+    fimPeriodo.getDate() + 1
+);
+
+// Mantém somente pedidos do período atual
+pedidosAPI = pedidosAPI.filter(p => {
+
+    if(!p.data){
+        return false;
+    }
+
+    const dataPedido =
+        new Date(p.data);
+
+    return (
+        dataPedido >= inicioPeriodo &&
+        dataPedido < fimPeriodo
+    );
+
+});
+
 
     // VERIFICA SE MUDOU
     let mudou =
@@ -2227,6 +2253,39 @@ if (contador === null) {
 /* ATUALIZAR */
 function atualizarTela(){
 
+ // ============================================
+    // DIA OPERACIONAL: 03:00 até 02:59 do dia seguinte
+    // ============================================
+
+    const agora = new Date();
+
+    let inicioDia = new Date(agora);
+
+    // Se ainda não são 03:00, estamos no turno iniciado ontem
+    if(agora.getHours() < 3){
+        inicioDia.setDate(inicioDia.getDate() - 1);
+    }
+
+    inicioDia.setHours(3, 0, 0, 0);
+
+    const fimDia = new Date(inicioDia);
+    fimDia.setDate(fimDia.getDate() + 1);
+
+    // Filtra os pedidos pertencentes ao turno atual
+    const pedidosVisiveis = pedidos.filter(p => {
+
+        if(!p.data) return false;
+
+        const dataPedido = new Date(p.data);
+
+        return dataPedido >= inicioDia &&
+               dataPedido < fimDia;
+    });
+
+    // ============================================
+    // DAQUI PARA BAIXO, USE pedidosVisiveis
+    // ============================================
+
     let preparoHTML = "";
     let prontoHTML = "";
     let totalDia = 0;
@@ -2236,7 +2295,7 @@ function atualizarTela(){
         ? pedidos[pedidos.length - 1].numero
         : null;
 
-    pedidos.forEach(p => {
+    pedidosVisiveis.forEach(p => {
 
         totalDia += Number(p.total || 0);
 
