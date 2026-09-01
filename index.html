@@ -3,202 +3,2921 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Menalmei</title>
+<title>Menalmei Gourmet</title>
+
+<script src="https://cdn.jsdelivr.net/npm/qz-tray/qz-tray.js"></script>
 
 <style>
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+
+/* GOOGLE FONT */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
 }
 
-/* BODY */
-body {
-    background: linear-gradient(135deg, #050b1a, #0a1633, #020615);
-    color: #fff;
-    font-family: 'Arial', sans-serif;
-    overflow: hidden;
+body{
+    font-family:Arial, sans-serif;
+    margin:0;
+    background:#f3f4f6;
+    color:#111827;
+
+    display:flex;
+    align-items:flex-start;
+    gap:15px;
+
+    width:100%;
 }
 
+/* COLUNAS */
+.coluna{
 
-/* HEADER */
-header {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    z-index: 10;
+    flex:1;
+
+    min-width:0;
+
 }
 
-/* LOGO */
-header img {
-    width: 240px;
-    margin-bottom: 25px;
-    filter: drop-shadow(0 0 10px rgba(76,110,220,0.6));
+/* CARD PRINCIPAL */
+.caixa{
+    background:white;
+    padding:18px;
+    border-radius:18px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+
+    color:#111827;
 }
 
-/* SUBTÍTULO */
-header p {
-    font-size: 18px;
-    margin-bottom: 45px;
-    letter-spacing: 2px;
-    opacity: 0.9;
-    color: #dde5f3;
+/* TITULOS */
+h2{
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:22px;
+
+    color:white;
+
+}
+
+h3{
+
+    font-size:18px;
+
+    margin-bottom:12px;
+
+    color:white;
+
+}
+
+/* LABELS */
+label{
+
+    font-size:15px;
+
+}
+
+/* GRID */
+.grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:16px;
+
+    align-items:start;
+
+    margin-top:15px;
+
+}
+
+/* BOXES */
+.box{
+    
+
+    background:#3439ff;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    border:1px solid rgba(255,255,255,0.06);
+
+    transition:0.25s;
+
+}
+
+.box:hover{
+
+    border-color:#7b2cbf;
+
+    transform:translateY(-2px);
+
+}
+
+.box b{
+
+    display:block;
+
+    margin-bottom:12px;
+
+    font-size:16px;
+
+    color:white;
+
+}
+
+.box label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    cursor:pointer;
+
+    color:#d1d5db;
+
+}
+
+/* AÇÕES */
+.acoes{
+
+    margin-top:18px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
 }
 
 /* BOTÕES */
-a.btn {
-    width: 260px;
-    padding: 16px;
-    margin: 10px;
-    text-decoration: none;
-    color: #fff;
-    background: #1e2a4f; /* azul escuro */
-    border: 2px solid #4c6edc; /* destaque */
-    border-radius: 40px;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 1.5px;
-    transition: 0.35s ease;
+button{
+
+    width:100%;
+
+    padding:14px;
+
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    transition:0.25s;
+
+    font-weight:700;
+
+    font-size:14px;
+
+    letter-spacing: 0.3px;
+
 }
 
-a.btn:hover {
-    background: #33487a; /* tom mais claro ao passar */
-    border-color: #5a7cf2;
-    transform: translateY(-3px);
+/* HOVER */
+button:hover{
+
+    transform:translateY(-2px);
+
 }
 
-/* PARTÍCULAS */
-#particles {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
+/* BOTÃO PRINCIPAL */
+.btn{
+
+    background:linear-gradient(
+        135deg,
+        #7b2cbf,
+        #9d4edd
+    );
+
+    color:white;
+
+    box-shadow:
+        0 8px 20px rgba(123,44,191,0.35);
+
 }
 
-/* FOOTER */
-footer {
-    position: fixed;
-    bottom: 12px;
-    width: 100%;
-    text-align: center;
-    font-size: 12px;
-    opacity: 0.75;
-    letter-spacing: 1px;
-    z-index: 15;
-    color: #c8c8c8;
+/* SECUNDÁRIO */
+.btn-sec{
+    background:#e5e7eb;
+    color:#111827;
 }
 
-/* WHATSAPP */
-.whatsapp-float {
-    position: fixed;
-    bottom: 22px;
-    right: 22px;
-    width: 60px;
-    height: 60px;
-    background: #25D366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 22px rgba(37,211,102,0.55);
-    z-index: 20;
-    transition: transform 0.3s ease;
+/* EXCLUIR */
+.excluir{
+
+    background:#dc2626;
+
+    color:white;
+    
+    margin-top: 5px
+
 }
-.whatsapp-float:hover {
-    transform: scale(1.15);
+
+/* LINHA */
+hr{
+
+    border:none;
+
+    height:1px;
+
+    background:rgba(255,255,255,0.08);
+
+    margin:22px 0;
+
+}
+
+/* TOTAL */
+#totalDia{
+
+    color:#22c55e;
+
+    font-weight:700;
+
+    font-size:22px;
+
+}
+
+/* PEDIDOS */
+/* PEDIDOS */
+.pedido{
+
+    border-radius:22px;
+
+    margin-bottom:16px;
+
+    overflow:hidden;
+
+    transition:0.25s;
+
+    border:1px solid rgba(255,255,255,0.05);
+
+    background:#ffffff;
+
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.25);
+
+}
+
+.recebido{
+
+    border-left:6px solid #facc15;
+
+}
+
+.preparo{
+
+    border-left:6px solid #fb923c;
+
+}
+
+.entrega{
+
+    border-left:6px solid #60a5fa;
+
+}
+
+.finalizado{
+
+    border-left:6px solid #22c55e;
+
+}
+
+.pedido:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.35);
+
+}
+
+/* HEADER */
+.header{
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    padding:18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    user-select:none;
+
+    transition:0.2s;
+
+    font-size:15px;
+
+    color:white;
+
+}
+
+.header:hover{
+
+    background:rgba(255,255,255,0.03);
+
+}
+
+.header:hover{
+    background:rgba(0,0,0,0.04);
+}
+
+/* SETA */
+.seta{
+    transition:transform 0.3s ease;
+    font-size:14px;
+}
+
+.seta.aberta{
+    transform:rotate(90deg);
+}
+
+/* DETALHES */
+.detalhe{
+    padding:0 12px;
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+
+    transition:
+        max-height 0.35s ease,
+        opacity 0.25s ease,
+        padding 0.25s ease;
+}
+
+.detalhe.aberto{
+
+    padding:18px;
+
+    max-height:700px;
+
+    opacity:1;
+
+    color:#000000;
+
+}
+
+/* STATUS */
+
+
+/* ANIMAÇÃO NOVO PEDIDO */
+.novo{
+    animation:novoPedido 1s ease;
+}
+
+@keyframes novoPedido{
+
+    0%{
+        transform:scale(0.95);
+        opacity:0;
+    }
+
+    60%{
+        transform:scale(1.02);
+    }
+
+    100%{
+        transform:scale(1);
+        opacity:1;
+    }
+
+}
+
+*{
+    box-sizing:border-box;
+}
+
+/* ========================= */
+/* RESPONSIVIDADE MOBILE */
+/* ========================= */
+
+@media (max-width: 900px){
+
+    body{
+        flex-direction:column;
+        gap:0;
+    }
+
+    .coluna{
+        width:100%;
+        padding:10px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .header{
+        font-size:14px;
+    }
+
+    .pedido{
+        margin-bottom:10px;
+    }
+
+    button{
+        padding:14px;
+        font-size:15px;
+    }
+
+    h2{
+        font-size:20px;
+    }
+
+    h3{
+        font-size:17px;
+    }
+
+}
+
+/* CELULAR PEQUENO */
+@media (max-width: 500px){
+
+    body{
+        background:#eceef1;
+    }
+
+    .caixa{
+        padding:14px;
+        border-radius:14px;
+    }
+
+    .pedido{
+        border-radius:14px;
+    }
+
+    .header{
+        padding:12px;
+    }
+
+    input[type=text]{
+        font-size:16px;
+    }
+
+    button{
+        font-size:16px;
+        border-radius:10px;
+    }
+
+}
+
+/* ========================= */
+/* PAINEL FLUTUANTE PEDIDOS */
+/* ========================= */
+
+#btnPedidos{
+
+    position:fixed;
+    right:20px;
+    bottom:20px;
+
+    width:auto;
+
+    padding:14px 20px;
+
+    background:#7b2cbf;
+    color:white;
+
+    border-radius:50px;
+
+    z-index:9999;
+
+    box-shadow:0 6px 20px rgba(0,0,0,0.25);
+
+}
+
+#overlayPedidos{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,0.45);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:0.3s;
+
+    z-index:9997;
+
+}
+
+#overlayPedidos.ativo{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+.painel-pedidos{
+
+    position:fixed;
+
+    top:0;
+    right:-1000px;
+
+    width:420px;
+    max-width:100%;
+
+    height:100vh;
+
+    background:#f5f5f7;
+
+    z-index:9998;
+
+    overflow-y:auto;
+
+    transition:0.35s ease;
+
+    box-shadow:-5px 0 25px rgba(0,0,0,0.2);
+
+    padding:15px;
+
+}
+
+.painel-pedidos.aberto{
+
+    right:0;
+
+}
+
+.topo-painel{
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    margin-bottom:15px;
+
+}
+
+.fechar-painel{
+
+    width:45px;
+    height:45px;
+
+    border-radius:50%;
+
+    background:#dc3545;
+    color:white;
+
+    font-size:18px;
+
+    padding:0;
+
+}
+
+.producao-grid{
+
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+
+}
+
+.producao-coluna{
+
+    width:100%;
+
+}
+
+/* DESKTOP */
+@media(min-width: 1000px){
+
+    .painel-pedidos{
+
+        width:480px;
+
+    }
+
+}
+
+/* CATEGORIAS */
+
+.categorias{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:15px;
+}
+
+.categoria{
+    background:#white;
+    border-radius:16px;
+    overflow:hidden;
+    border:1px solid #7b2cbf;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+}
+
+.cat-header{
+    padding:16px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-weight:bold;
+    transition:0.2s;
+}
+
+.cat-header:hover{
+    background:#f9fafb;
+}
+
+.cat-body{
+    max-height:0;
+    overflow:hidden;
+    opacity:0;
+
+    transition:
+        max-height 0.3s ease,
+        opacity 0.2s ease,
+        padding 0.2s ease;
+
+    padding:0 16px;
+}
+
+.cat-body.aberto{
+    max-height:400px;
+    opacity:1;
+    padding:0 16px 16px;
+}
+
+.cat-body label{
+    display:block;
+    margin-top:10px;
+    cursor:pointer;
+}
+
+/* TEXTOS */
+
+h1,h2,h3,h4,b,label,span,div{
+    color:#111827;
+}
+
+/* INPUT */
+
+/* INPUT CLIENTE */
+
+.input-cliente{
+
+    display:flex;
+    align-items:center;
+    gap:12px;
+
+    width:100%;
+
+    background:white;
+
+    border:2px solid #e5e7eb;
+
+    border-radius:20px;
+
+    padding:4px 16px;
+
+    transition:0.25s ease;
+
+    box-shadow:
+        0 4px 14px rgba(0,0,0,0.05);
+
+    margin-bottom:0px;
+
+}
+
+.input-cliente:hover{
+
+    border-color:#d8b4fe;
+
+}
+
+.input-cliente:focus-within{
+
+    border-color:#7b2cbf;
+
+    box-shadow:
+        0 0 0 5px rgba(123,44,191,0.12),
+        0 8px 24px rgba(123,44,191,0.15);
+
+    transform:translateY(-1px);
+
+}
+
+.icone-cliente{
+
+    font-size:18px;
+
+    opacity:0.7;
+
+}
+
+.input-cliente input{
+
+    border:none;
+    outline:none;
+
+    width:100%;
+
+    background:transparent;
+
+    padding:16px 0;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    color:#111827;
+
+}
+
+.input-cliente input::placeholder{
+
+    color:#9ca3af;
+
+    font-weight:500;
+
+}
+
+
+/* CATEGORIAS */
+
+.cat-header{
+    background:white;
+    color:#111827;
+}
+
+.cat-body{
+    background:#fafafa;
+}
+
+/* LABELS */
+
+label{
+    color:#111827;
+}
+
+/* CARDS */
+
+.pedido{
+    color:#111827;
+}
+
+/* HEADER PEDIDO */
+
+.header{
+    color:#111827;
+}
+
+/* TIPO VENDA */
+
+.tipo-venda{
+
+    margin-top:18px;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:16px;
+
+    border:1px solid #e5e7eb;
+
+    box-shadow:
+        0 4px 12px rgba(0,0,0,0.04);
+
+}
+
+.opcao-venda{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+    margin-top:8px;
+
+    font-weight:600;
+
+}
+
+.opcao-venda:hover{
+
+    background:#f3f4f6;
+
+}
+
+.opcao-venda input{
+
+    transform:scale(1.2);
+
+}
+
+#btnDashboard{
+
+    position:fixed;
+
+    right:20px;
+    bottom:90px;
+
+    width:auto;
+
+    padding:14px 20px;
+
+    background:#7b2cbf;
+
+    color:white;
+
+    border-radius:50px;
+
+    z-index:9999;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.25);
+
+}
+
+#overlayFinanceiro{
+
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,0.45);
+
+    opacity:0;
+    visibility:hidden;
+
+    transition:0.3s;
+
+    z-index:9997;
+
+}
+
+#overlayFinanceiro.ativo{
+
+    opacity:1;
+    visibility:visible;
+
+}
+
+.painel-financeiro{
+
+    position:fixed;
+
+    top:0;
+    right:-1000px;
+
+    width:420px;
+    max-width:100%;
+
+    height:100vh;
+
+    background:#111827;
+
+    z-index:9998;
+
+    overflow-y:auto;
+
+    transition:0.35s ease;
+
+    box-shadow:
+        -5px 0 25px rgba(0,0,0,0.3);
+
+    padding:15px;
+
+}
+
+.painel-financeiro.aberto{
+
+    right:0;
+
+}
+
+.grid-financeiro{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+
+/* ========================= */
+/* LOADING SCREEN */
+/* ========================= */
+
+#loading{
+
+    position:fixed;
+    inset:0;
+
+    background:#f3f4f6;
+
+    z-index:999999;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    transition:0.5s ease;
+
+}
+
+#loading.esconder{
+
+    opacity:0;
+    visibility:hidden;
+
+}
+
+.loading-box{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:25px;
+
+}
+
+.logo-loading{
+
+    width:170px;
+
+    animation:pulse 1.5s infinite;
+
+}
+
+@keyframes pulse{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.05);
+    }
+
+    100%{
+        transform:scale(1);
+    }
+
+}
+
+.loader-bar{
+
+    width:240px;
+    height:10px;
+
+    background:#e5e7eb;
+
+    border-radius:999px;
+
+    overflow:hidden;
+
+}
+
+.loader-fill{
+
+    width:40%;
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #7b2cbf,
+        #9d4edd
+    );
+
+    border-radius:999px;
+
+    animation:loadingMove 1s infinite linear;
+
+}
+
+@keyframes loadingMove{
+
+    0%{
+        transform:translateX(-100%);
+    }
+
+    100%{
+        transform:translateX(350%);
+    }
+
+}
+
+.loading-text{
+
+    font-weight:600;
+
+    color:#6b7280;
+
+    font-size:15px;
+
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
+<!-- LOADING -->
+<div id="loading">
 
-<header>
-    <img src="logotipo.png" alt="Menalmei">
+    <div class="loading-box">
 
-    <p> STREETWEAR • RELÓGIOS • TÊNIS</p>
+        <img src="logo.png"
+             class="logo-loading">
 
-    <a class="btn" href="https://www.menalmei.com/" target="_blank">LOJA ONLINE</a>
-    <a class="btn" href="https://www.instagram.com/menalmeiofc/" target="_blank">INSTAGRAM</a>
-    <a class="btn" href="https://whatsapp.com/channel/0029Vb75rML6xCSXMORK580N" target="_blank">CANAL WHATSAPP</a>
-</header>
+        <div class="loader-bar">
 
-<footer>
-Menalmei • CNPJ: 59.739.723/0001-50 © 2025
-</footer>
+            <div class="loader-fill"></div>
 
-<!-- BOTÃO WHATSAPP -->
-<a href="https://wa.me/5513981996771?text=Olá!%20Quero%20saber%20mais%20sobre%20os%20produtos%20da%20Menalmei."
-   class="whatsapp-float"
-   target="_blank">
-   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" width="28">
-</a>
+        </div>
+
+        <p class="loading-text">
+            Carregando sistema...
+        </p>
+
+    </div>
+
+</div>
+
+<!-- SOM -->
+<audio id="som" preload="auto">
+<source src="som.mp3" type="audio/mpeg">
+</audio>
+
+<!-- CAIXA -->
+<div class="coluna">
+
+<div class="caixa">
+
+<h2>🍧 MENALMEI GOURMET</h2>
+
+<div class="input-cliente">
+
+    <span class="icone-cliente">
+        👤
+    </span>
+
+    <input
+        id="cliente"
+        type="text"
+        autocomplete="off"
+        placeholder="Digite o nome do cliente">
+
+</div>
+
+<br>
+
+<!-- TAMANHOS -->
+<!-- <b>Tamanho</b> -->
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="330ml"
+       checked>
+
+🥤 330ml
+</label>
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="550ml">
+
+🥤 550ml
+</label>
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="770ml">
+
+🥤 770ml
+</label>
+
+<br>
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="Marmita 500ml">
+
+Marmita 500ml
+</label>
+
+<br>
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="Combo Turbo">
+
+Combo Turbo
+</label>
+
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="Combo Casal">
+
+Combo Casal
+</label>
+
+
+<label>
+<input type="radio"
+       name="tamanho"
+       value="Combo Familia">
+
+💕 Combo Familia
+</label>
+
+<div class="categorias">
+
+    <!-- SUCOS -->
+    <div class="categoria">
+
+        <div class="cat-header"
+             onclick="toggleCategoria('sucos')">
+
+            <span>🥤 Sucos de Açaí</span>
+
+            <span id="seta-sucos"
+                  class="seta">
+
+                ▶
+
+            </span>
+
+        </div>
+
+        <div id="sucos"
+             class="cat-body">
+
+            <label>
+            <input type="radio"
+                   name="suco"
+                   value=""
+                   checked>
+
+            Nenhum
+            </label>
+
+            <label>
+            <input type="radio"
+                   name="suco"
+                   value="Açaí com Morango">
+
+            Açaí com Morango (R$10)
+            </label>
+
+            <label>
+            <input type="radio"
+                   name="suco"
+                   value="Açaí com Maracujá">
+
+            Açaí com Maracujá (R$10)
+            </label>
+
+            <label>
+            <input type="radio"
+                   name="suco"
+                   value="Açaí com Banana">
+
+            Açaí com Banana (R$10)
+            </label>
+
+            <label>
+            <input type="radio"
+                   name="suco"
+                   value="Açaí Napolitano">
+
+            Açaí Napolitano (R$10)
+            </label>
+
+            <label>
+            <input type="radio"
+                   name="suco"
+                   value="Açaí Leite em Pó e Condensado">
+
+            Açaí Leite em Pó e Condensado (R$12)
+            </label>
+
+           <label>
+           <input type="radio"
+                   name="suco"
+                   value="Açaí com Nutella">
+
+           Açaí com Nutella (R$15)
+           </label>
+
+        </div>
+
+    </div>
+
+    <!-- COMPLEMENTOS -->
+    <div class="categoria">
+
+        <div class="cat-header"
+             onclick="toggleCategoria('complementos')">
+
+            <span>🥣 Complementos</span>
+
+            <span id="seta-complementos"
+                  class="seta">
+
+                ▶
+
+            </span>
+
+        </div>
+
+        <div id="complementos"
+             class="cat-body">
+
+            <label><input type="checkbox" value="Leite Condensado"> Leite Condensado</label>
+            <label><input type="checkbox" value="Leite em Pó"> Leite em Pó</label>
+            <label><input type="checkbox" value="Granola"> Granola</label>
+            <label><input type="checkbox" value="Sucrilhos"> Sucrilhos</label>
+            <label><input type="checkbox" value="Paçoca"> Paçoca</label>
+            <label><input type="checkbox" value="Amendoim"> Amendoim</label>
+
+        </div>
+
+    </div>
+
+    <!-- FRUTAS -->
+    <div class="categoria">
+
+        <div class="cat-header"
+             onclick="toggleCategoria('frutas')">
+
+            <span>🍓 Frutas</span>
+
+            <span id="seta-frutas"
+                  class="seta">
+
+                ▶
+
+            </span>
+
+        </div>
+
+        <div id="frutas"
+             class="cat-body">
+
+            <label><input type="checkbox" value="Morango"> Morango</label>
+            <label><input type="checkbox" value="Banana"> Banana</label>
+            <label><input type="checkbox" value="Uva"> Uva</label>
+
+        </div>
+
+    </div>
+
+    <!-- ADICIONAIS -->
+    <div class="categoria">
+
+        <div class="cat-header"
+             onclick="toggleCategoria('adicionais')">
+
+            <span>🍫 Adicionais</span>
+
+            <span id="seta-adicionais"
+                  class="seta">
+
+                ▶
+
+            </span>
+
+        </div>
+
+        <div id="adicionais"
+             class="cat-body">
+
+            <label><input type="checkbox" value="Nutella"> Nutella (+R$5)</label>
+            <label><input type="checkbox" value="Ovomaltine"> Ovomaltine (+R$3)</label>
+            <label><input type="checkbox" value="Confete Choc"> Confete Choc (+R$3)</label>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TIPO DE VENDA -->
+
+<div class="tipo-venda">
+
+    <b style="margin-bottom:10px; display:block;">
+        💳 Tipo de Venda
+    </b>
+
+    <label class="opcao-venda">
+
+        <input type="radio"
+               name="tipoVenda"
+               value="Loja"
+               checked>
+
+        🏪 Venda na Loja
+
+    </label>
+
+    <label class="opcao-venda">
+
+        <input type="radio"
+               name="tipoVenda"
+               value="Ifood Proprio">
+
+        🛵 iFood Próprio (+15,2%)
+
+    </label>
+
+    <label class="opcao-venda">
+
+        <input type="radio"
+               name="tipoVenda"
+               value="Ifood Parceiro">
+
+        🍔 iFood Parceiro (+26,2%)
+
+    </label>
+
+</div>
+
+<!-- BOTÕES -->
+<div class="acoes">
+
+<button id="btnCriarPedido"
+        class="btn"
+        onclick="criarPedido()">
+
+CRIAR PEDIDO
+
+</button>
+
+<button class="btn-sec"
+        onclick="novoPedido()">
+
+LIMPAR
+
+</button>
+
+</div>
+
+<hr>
+
+<h3>
+Total do Dia:
+R$ <span id="totalDia">0.00</span>
+</h3>
+
+</div>
+</div>
+
+<!-- BOTÃO FLUTUANTE -->
+<button id="btnPedidos" onclick="togglePainelPedidos()">
+
+📦 Pedidos
+
+</button>
+
+<button id="btnDashboard"
+        onclick="abrirDashboard()">
+
+📊 Financeiro
+
+</button>
+
+<!-- FUNDO ESCURO -->
+<div id="overlayPedidos"
+     onclick="fecharPainelPedidos()">
+
+</div>
+
+<div id="overlayFinanceiro"
+     onclick="fecharFinanceiro()">
+
+</div>
+
+<!-- PAINEL PRODUÇÃO -->
+<div class="painel-pedidos"
+     id="painelPedidos">
+
+    <div class="topo-painel">
+
+        <h2>PRODUÇÃO</h2>
+
+        <button class="fechar-painel"
+                onclick="fecharPainelPedidos()">
+
+            ✕
+
+        </button>
+
+    </div>
+
+    <div class="producao-grid">
+
+        <!-- PREPARO -->
+        <div class="producao-coluna">
+
+            <h3>🟡 Em preparo</h3>
+
+            <div id="colPreparo"></div>
+
+        </div>
+
+        <!-- FINALIZADOS -->
+        <div class="producao-coluna">
+
+            <h3>🟢 Finalizados</h3>
+
+            <div id="colPronto"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="painel-financeiro"
+     id="painelFinanceiro">
+
+    <div class="topo-painel">
+
+        <h2 style="color:white;">
+            📊 Dashboard Financeiro
+        </h2>
+
+        <button class="fechar-painel"
+                onclick="fecharFinanceiro()">
+
+            ✕
+
+        </button>
+
+    </div>
+
+    <div class="grid-financeiro">
+
+        <div class="box">
+
+            <b>💰 Faturamento</b>
+
+            <h3 id="fatTotal">
+                R$ 0,00
+            </h3>
+
+        </div>
+
+        <div class="box">
+
+            <b>📈 Lucro</b>
+
+            <h3 id="lucroTotal">
+                R$ 0,00
+            </h3>
+
+        </div>
+
+        <div class="box">
+
+            <b>🧾 Pedidos</b>
+
+            <h3 id="qtdPedidos">
+                0
+            </h3>
+
+        </div>
+
+        <div class="box">
+
+            <b>🛒 Ticket Médio</b>
+
+            <h3 id="ticketMedio">
+                R$ 0,00
+            </h3>
+
+        </div>
+
+        <div class="box">
+
+            <b>🏪 Loja</b>
+
+            <h3 id="vendasLoja">
+                R$ 0,00
+            </h3>
+
+        </div>
+
+        <div class="box">
+
+            <b>🛵 iFood</b>
+
+            <h3 id="vendasIfood">
+                R$ 0,00
+            </h3>
+
+        </div>
+
+    </div>
+
+</div>
 
 <script>
-/* PARTICLES BACKGROUND */
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzQFNw249hOQplBAt4WzlGdaOev5E1KYgn2bRWhC2z-7eotL51OmToVydzAqQXzsilT/exec";
+
+let senhaAdmin = "";
+
+let produtosLoja = [];
+
+let produtosIfood = [];
+
+let sincronizando = false;
+
+function buscarProduto(nome, tipoVenda){
+
+    let lista =
+        tipoVenda === "Loja"
+        ? produtosLoja
+        : produtosIfood;
+
+console.log(nome);
+console.log(lista);
+
+    return lista.find(
+        p => p.produto.trim() === nome.trim()
+    );
+
 }
-resize();
 
-const particles = [], count = 55;
-for (let i = 0; i < count; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2 + 1,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3
-    });
-}
+async function carregarProdutos(){
 
-function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    try{
 
-    particles.forEach(p => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.fill();
-    });
+        const resposta =
+            await fetch(
+                API_URL + "?t=" + Date.now()
+            );
 
-    for (let i = 0; i < count; i++) {
-        for (let j = i + 1; j < count; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 110) {
-                ctx.beginPath();
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = 'rgba(255,255,255,' + (1 - dist / 110) + ')';
-                ctx.lineWidth = 0.6;
-                ctx.stroke();
-            }
-        }
+        const dados =
+            await resposta.json();
+
+        receberProdutos(dados);
+
+    }
+    catch(err){
+
+        console.log(
+            "Erro ao carregar:",
+            err
+        );
+
     }
 
-    particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
-        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+}
+
+function receberProdutos(dados){
+
+    produtosLoja = dados.loja;
+
+    produtosIfood = dados.ifood;
+
+    senhaAdmin = dados.senha || "";
+
+    // PEDIDOS VINDOS DA PLANILHA
+    let pedidosAPI =
+        dados.pedidos || [];
+
+    // VERIFICA SE MUDOU
+    let mudou =
+        JSON.stringify(pedidosAPI)
+        !==
+        JSON.stringify(pedidos);
+
+    // SÓ ATUALIZA SE MUDAR
+
+    contador = Number(dados.ultimoNumero || 0) + 1;
+
+    if(mudou){
+
+        pedidos = pedidosAPI;
+
+        atualizarTela();
+
+        atualizarDashboard();
+
+    }
+
+    // ESCONDE O LOADING SEMPRE
+    document
+        .getElementById("loading")
+        .classList.add("esconder");
+
+document.getElementById("btnCriarPedido").disabled = false;
+
+}
+
+carregarProdutos();
+
+setInterval(() => {
+
+    if(!sincronizando){
+
+        carregarProdutos();
+
+    }
+
+}, 3000);
+
+let pedidos = [];
+
+let contador = null;
+
+/* SALVAR */
+function salvar(){
+
+    localStorage.setItem(
+        "pedidos",
+        JSON.stringify(pedidos)
+    );
+
+}
+
+function tempoDecorrido(pedido){
+
+    if(!pedido.data) return "00:00";
+
+    // PARA O TEMPO
+    if(
+    pedido.status === "finalizado"
+){
+
+    return pedido.tempoFinal || "Finalizado";
+
+}
+
+    let agora = new Date();
+
+    let criado =
+        new Date(pedido.data);
+
+    let diff =
+        Math.floor(
+            (agora - criado) / 1000
+        );
+
+    let minutos =
+        Math.floor(diff / 60);
+
+    let segundos =
+        diff % 60;
+
+    return `${String(minutos).padStart(2,"0")}:${String(segundos).padStart(2,"0")}`;
+
+}
+
+/* LIMPAR */
+function novoPedido(){
+
+    document.getElementById("cliente").value = "";
+
+    document.querySelectorAll(
+        "input[type=checkbox]"
+    ).forEach(c => c.checked = false);
+
+    document.querySelectorAll(
+    'input[name="suco"]'
+).forEach(r => {
+
+    r.checked = false;
+
+});
+
+    document.querySelector(
+        'input[name="suco"][value=""]'
+    ).checked = true;
+
+document.querySelector(
+    'input[name="tipoVenda"][value="Loja"]'
+).checked = true;
+
+}
+
+/* SOM */
+function tocarSom(){
+
+    let som =
+        document.getElementById("som");
+
+    som.pause();
+    som.currentTime = 0;
+
+    som.play().catch(()=>{});
+
+}
+
+/* LIBERA SOM */
+document.addEventListener("click", () => {
+
+    let som =
+        document.getElementById("som");
+
+    som.play()
+    .then(() => {
+
+        som.pause();
+        som.currentTime = 0;
+
+    })
+    .catch(()=>{});
+
+}, { once:true });
+
+/* QZ */
+async function conectarQZ(){
+
+    if(!qz.websocket.isActive()){
+
+        await qz.websocket.connect();
+
+    }
+
+}
+
+
+
+/* IMPRIMIR */
+/* IMPRIMIR */
+async function imprimir(p){
+
+    try{
+
+        if(!qz.websocket.isActive()){
+            await qz.websocket.connect();
+        }
+
+        let texto = "";
+
+        texto += "\x1B\x40";
+
+        texto += "\x1B\x61\x01";
+        texto += "MENALMEI GOURMET\n";
+        texto += "==============================\n";
+
+        texto += "\x1B\x21\x20";
+        texto += "PEDIDO #" + p.numero + "\n";
+
+        texto += "\x1B\x21\x00";
+        texto += "==============================\n\n";
+
+        texto += "\x1B\x61\x00";
+
+        texto += "Cliente: " + p.cliente + "\n";
+        texto += "Venda: " + p.tipoVenda + "\n";
+        texto += "Data: " + new Date().toLocaleString('pt-BR') + "\n\n";
+
+        texto += p.itens + "\n";
+
+        texto += "------------------------------\n";
+
+        texto += "Subtotal: R$ " + Number(p.subtotal || 0).toFixed(2) + "\n";
+        texto += "Taxa: R$ " + Number(p.taxa || 0).toFixed(2) + "\n";
+
+        texto += "TOTAL LIQUIDO: R$ " + Number(p.total || 0).toFixed(2) + "\n";
+
+        texto += "------------------------------\n\n";
+
+        texto += "Status: " + p.status + "\n\n";
+
+        texto += "Obrigado pela preferencia!\n\n\n\n";
+
+        texto += "\x1D\x56\x41\x10";
+
+        const printer =
+            await qz.printers.getDefault();
+
+        const config =
+            qz.configs.create(printer);
+
+        // AQUI ESTÁ O CORRETO
+        await qz.print(config, [texto]);
+
+        console.log("IMPRESSO COM SUCESSO");
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        alert(
+            "Erro ao imprimir:\n\n" + err
+        );
+
+    }
+
+}
+
+/* REIMPRIMIR */
+function imprimirPedido(numero){
+
+    let pedido =
+        pedidos.find(
+            p => p.numero === numero
+        );
+
+    if(pedido){
+
+        imprimir(pedido);
+
+    }
+
+}
+
+
+/* ENVIA INFORMAÇÕES DO SITE PARA PLANILHA */
+
+async function salvarVendaPlanilha(pedido){
+
+console.log("ENVIANDO PARA PLANILHA", pedido);
+
+    try{
+
+        await fetch(API_URL, {
+
+            method: "POST",
+
+            body: JSON.stringify({
+
+                numero: pedido.numero,
+                cliente: pedido.cliente,
+                itens: pedido.itens,
+                subtotal: pedido.subtotal,
+                taxa: pedido.taxa,
+                lucro: pedido.lucro,
+                total: pedido.total,
+                tipoVenda: pedido.tipoVenda,
+                status: pedido.status,
+                data: new Date().toISOString()
+
+            })
+
+        });
+
+        console.log("Venda salva na planilha");
+
+    }
+    catch(err){
+
+        console.log(
+            "Erro ao salvar venda:",
+            err
+        );
+
+    }
+
+}
+
+/* CRIAR PEDIDO */
+
+function criarPedido(){
+
+if (contador === null) {
+
+    alert("Aguarde o carregamento completo do sistema.");
+
+    return;
+
+}
+
+    try{
+
+        let cliente =
+            document.getElementById("cliente")
+            .value
+            .trim();
+
+        if(cliente === ""){
+
+            alert("Digite o nome do cliente");
+            return;
+
+        }
+
+        let itensTxt = "";
+
+        let total = 0;
+
+        let custoTotal = 0;
+
+        // tipo venda
+        let vendaSelecionada =
+            document.querySelector(
+                'input[name="tipoVenda"]:checked'
+            );
+
+        let tipoVenda =
+            vendaSelecionada
+            ? vendaSelecionada.value
+            : "Loja";
+
+        let taxa = 0;
+
+        // suco
+        let sucoSel =
+            document.querySelector(
+                'input[name="suco"]:checked'
+            );
+
+        // =========================
+        // SUCOS
+        // =========================
+
+        if(
+            sucoSel &&
+            sucoSel.value !== ""
+        ){
+
+            let nome = sucoSel.value;
+
+            let produto =
+                buscarProduto(nome, tipoVenda);
+
+            if(!produto){
+
+                alert("Produto não encontrado: " + nome);
+                return;
+
+            }
+
+            let preco =
+                parseFloat(
+                    produto.valor
+                        .toString()
+                        .replace(",", ".")
+                ) || 0;
+
+            let custo =
+                parseFloat(
+                    produto.custo
+                        .toString()
+                        .replace(",", ".")
+                ) || 0;
+
+            itensTxt +=
+                "SUCO: " + nome + "\n";
+
+            total += preco;
+
+            custoTotal += custo;
+
+        }
+
+        // =========================
+        // AÇAÍ
+        // =========================
+
+        else{
+
+            let tamanho =
+                document.querySelector(
+                    'input[name="tamanho"]:checked'
+                );
+
+            let tam = tamanho.value;
+
+            let produto =
+                buscarProduto(tam, tipoVenda);
+
+            if(!produto){
+
+                alert("Produto não encontrado: " + tam);
+                return;
+
+            }
+
+            let preco =
+                parseFloat(
+                    produto.valor
+                        .toString()
+                        .replace(",", ".")
+                ) || 0;
+
+            let custo =
+                parseFloat(
+                    produto.custo
+                        .toString()
+                        .replace(",", ".")
+                ) || 0;
+
+            itensTxt +=
+                "Açaí " + tam + "\n";
+
+            total += preco;
+
+            custoTotal += custo;
+
+            // =========================
+            // COMPLEMENTOS
+            // =========================
+
+            document.querySelectorAll(
+                '#complementos input[type="checkbox"]:checked'
+            ).forEach(c => {
+
+                itensTxt +=
+                    "- " + c.value + "\n";
+
+            });
+
+            // =========================
+            // FRUTAS
+            // =========================
+
+            document.querySelectorAll(
+                '#frutas input[type="checkbox"]:checked'
+            ).forEach(c => {
+
+                itensTxt +=
+                    "- " + c.value + "\n";
+
+            });
+
+            // =========================
+            // ADICIONAIS
+            // =========================
+
+            document.querySelectorAll(
+                '#adicionais input[type="checkbox"]:checked'
+            ).forEach(c => {
+
+                let nome = c.value;
+
+                let produto =
+                    buscarProduto(nome, tipoVenda);
+
+                if(!produto){
+
+                    alert("Produto não encontrado: " + nome);
+                    return;
+
+                }
+
+                let preco =
+                    parseFloat(
+                        produto.valor
+                            .toString()
+                            .replace(",", ".")
+                    ) || 0;
+
+                let custo =
+                    parseFloat(
+                        produto.custo
+                            .toString()
+                            .replace(",", ".")
+                    ) || 0;
+
+                itensTxt +=
+                    "- " + nome + "\n";
+
+                total += preco;
+
+                custoTotal += custo;
+
+            });
+
+        }
+
+        // =========================
+        // TAXAS IFOOD
+        // =========================
+
+        if(tipoVenda === "Ifood Proprio"){
+
+            taxa = total * 0.152;
+
+        }
+        else if(tipoVenda === "Ifood Parceiro"){
+
+            taxa = total * 0.262;
+
+        }
+
+        // =========================
+        // TOTAL / LUCRO
+        // =========================
+
+        let totalFinal =
+            total - taxa;
+
+        let lucro =
+            totalFinal - custoTotal;
+
+        // =========================
+        // STATUS
+        // =========================
+
+        let statusInicial = "preparo";
+
+        // pedidos do iFood entram finalizados
+        if(
+            tipoVenda === "Ifood Proprio" ||
+            tipoVenda === "Ifood Parceiro"
+        ){
+
+            statusInicial = "finalizado";
+
+        }
+
+        // =========================
+        // PEDIDO
+        // =========================
+
+        let pedido = {
+
+            numero: contador++,
+
+            cliente,
+
+            itens: itensTxt,
+
+            subtotal: total,
+
+            taxa,
+
+            lucro,
+
+            total: totalFinal,
+
+            tipoVenda,
+
+            data: new Date().toISOString(),
+
+            status: statusInicial,
+
+            tempoFinal:
+                statusInicial === "finalizado"
+                ? "00:00"
+                : null
+
+        };
+
+        pedidos.push(pedido);
+
+        salvarVendaPlanilha(pedido);
+
+        atualizarTela();
+        atualizarDashboard();
+
+        imprimir(pedido).catch(err => {
+
+            console.log(
+                "Erro impressão:",
+                err
+            );
+
+        });
+
+        tocarSom();
+
+        novoPedido();
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        alert(
+            "Erro ao criar pedido:\n\n" +
+            err.message
+        );
+
+    }
+
+}
+
+
+/* ATUALIZAR */
+/* ATUALIZAR */
+function atualizarTela(){
+
+    let preparoHTML = "";
+    let prontoHTML = "";
+    let totalDia = 0;
+
+    let ultimoPedido =
+        pedidos.length
+        ? pedidos[pedidos.length - 1].numero
+        : null;
+
+    pedidos.forEach(p => {
+
+        totalDia += Number(p.total || 0);
+
+        // abre apenas o último pedido que NÃO foi finalizado
+        let aberto = "";
+
+        if (
+            p.numero === ultimoPedido &&
+            p.status !== "finalizado"
+        ){
+            aberto = "aberto";
+        }
+
+        // TEXTO DO STATUS
+        let textoStatus = "";
+
+        if(p.status === "preparo"){
+    textoStatus = "🟠 Em preparo";
+}
+else{
+    textoStatus = "🟢 Finalizado";
+}
+
+        // TEXTO DO BOTÃO
+        let textoBotao = "";
+
+        if(p.status === "preparo"){
+
+    textoBotao = "🟢 Finalizar Pedido";
+
+}
+
+        let card = `
+        <div class="pedido ${p.status} novo">
+
+            <div class="header"
+     onclick="togglePedido(${p.numero})">
+
+    <div style="
+        display:flex;
+        flex-direction:column;
+        gap:3px;
+    ">
+
+        <span style="
+            font-weight:bold;
+            font-size:15px;
+        ">
+            #${p.numero} - ${p.cliente}
+        </span>
+
+        <span style="
+            font-size:12px;
+            opacity:0.7;
+        ">
+
+            🕒 ${
+                new Date(String(p.data)).toLocaleTimeString(
+                    'pt-BR',
+                    {
+                        hour:'2-digit',
+                        minute:'2-digit'
+                    }
+                )
+            }
+
+            •
+
+            <span id="tempo-header-${p.numero}">
+                ⏱ ${tempoDecorrido(p)}
+            </span>
+
+        </span>
+
+    </div>
+
+    <span id="seta-${p.numero}"
+          class="seta ${aberto}">
+
+        ▶
+
+    </span>
+
+</div>
+
+            <div id="detalhe-${p.numero}"
+                 class="detalhe ${aberto}">
+
+                ${p.itens.replace(/\n/g,"<br>")}
+                <br>
+
+<b>
+💳 ${p.tipoVenda}
+</b>
+
+<br>
+
+<small>
+Subtotal: R$ ${Number(p.subtotal || 0).toFixed(2)}
+</small>
+
+<br>
+
+<small>
+Taxa: R$ ${Number(p.taxa || 0).toFixed(2)}
+</small>
+                <br><br>
+
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                ">
+
+                    <b>
+                    💰 R$ ${Number(p.total || 0).toFixed(2)}
+                    </b>
+
+                    <div id="tempo-${p.numero}" style="
+                        background:${
+                            tempoDecorrido(p).split(':')[0] >= 20
+                            ? '#dc3545'
+                            : tempoDecorrido(p).split(':')[0] >= 10
+                            ? '#ffc107'
+                            : '#28a745'
+                        };
+                        color:white;
+                        padding:4px 8px;
+                        border-radius:20px;
+                        font-size:12px;
+                    ">
+
+                        ⏱ ${tempoDecorrido(p)}
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div style="
+                    font-weight:bold;
+                    margin-top:5px;
+                ">
+
+                    ${textoStatus}
+
+                </div>
+
+                <br><br>
+
+                ${
+                    p.status !== "finalizado"
+                    ?
+                    `
+                    <button onclick="event.stopPropagation(); mudarStatus(${p.numero})">
+
+                        ${textoBotao}
+
+                    </button>
+                    `
+                    :
+                    `
+                    <div class="status-ok">
+                        <! --✅ Pedido finalizado -->
+                    </div>
+                    `
+                }
+
+                <button onclick="event.stopPropagation(); imprimirPedido(${p.numero})">
+
+                    🖨 Reimprimir Comanda
+
+                </button>
+
+                <button class="excluir"
+                onclick="event.stopPropagation(); excluirPedido(${p.numero})">
+
+                    🗑 Excluir Pedido
+
+                </button>
+
+            </div>
+
+        </div>
+        `;
+
+        // separação das colunas
+        if(p.status === "preparo"){
+
+    preparoHTML += card;
+
+}
+else{
+
+    prontoHTML += card;
+
+}
+
     });
 
-    requestAnimationFrame(draw);
+    document.getElementById("colPreparo").innerHTML = preparoHTML;
+
+    document.getElementById("colPronto").innerHTML = prontoHTML;
+
+    document.getElementById("totalDia").innerText =
+        totalDia.toFixed(2);
+
 }
-draw();
-window.addEventListener('resize', resize);
+
+function atualizarDashboard(){
+
+    let faturamento = 0;
+    let lucro = 0;
+
+    let qtd = pedidos.length;
+
+    let loja = 0;
+    let ifood = 0;
+
+    pedidos.forEach(p => {
+
+        faturamento +=
+            parseFloat(p.total || 0);
+
+        lucro +=
+            parseFloat(p.lucro || 0);
+
+        if(
+            p.tipoVenda === "Loja"
+        ){
+
+            loja +=
+                parseFloat(p.total || 0);
+
+        }
+        else{
+
+            ifood +=
+                parseFloat(p.total || 0);
+
+        }
+
+    });
+
+    let ticket =
+        qtd > 0
+        ? faturamento / qtd
+        : 0;
+
+    // PAINEL LATERAL
+
+    document.getElementById(
+        "fatTotal"
+    ).innerText =
+        "R$ " + faturamento.toFixed(2);
+
+    document.getElementById(
+        "lucroTotal"
+    ).innerText =
+        "R$ " + lucro.toFixed(2);
+
+    document.getElementById(
+        "qtdPedidos"
+    ).innerText =
+        qtd;
+
+    document.getElementById(
+        "ticketMedio"
+    ).innerText =
+        "R$ " + ticket.toFixed(2);
+
+    document.getElementById(
+        "vendasLoja"
+    ).innerText =
+        "R$ " + loja.toFixed(2);
+
+    document.getElementById(
+        "vendasIfood"
+    ).innerText =
+        "R$ " + ifood.toFixed(2);
+
+}
+
+function atualizarTempos(){
+
+    pedidos.forEach(p => {
+
+        let tempo =
+            tempoDecorrido(p);
+
+        let minutos =
+            parseInt(
+                tempo.split(":")[0]
+            );
+
+        let cor = "#28a745";
+
+        if(minutos >= 20){
+
+            cor = "#dc3545";
+
+        }
+        else if(minutos >= 10){
+
+            cor = "#ffc107";
+
+        }
+
+        // TEMPO DO CARD ABERTO
+        let tempoEl =
+            document.getElementById(
+                "tempo-" + p.numero
+            );
+
+        if(tempoEl){
+
+            tempoEl.innerHTML =
+                "⏱ " + tempo;
+
+            tempoEl.style.background =
+                cor;
+
+        }
+
+        // TEMPO DO HEADER
+        let tempoHeader =
+            document.getElementById(
+                "tempo-header-" + p.numero
+            );
+
+        if(tempoHeader){
+
+            tempoHeader.innerHTML =
+                "⏱ " + tempo;
+
+        }
+
+    });
+
+}
+
+/* ABRIR / FECHAR */
+function togglePedido(numero){
+
+    let detalhe =
+        document.getElementById(
+            "detalhe-" + numero
+        );
+
+    let seta =
+        document.getElementById(
+            "seta-" + numero
+        );
+
+    if(!detalhe) return;
+
+    detalhe.classList.toggle("aberto");
+
+    if(seta){
+
+        seta.classList.toggle("aberta");
+
+    }
+
+}
+
+function toggleCategoria(id){
+
+    let area =
+        document.getElementById(id);
+
+    let seta =
+        document.getElementById(
+            "seta-" + id
+        );
+
+    area.classList.toggle("aberto");
+
+    seta.classList.toggle("aberta");
+
+}
+
+/* STATUS */
+async function mudarStatus(numero){
+
+    let pedido =
+        pedidos.find(
+            p => p.numero === numero
+        );
+
+    if(!pedido) return;
+
+    sincronizando = true;
+
+    try{
+
+        if(pedido.status === "preparo"){
+
+            pedido.status = "finalizado";
+
+            pedido.tempoFinal =
+                tempoDecorrido(pedido);
+
+        }
+
+        atualizarTela();
+
+        atualizarDashboard();
+
+        await atualizarStatusPlanilha(
+
+            pedido.numero,
+            pedido.status,
+            pedido.tempoFinal
+
+        );
+
+        await carregarProdutos();
+
+    }
+    catch(err){
+
+        console.log(err);
+
+        alert(
+            "Erro ao atualizar pedido"
+        );
+
+    }
+
+    sincronizando = false;
+
+}
+
+async function atualizarStatusPlanilha(
+    numero,
+    status,
+    tempoFinal
+){
+
+    console.log(
+        "Atualizando",
+        numero,
+        status
+    );
+
+    const resposta = await fetch(API_URL, {
+
+        method:"POST",
+
+        body:JSON.stringify({
+
+            acao:"atualizarStatus",
+
+            numero:numero,
+
+            status:status,
+
+            tempoFinal:tempoFinal
+
+        })
+
+    });
+
+    const json = await resposta.json();
+
+    console.log("Resposta:", json);
+
+    if(!json.sucesso){
+
+        throw new Error(
+            "Falha ao atualizar status"
+        );
+
+    }
+
+}
+
+async function excluirPedidoPlanilha(numero){
+
+    const resposta = await fetch(API_URL, {
+
+        method: "POST",
+
+        body: JSON.stringify({
+
+            acao: "excluir",
+
+            numero: numero
+
+        })
+
+    });
+
+    const json = await resposta.json();
+
+    if(!json.sucesso){
+
+        throw new Error(
+            "Falha ao excluir pedido"
+        );
+
+    }
+
+}
+
+/* EXCLUIR */
+async function excluirPedido(numero){
+
+    sincronizando = true;
+
+    try{
+
+        await excluirPedidoPlanilha(numero);
+
+        pedidos =
+            pedidos.filter(
+                p => p.numero !== numero
+            );
+
+        atualizarTela();
+
+        atualizarDashboard();
+
+        await carregarProdutos();
+
+    }
+    catch(err){
+
+        console.log(err);
+
+        alert(
+            "Erro ao excluir pedido"
+        );
+
+    }
+
+    sincronizando = false;
+
+}
+
+/* PAINEL PEDIDOS */
+function togglePainelPedidos(){
+
+    document
+    .getElementById("painelPedidos")
+    .classList.toggle("aberto");
+
+    document
+    .getElementById("overlayPedidos")
+    .classList.toggle("ativo");
+
+}
+
+function fecharPainelPedidos(){
+
+    document
+    .getElementById("painelPedidos")
+    .classList.remove("aberto");
+
+    document
+    .getElementById("overlayPedidos")
+    .classList.remove("ativo");
+
+}
+
+/* ========================= */
+/* DASHBOARD FINANCEIRO */
+/* ========================= */
+
+function abrirDashboard(){
+
+    let painel = document.getElementById("painelFinanceiro");
+    let overlay = document.getElementById("overlayFinanceiro");
+
+    if(painel.classList.contains("aberto")){
+        fecharFinanceiro();
+        return;
+    }
+
+    // abre modal de senha
+    document.getElementById("modalSenhaBox").style.display = "flex";
+    document.getElementById("inputSenha").value = "";
+}
+
+function confirmarSenha(){
+
+    let senha = document.getElementById("inputSenha").value;
+
+    if(senha.trim() !== senhaAdmin.toString().trim()){
+        alert("Senha incorreta");
+        return;
+    }
+
+    fecharModalSenha();
+
+    // abre a página financeiro
+    window.location.href = "financeiro.html";
+}
+
+function fecharModalSenha(){
+    document.getElementById("modalSenhaBox").style.display = "none";
+}
+
+function fecharFinanceiro(){
+
+    document
+    .getElementById("painelFinanceiro")
+    .classList.remove("aberto");
+
+    document
+    .getElementById("overlayFinanceiro")
+    .classList.remove("ativo");
+
+}
+
+function fecharFinanceiro(){
+
+    document
+    .getElementById("painelFinanceiro")
+    .classList.remove("aberto");
+
+    document
+    .getElementById("overlayFinanceiro")
+    .classList.remove("ativo");
+
+}
+
+// FAILSAFE LOADING ANDROID
+
+setTimeout(() => {
+
+    let loading =
+        document.getElementById("loading");
+
+    if(loading){
+
+        loading.classList.add("esconder");
+
+    }
+
+}, 5000);
+
+/* INICIAR */
+atualizarTela();
+atualizarDashboard();
+
+document.getElementById("btnCriarPedido").disabled = true;
+
+setInterval(() => {
+
+    atualizarTempos();
+
+}, 1000);
+
 </script>
 
+<div id="modalSenhaBox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:99999; align-items:center; justify-content:center;">
+
+  <div style="background:white; padding:20px; border-radius:12px; width:90%; max-width:320px; text-align:center;">
+
+    <h3>🔒 Acesso Financeiro</h3>
+
+    <input id="inputSenha" type="password" placeholder="Digite a senha"
+      style="width:100%; padding:12px; margin-top:12px; border:1px solid #ccc; border-radius:8px;">
+
+    <div style="display:flex; gap:10px; margin-top:15px;">
+
+      <button onclick="confirmarSenha()" style="flex:1; padding:10px; background:#7b2cbf; color:white; border:none; border-radius:8px;">
+        Entrar
+      </button>
+
+      <button onclick="fecharModalSenha()" style="flex:1; padding:10px; background:#dc2626; color:white; border:none; border-radius:8px;">
+        Cancelar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 </body>
 </html>
